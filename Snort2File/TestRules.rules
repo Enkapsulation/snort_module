@@ -1,0 +1,26 @@
+#icmp alert
+#alert icmp 10.0.2.15 any -> 10.0.2.15 any (msg:"Destination and source are same";sameip; sid:1000000)
+
+#trceroute detect
+#alert UDP 10.0.2.15 any -> any any (ttl:1; msg:"Traceroute detect UDP"; sid:10000001;)
+
+#traceroute drop
+#reject UDP 10.0.2.15 any -> any any (ttl:1; msg:"Traceroute detect UDP{reject}"; sid:10000004;)
+
+#traceroute
+#pass UDP 10.0.2.15 any -> any any (ttl: 1 ; msg:"Traceroute detect UDP{pass}"; sid:10000005;)
+
+#traceroute reject
+#sdrop UDP 10.0.2.15 any -> any any (ttl:1; msg:"Traceroute detect UDP{reject}"; sid:10000006;)
+
+#traceroute TCP
+alert TCP 10.0.2.15 any -> any any (ttl:1; msg:"Traceroute detect TCP"; sid:10000002;)
+
+#traceroute ICMP
+#alert ICMP 10.0.2.15 any -> any any (ttl:1; msg:"Traceroute detect ICMP"; sid:10000003;)
+
+#Pudelek detect
+#alert udp any any -> any 53 (msg:"pudelek detect";  sid:10000001; content:"|0377777707707564656c656b02706c00|";) 
+
+#RTP detect 
+#alert tcp any 45802 <> any 16384:32767 (msg:"Serwer NTP detect"; seq: 16950; sid:1000015;)

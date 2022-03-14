@@ -1,8 +1,11 @@
-// #ifndef __HEURISTIC_H__
-// #define __HEURISTIC_H__
+#ifndef __HEURISTIC_MODULE_H__
+#define __HEURISTIC_MODULE_H__
 
 #include <netinet/in.h>
-#include <stdint.h>
+#include <cstdint>
+#include <array>
+#include <memory>
+#include <string>
 
 #define GENERATOR_SPP_HEURISTIC 256
 #define     HEURISTIC_BRUTEFORECE_DETECT 1   
@@ -60,64 +63,64 @@
 /*===========================[Heurstic structure]===========================*/
 
 /* Structre define file config for subpreprocessor */
-typedef struct _DangerousIPConfig
+struct DangerousIPConfig
 {
-   int flags_score[NUM_OF_FLAGS];
-   int attack_score[NUM_OF_ATTACK];
-   int range_score[NUM_OF_RANGE];
-   int access_score[NUM_OF_ACCESS];
-   int availability_score[NUM_OF_AVAILABILITY];
-}DangerousIPConfig;
+   std::array<int, NUM_OF_FLAGS> flags_score;
+   std::array<int, NUM_OF_ATTACK> attack_score;
+   std::array<int, NUM_OF_RANGE> range_score;
+   std::array<int, NUM_OF_ACCESS> access_score;
+   std::array<int, NUM_OF_AVAILABILITY> availability_score;
+};
 
 /* Main policy configuration */
-typedef struct _heuristicConfig
+struct HeuristicConfig
 {
-   double sensitivity {};
-   double dangerous_entropy {};
-   double packet_value {};
-   char* filename_malicious {};
-   int record_number {};
-   DangerousIPConfig* filename_config {};
-}HeuristicConfig, *pHeuristicConfig;
+   double sensitivity;
+   double dangerous_entropy;
+   double packet_value;
+   int record_number;
+   std::string filename_malicious;
+   std::shared_ptr<DangerousIPConfig> filename_config;
+};
 
 /*===========================[Dangerous ip]===========================*/
 
 /* structure to hold each element from .csv file */
-typedef struct _dangerous_ip_addr
+struct DangerousIpAddr
 {
-   struct in_addr ip_addr {};
-   char flag {};
-   uint8_t attack_type {};
-   uint8_t range {};
-   uint8_t access {};
-   uint8_t availability {};
-   double network_entropy {};
-   uint64_t counter {};
-}dangerous_ip_addr;
+   uint8_t attack_type;
+   uint8_t range;
+   uint8_t access;
+   uint8_t availability;
+   char flag;
+   double network_entropy;
+   in_addr ip_addr;
+   uint64_t counter;
+};
 
-/* list of ip parse from file */
-dangerous_ip_addr* dangerous_ip_record = nullptr;
+// /* list of ip parse from file */
+// DangerousIpAddr* dangerous_ip_record = nullptr;
 
 /*===========================[linked list]===========================*/
 
 /* Double linked list structure */
-typedef struct _linkedlist
+struct LinkedList
 {
-   struct dlinkedlist* next; // Previus item on the linked list
-   struct in_addr ip_addr;
-   uint64_t count;
+   LinkedList* next; // Previus item on the linked list
    double entropy;
-}linkedlist;
+   in_addr ip_addr;
+   uint64_t count;
+};
 
 /* Head of linked list */
-linkedlist* headPtr = nullptr;
+// linkedlist* headPtr = nullptr;
 
 /*===========================[Error enum]===========================*/
-typedef enum _HeuristicParseTypes
+enum ParseStatus
 {
    STATUS_OK = 0,
    STATUS_ERROR = 1
-}ParseStatus;
+};
 
 
-// #endif /* __HEURISTIC_H__ */
+#endif /* __HEURISTIC_MODULE_H__ */
