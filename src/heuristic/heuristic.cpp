@@ -17,92 +17,91 @@ using namespace snort;
 //-------------------------------------------------------------------------
 // implementation stuff
 //-------------------------------------------------------------------------
-void Heuristic::heuristic_show_config(const HeuristicConfig *config) const
+void Heuristic::heuristic_show_config( const HeuristicConfig* config ) const
 {
-    if (config)
-        return;
+	if( config )
+	{
+		return;
+	}
 
-    ConfigLogger::log_option("hosts");
+	ConfigLogger::log_option( "hosts" );
 }
 
 //-------------------------------------------------------------------------
 // class stuff
 //-------------------------------------------------------------------------
-Heuristic::Heuristic(HeuristicModule *mod)
+Heuristic::Heuristic( HeuristicModule* mod )
 {
-    config = mod->get_config();
+	config = mod->get_config();
 }
 
 Heuristic::~Heuristic()
 {
-    delete config;
+	delete config;
 }
 
-void Heuristic::show(const SnortConfig *) const
+void Heuristic::show( const SnortConfig* ) const
 {
-    if (config)
-        heuristic_show_config(config);
+	if( config )
+		heuristic_show_config( config );
 }
 
-void Heuristic::eval(Packet *p)
+void Heuristic::eval( Packet* p )
 {
-    std::cout << "Hello World from -> " << p->is_icmp() << std::endl;
+	std::cout << "Hello World from -> " << p->is_icmp() << std::endl;
 }
 
 //-------------------------------------------------------------------------
 // api stuff
 //-------------------------------------------------------------------------
-static Module *mod_ctor()
+static Module* mod_ctor()
 {
-    return new HeuristicModule;
+	return new HeuristicModule;
 }
 
-static void mod_dtor(Module *m)
+static void mod_dtor( Module* m )
 {
-    delete m;
+	delete m;
 }
 
-static Inspector *heu_ctor(Module *m)
+static Inspector* heu_ctor( Module* m )
 {
-    return new Heuristic((HeuristicModule *)m);
+	return new Heuristic( ( HeuristicModule* )m );
 }
 
-static void heu_dtor(Inspector *p)
+static void heu_dtor( Inspector* p )
 {
-    delete p;
+	delete p;
 }
 
-static const InspectApi as_api =
-    {
-        {PT_INSPECTOR,
-         sizeof(InspectApi),
-         INSAPI_VERSION,
-         0,
-         API_RESERVED,
-         API_OPTIONS,
-         s_name,
-         s_help,
-         mod_ctor,
-         mod_dtor},
-        IT_NETWORK,
-        PROTO_BIT__ARP,
-        nullptr, // buffers
-        nullptr, // service
-        nullptr, // pinit
-        nullptr, // pterm
-        nullptr, // tinit
-        nullptr, // tterm
-        heu_ctor,
-        heu_dtor,
-        nullptr, // ssn
-        nullptr, // reset
+static const InspectApi as_api = {
+	{ PT_INSPECTOR,
+	  sizeof( InspectApi ),
+	  INSAPI_VERSION,
+	  0,
+	  API_RESERVED,
+	  API_OPTIONS,
+	  s_name,
+	  s_help,
+	  mod_ctor,
+	  mod_dtor },
+	IT_NETWORK,
+	PROTO_BIT__ARP,
+	nullptr, // buffers
+	nullptr, // service
+	nullptr, // pinit
+	nullptr, // pterm
+	nullptr, // tinit
+	nullptr, // tterm
+	heu_ctor,
+	heu_dtor,
+	nullptr, // ssn
+	nullptr, // reset
 };
 
 #ifdef BUILDING_SO
-SO_PUBLIC const BaseApi *snort_plugins[] =
+SO_PUBLIC const BaseApi* snort_plugins[] =
 #else
-const BaseApi *nin_heuristic[] =
+const BaseApi* nin_heuristic[] =
 #endif
-    {
-        &as_api.base,
-        nullptr};
+	{ &as_api.base, nullptr };

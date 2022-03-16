@@ -17,7 +17,7 @@
 
 using namespace snort;
 
-THREAD_LOCAL const Trace *heu_trace = nullptr;
+THREAD_LOCAL const Trace* heu_trace = nullptr;
 
 //-------------------------------------------------------------------------
 // class stuff
@@ -26,15 +26,15 @@ THREAD_LOCAL const Trace *heu_trace = nullptr;
 class Heuristic : public Inspector
 {
 private:
-    HeuristicConfig* config;
-    void heuristic_show_config(const HeuristicConfig*) const;
+	HeuristicConfig* config;
+	void heuristic_show_config( const HeuristicConfig* ) const;
 
 public:
-    Heuristic(HeuristicModule*);
-    ~Heuristic() override;
+	Heuristic( HeuristicModule* );
+	~Heuristic() override;
 
-    void show(const SnortConfig*) const override;
-    void eval(Packet*) override;
+	void show( const SnortConfig* ) const override;
+	void eval( Packet* ) override;
 };
 
 #endif /* __HEURISTIC_H__ */
