@@ -2,6 +2,7 @@
 #define __HEURISTIC_H__
 
 #include <math.h>
+#include <memory>
 
 #include "detection/detection_engine.h"
 #include "events/event_queue.h"
@@ -25,16 +26,17 @@ THREAD_LOCAL const Trace* heu_trace = nullptr;
 
 class Heuristic : public Inspector
 {
-private:
-	HeuristicConfig* config;
-	void heuristic_show_config( const HeuristicConfig* ) const;
-
 public:
 	Heuristic( HeuristicModule* );
-	~Heuristic() override;
+	virtual ~Heuristic();
 
 	void show( const SnortConfig* ) const override;
 	void eval( Packet* ) override;
+
+private:
+	void heuristic_show_config( const std::unique_ptr< HeuristicConfig >& ) const;
+
+	std::unique_ptr< HeuristicConfig > config;
 };
 
 #endif /* __HEURISTIC_H__ */

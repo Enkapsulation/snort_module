@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include "detection/detection_engine.h"
 #include "events/event_queue.h"
@@ -17,10 +18,11 @@ using namespace snort;
 //-------------------------------------------------------------------------
 // implementation stuff
 //-------------------------------------------------------------------------
-void Heuristic::heuristic_show_config( const HeuristicConfig* config ) const
+void Heuristic::heuristic_show_config( const std::unique_ptr< HeuristicConfig >& ) const
 {
 	if( config )
 	{
+		// TO DO??
 		return;
 	}
 
@@ -30,25 +32,21 @@ void Heuristic::heuristic_show_config( const HeuristicConfig* config ) const
 //-------------------------------------------------------------------------
 // class stuff
 //-------------------------------------------------------------------------
-Heuristic::Heuristic( HeuristicModule* mod )
-{
-	config = mod->get_config();
-}
+Heuristic::Heuristic( HeuristicModule* mod ) : config( mod->get_config() ) {}
 
-Heuristic::~Heuristic()
-{
-	delete config;
-}
+Heuristic::~Heuristic() = default;
 
 void Heuristic::show( const SnortConfig* ) const
 {
 	if( config )
+	{
 		heuristic_show_config( config );
+	}
 }
 
-void Heuristic::eval( Packet* p )
+void Heuristic::eval( Packet* packet )
 {
-	std::cout << "Hello World from -> " << p->is_icmp() << std::endl;
+	std::cout << "Hello World from -> " << packet->is_icmp() << std::endl;
 }
 
 //-------------------------------------------------------------------------
@@ -59,19 +57,19 @@ static Module* mod_ctor()
 	return new HeuristicModule;
 }
 
-static void mod_dtor( Module* m )
+static void mod_dtor( Module* module )
 {
-	delete m;
+	delete module;
 }
 
-static Inspector* heu_ctor( Module* m )
+static Inspector* heu_ctor( Module* module )
 {
-	return new Heuristic( ( HeuristicModule* )m );
+	return new Heuristic( ( HeuristicModule* )module );
 }
 
-static void heu_dtor( Inspector* p )
+static void heu_dtor( Inspector* inspector )
 {
-	delete p;
+	delete inspector;
 }
 
 static const InspectApi as_api = {
