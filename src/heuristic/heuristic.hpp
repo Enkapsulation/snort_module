@@ -34,9 +34,9 @@ public:
 	void eval( Packet* ) override;
 
 private:
-	void heuristic_show_config( const std::unique_ptr< HeuristicConfig >& ) const;
+	void heuristic_show_config( const std::shared_ptr< HeuristicConfig >& ) const;
 
-	std::unique_ptr< HeuristicConfig > config;
+	std::shared_ptr< HeuristicConfig > config;
 };
 
 #endif /* __HEURISTIC_H__ */

@@ -18,7 +18,7 @@ using namespace snort;
 //-------------------------------------------------------------------------
 // implementation stuff
 //-------------------------------------------------------------------------
-void Heuristic::heuristic_show_config( const std::unique_ptr< HeuristicConfig >& ) const
+void Heuristic::heuristic_show_config( const std::shared_ptr< HeuristicConfig >& ) const
 {
 	if( config )
 	{

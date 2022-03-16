@@ -1,4 +1,5 @@
 #include "heuristic_module.hpp"
+#include <memory>
 
 // THREAD_LOCAL SimpleStats asstats;
 
@@ -24,16 +25,9 @@ static const RuleMap s_rules[] = { { 678, "Jeszcze jak" }, { 0, nullptr } };
 //-------------------------------------------------------------------------
 // arp_spoof module
 //-------------------------------------------------------------------------
-HeuristicModule::HeuristicModule() : Module( s_name, s_help, s_params )
-{
-	config = nullptr;
-}
+HeuristicModule::HeuristicModule() : Module( s_name, s_help, s_params ), config( nullptr ) {}
 
-HeuristicModule::~HeuristicModule()
-{
-	if( config )
-		delete config;
-}
+HeuristicModule::~HeuristicModule() = default;
 
 const RuleMap* HeuristicModule::get_rules() const
 {
@@ -54,14 +48,20 @@ bool HeuristicModule::begin( const char*, int, SnortConfig* )
 {
 	if( !config )
 	{
-		config = new HeuristicConfig;
+		config = std::make_shared< HeuristicConfig >();
 	}
+
 	return true;
 }
 
 bool HeuristicModule::end( const char*, int idx, SnortConfig* )
 {
 	return true;
+}
+
+std::shared_ptr< HeuristicConfig > HeuristicModule::get_config()
+{
+	return config;
 }
 
 const PegInfo* HeuristicModule::get_pegs() const
@@ -72,4 +72,14 @@ const PegInfo* HeuristicModule::get_pegs() const
 PegCount* HeuristicModule::get_counts() const
 {
 	return ( PegCount* )&asstats;
+}
+
+unsigned HeuristicModule::get_gid() const
+{
+	return gid_heuristic;
+}
+
+HeuristicModule::Usage HeuristicModule::get_usage() const
+{
+	return INSPECT;
 }
