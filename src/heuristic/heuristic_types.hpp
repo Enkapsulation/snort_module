@@ -8,13 +8,13 @@
 #include <string>
 
 #define GENERATOR_SPP_HEURISTIC 256
-#define     HEURISTIC_BRUTEFORECE_DETECT 1   
+#define HEURISTIC_BRUTEFORECE_DETECT 1
 
 #define HEURISTIC_DETECT_STRING "(spp_heuristic) Detect enormous anomaly"
 
 /* Shanon entropy */
 #define LOG2 0.69314718056
-#define ENTROPY(prob) (-1*(log(prob)/LOG2))
+#define ENTROPY(prob) (-1 * (log(prob) / LOG2))
 
 /* Default value for entropy */
 #define NO_SCORE (double)-1
@@ -35,12 +35,12 @@
 #define L_FLAGS 2
 
 /* Attack types */
-#define DDOS         0
-#define PHISING      1
-#define MALWARE      2
-#define RANSOMEWARE  3
-#define DoS          4
-#define XSS          5
+#define DDOS 0
+#define PHISING 1
+#define MALWARE 2
+#define RANSOMEWARE 3
+#define DoS 4
+#define XSS 5
 
 /* range flags */
 #define SINGLE 0
@@ -78,7 +78,6 @@ struct HeuristicConfig
    double sensitivity;
    double dangerous_entropy;
    double packet_value;
-   int record_number;
    std::string filename_malicious;
    std::shared_ptr<DangerousIPConfig> filename_config;
 };
@@ -106,7 +105,7 @@ struct DangerousIpAddr
 /* Double linked list structure */
 struct LinkedList
 {
-   LinkedList* next; // Previus item on the linked list
+   LinkedList *next; // Previus item on the linked list
    double entropy;
    in_addr ip_addr;
    uint64_t count;
@@ -121,6 +120,5 @@ enum ParseStatus
    STATUS_OK = 0,
    STATUS_ERROR = 1
 };
-
 
 #endif /* __HEURISTIC_MODULE_H__ */

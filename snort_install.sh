@@ -36,7 +36,7 @@ sudo make install
 # install gperftools
 cd ${PATH_SNORT_DIR_LIB}
 wget https://github.com/gperftools/gperftools/releases/download/gperftools-2.9.1/gperftools-2.9.1.tar.gz
-tar xzvf gperftools-2.9.1.tar.gz
+tar -xzvf gperftools-2.9.1.tar.gz
 cd gperftools-2.9.1
 ./configure
 make

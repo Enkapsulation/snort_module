@@ -15,6 +15,8 @@ add_library (
     heuristic_types.hpp
     heuristic_module.hpp
     heuristic_module.cpp
+    utils.hpp
+    utils.cpp
 )
 
 set_target_properties (

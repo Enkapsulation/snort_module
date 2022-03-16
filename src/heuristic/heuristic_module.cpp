@@ -5,7 +5,7 @@
 using namespace snort;
 
 //-------------------------------------------------------------------------
-// arp_spoof stuff
+// heurstic stuff
 //-------------------------------------------------------------------------
 static const Parameter heuristic_params[] = 
 {
@@ -19,14 +19,14 @@ static const Parameter heuristic_params[] =
 
 static const Parameter s_params[] =
 {
-    { "hosts", Parameter::PT_LIST, heuristic_params, nullptr,
-      "configure ARP cache overwrite attacks" },
+    { "configuration", Parameter::PT_LIST, heuristic_params, nullptr,
+        "heursitic configuration" },
     { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr }
 };
 
 static const RuleMap s_rules[] =
 {
-    { 678, "Jeszcze jak"},
+    { 1, "Jeszcze jak"},
     { 0, nullptr }
 };
 
@@ -52,6 +52,13 @@ const RuleMap* HeuristicModule::get_rules() const
 ProfileStats* HeuristicModule::get_profile() const
 {
     return &heuristicPerfStats;
+}
+
+HeuristicConfig* HeuristicModule::get_config()
+{
+    HeuristicConfig* temp = config;
+    config = nullptr;
+    return temp;
 }
 
 bool HeuristicModule::set(const char*, Value& v, SnortConfig*)
