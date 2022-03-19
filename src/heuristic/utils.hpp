@@ -1,110 +1,97 @@
+#include <iterator>
+#include <iostream>
 #include <fstream>
-#include <string>
+#include <sstream>
 #include <vector>
-#include <memory>
+#include <string>
+#include <cstdint>
+#include <arpa/inet.h>
+#include <string_view>
 
 #include "heuristic_types.hpp"
 
-void ReadCSV(std::shared_ptr<HeuristicConfig> file_data, DangerousIpAddr** ip_ranking)
+class CSVRow
 {
-	std::ofstream fd;
-   fd.open(file_data->filename_malicious);
-
-   char line[50];
-   int j = 0;
-   int i = 0;
-   char* token;
-   double ent;
-   char* endptr;
-   DangerousIpAddr* tmp_ip_ranking = NULL;
-
-   /* Pętla do zliczenia ilości wierszy */
-   for(char c = getc(fd); EOF != c; c = getc(fd))
+public:
+   std::string operator[](std::size_t index) const
    {
-      if('\n' == c)
-      {
-         j++;
-      }
+      return m_line.substr((m_data[index] + 1), m_data[index + 1] - (m_data[index] + 1));
    }
 
-   /* długość tablicy */
-   file_data->record_number = j;
-
-   /* alokacja pamięci na sparsowane dane */
-   tmp_ip_ranking = (dangerous_ip_addr*)malloc(j * sizeof(dangerous_ip_addr));
-
-   /* przewijanie pliku do początku */
-   rewind(fd);
-
-   /* pobieranie i przypisanie danych z pliku */
-   while(fgets(line, sizeof(line), fd))
+   std::size_t size() const
    {
-      /* Read malicious IP addr */
-      struct in_addr IP_struct;
-      token = strtok(line, ",");
-      inet_aton(token, &IP_struct);
-      tmp_ip_ranking[i].ip_addr = IP_struct;
-
-      /* Read flag */
-      token = strtok(NULL, ",");
-      tmp_ip_ranking[i].flag = token[0];
-
-      /* Read probably attack */
-      token = strtok(NULL, ",");
-      switch(*token)
-      {
-         case 'D': tmp_ip_ranking[i].attack_type = DDOS; break;
-         case 'P': tmp_ip_ranking[i].attack_type = PHISING; break;
-         case 'M': tmp_ip_ranking[i].attack_type = MALWARE; break;
-         case 'R': tmp_ip_ranking[i].attack_type = RANSOMEWARE; break;
-         case 'S': tmp_ip_ranking[i].attack_type = DoS; break;
-         case 'X': tmp_ip_ranking[i].attack_type = XSS; break;
-         default: break;
-      }
-
-      /* Read range */
-      token = strtok(NULL, ",");
-      switch(*token)
-      {
-         case 'S': tmp_ip_ranking[i].range = SINGLE; break;
-         case 'P': tmp_ip_ranking[i].range = PARTIAL; break;
-         case 'C': tmp_ip_ranking[i].range = COMPLETE; break;
-         default: break;
-      }
-
-      /* Read access */
-      token = strtok(NULL, ",");
-      switch(*token)
-      {
-         case 'N': tmp_ip_ranking[i].access = NONE; break;
-         case 'U': tmp_ip_ranking[i].access = USER; break;
-         default: break;
-      }
-
-      /* Read availability */
-      token = strtok(NULL, ",");
-      switch(*token)
-      {
-         case 'N': tmp_ip_ranking[i].availability = NONE; break;
-         case 'P': tmp_ip_ranking[i].availability = PARTIAL; break;
-         case 'C': tmp_ip_ranking[i].availability = COMPLETE; break;
-         default: break;
-      }
-
-      /* Read counter */
-      token = strtok(NULL, ",");
-      tmp_ip_ranking[i].counter = strtol(token, &endptr, 0);
-
-      /* Read entropy */
-      token = strtok(NULL, "\n");
-      tmp_ip_ranking[i].network_entropy = strtod(token, endptr);
-
-      i++;
+      return m_data.size() - 1;
    }
 
-   /* Move data to main array */
-   *ip_ranking = tmp_ip_ranking;
+   void readNextRow(std::istream &str)
+   {
+      std::getline(str, m_line);
 
-   /* closed file descriptor*/
-   fclose(fd); 
+      m_data.clear();
+      m_data.emplace_back(-1);
+      std::string::size_type pos = 0;
+      while ((pos = m_line.find(',', pos)) != std::string::npos)
+      {
+         m_data.emplace_back(pos);
+         ++pos;
+      }
+
+      // This checks for a trailing comma with no data after it.
+      pos = m_line.size();
+      m_data.emplace_back(pos);
+   }
+
+private:
+   std::string m_line;
+   std::vector<int> m_data;
+};
+
+std::istream &operator>>(std::istream &str, CSVRow &data)
+{
+   data.readNextRow(str);
+   return str;
 }
+
+class CSVIterator
+{
+public:
+   typedef std::input_iterator_tag iterator_category;
+   typedef CSVRow value_type;
+   typedef std::size_t difference_type;
+   typedef CSVRow *pointer;
+   typedef CSVRow &reference;
+
+   CSVIterator(std::istream &str) : m_str(str.good() ? &str : NULL) { ++(*this); }
+   CSVIterator() : m_str(NULL) {}
+
+   // Pre Increment
+   CSVIterator &operator++()
+   {
+      if (m_str)
+      {
+         if (!((*m_str) >> m_row))
+         {
+            m_str = NULL;
+         }
+      }
+      return *this;
+   }
+
+   // Post increment
+   CSVIterator operator++(int)
+   {
+      CSVIterator tmp(*this);
+      ++(*this);
+      return tmp;
+   }
+
+   CSVRow const &operator*() const { return m_row; }
+   CSVRow const *operator->() const { return &m_row; }
+
+   bool operator==(CSVIterator const &rhs) { return ((this == &rhs) || ((this->m_str == NULL) && (rhs.m_str == NULL))); }
+   bool operator!=(CSVIterator const &rhs) { return !((*this) == rhs); }
+
+private:
+   std::istream *m_str;
+   CSVRow m_row;
+};

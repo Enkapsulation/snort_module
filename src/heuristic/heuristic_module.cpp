@@ -1,5 +1,6 @@
 #include "heuristic_module.hpp"
 #include <memory>
+#include "utils.hpp"
 
 // THREAD_LOCAL SimpleStats asstats;
 
@@ -56,7 +57,11 @@ bool HeuristicModule::begin( const char*, int, SnortConfig* )
 
 bool HeuristicModule::end( const char*, int idx, SnortConfig* )
 {
-	return true;
+    // if ( !config )
+    // {
+    //     config = new HeuristicConfig();
+    // }
+    // return true;
 }
 
 std::shared_ptr< HeuristicConfig > HeuristicModule::get_config()
