@@ -1,5 +1,5 @@
-#ifndef __HEURISTIC_MODULE_H__
-#define __HEURISTIC_MODULE_H__
+#ifndef _HEURISTIC_TYPES_H_
+#define _HEURISTIC_TYPES_H_
 
 #include <arpa/inet.h>
 #include <cstdint>
@@ -33,15 +33,7 @@ enum class RiskFLag : uint8_t
    L
 };
 
-RiskFLag GetRiskFlag(std::string riskFlag)
-{
-   static std::map<std::string, RiskFLag> const string2RiskFLag = {
-      {"H", RiskFLag::H},
-      {"M", RiskFLag::M},
-      {"L", RiskFLag::L}};
-
-   return string2RiskFLag.find(riskFlag)->second;
-}
+RiskFLag GetRiskFlag(std::string riskFlag);
 
 enum class AttackTypes : uint8_t
 {
@@ -52,17 +44,7 @@ enum class AttackTypes : uint8_t
    dos,
 };
 
-AttackTypes getAttackFlag(std::string attackFlag)
-{
-   static std::map<std::string, AttackTypes> const string2AttackFlag = {
-      {"D", AttackTypes::ddos},
-      {"P", AttackTypes::phishing},
-      {"M", AttackTypes::malware},
-      {"R", AttackTypes::ransomware},
-      {"D", AttackTypes::dos}};
-
-   return string2AttackFlag.find(attackFlag)->second;
-}
+AttackTypes getAttackFlag(std::string attackFlag);
 
 enum class RangeFlags : uint8_t
 {
@@ -71,15 +53,7 @@ enum class RangeFlags : uint8_t
    complete
 };
 
-RangeFlags getRangeFlag(std::string rangeFlag)
-{
-   static std::map<std::string, RangeFlags> const string2RangeFlag = {
-      {"S", RangeFlags::single},
-      {"P", RangeFlags::partial},
-      {"C", RangeFlags::complete}};
-
-   return string2RangeFlag.find(rangeFlag)->second;
-}
+RangeFlags getRangeFlag(std::string rangeFlag);
 
 enum class AccessFlag : uint8_t
 {
@@ -87,14 +61,7 @@ enum class AccessFlag : uint8_t
    user
 };
 
-AccessFlag getAccessFlag(std::string accessFlag)
-{
-   static std::map<std::string, AccessFlag> const string2AccessFlag = {
-      {"S", AccessFlag::none},
-      {"P", AccessFlag::user}};
-
-   return string2AccessFlag.find(accessFlag)->second;
-}
+AccessFlag getAccessFlag(std::string accessFlag);
 
 enum class AvailabilityFlags : uint8_t
 {
@@ -103,15 +70,7 @@ enum class AvailabilityFlags : uint8_t
    complete
 };
 
-AvailabilityFlags getAvailabilityFlags(std::string availabilityFlags)
-{
-   static std::map<std::string, AvailabilityFlags> const string2AvailabilityFlags = {
-      {"N", AvailabilityFlags::none},
-      {"P", AvailabilityFlags::partial},
-      {"C", AvailabilityFlags::complete}};
-
-   return string2AvailabilityFlags.find(availabilityFlags)->second;
-}
+AvailabilityFlags getAvailabilityFlags(std::string availabilityFlags);
 
 /*============================================================================*\
 * Local variables
@@ -188,4 +147,4 @@ enum ParseStatus
 	STATUS_ERROR = 1
 };
 
-#endif /* __HEURISTIC_MODULE_H__ */
+#endif /* _HEURISTIC_TYPES_H_ */

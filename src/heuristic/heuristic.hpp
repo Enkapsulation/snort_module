@@ -1,5 +1,5 @@
-#ifndef __HEURISTIC_H__
-#define __HEURISTIC_H__
+#ifndef HEURISTIC_H
+#define HEURISTIC_H
 
 #include <math.h>
 #include <memory>
@@ -40,4 +40,4 @@ private:
 	std::shared_ptr< HeuristicConfig > config;
 };
 
-#endif /* __HEURISTIC_H__ */
+#endif /* HEURISTIC_H */

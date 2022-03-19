@@ -13,6 +13,7 @@ add_library (
 	heuristic.hpp
     heuristic.cpp
     heuristic_types.hpp
+    heuristic_types.cpp
     heuristic_module.hpp
     heuristic_module.cpp
     utils.hpp
