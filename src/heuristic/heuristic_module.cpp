@@ -68,13 +68,16 @@ bool HeuristicModule::begin(const char *, int, SnortConfig *)
 {
     if (!config)
     {
-        /* Set default vaule */
+        /* Set default vaule config*/
         double defaultSensitivity = 20.0;
         double defaultDangerousEntropy = 6.0;
         double defaultPacketValue = 15.0;
         std::string defaultFilenameMalicious = "";
 
         config = std::make_shared<HeuristicConfig>(defaultSensitivity, defaultDangerousEntropy, defaultPacketValue, defaultFilenameMalicious);
+
+        /* Set default value for flags*/
+        
     }
 
     return true;
