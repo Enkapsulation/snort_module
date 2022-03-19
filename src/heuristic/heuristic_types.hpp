@@ -1,16 +1,16 @@
 #ifndef __HEURISTIC_MODULE_H__
 #define __HEURISTIC_MODULE_H__
 
-#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <cstdint>
 #include <array>
 #include <memory>
 #include <string>
+#include <vector>
+#include <map>
 
 #define GENERATOR_SPP_HEURISTIC 256
 #define HEURISTIC_BRUTEFORECE_DETECT 1
-
-#define HEURISTIC_DETECT_STRING "(spp_heuristic) Detect enormous anomaly"
 
 /* Shanon entropy */
 #define LOG2 0.69314718056
@@ -19,9 +19,6 @@
 /* Default value for entropy */
 #define NO_SCORE ( double )-1
 
-/* Get row number */
-#define GET_IN_ROW_NUMBER( config ) ( ( config )->filename_config->infected_row_number )
-
 /*  number of flag types */
 #define NUM_OF_FLAGS 3
 #define NUM_OF_ATTACK 6
@@ -29,32 +26,92 @@
 #define NUM_OF_ACCESS 2
 #define NUM_OF_AVAILABILITY 3
 
-/* Risk flags */
-#define H_FLAGS 0
-#define M_FLAGS 1
-#define L_FLAGS 2
+enum class RiskFLag : uint8_t
+{
+   H,
+   M,
+   L
+};
 
-/* Attack types */
-#define DDOS 0
-#define PHISING 1
-#define MALWARE 2
-#define RANSOMEWARE 3
-#define DoS 4
-#define XSS 5
+RiskFLag GetRiskFlag(std::string riskFlag)
+{
+   static std::map<std::string, RiskFLag> const string2RiskFLag = {
+      {"H", RiskFLag::H},
+      {"M", RiskFLag::M},
+      {"L", RiskFLag::L}};
 
-/* range flags */
-#define SINGLE 0
-#define PARTIAL 1
-#define COMPLETE 2
+   return string2RiskFLag.find(riskFlag)->second;
+}
 
-/* Access flags */
-#define NONE 0
-#define USER 1
+enum class AttackTypes : uint8_t
+{
+   ddos,
+   phishing,
+   malware,
+   ransomware,
+   dos,
+};
 
-/* Availability flags */
-#define NONE 0
-#define PARTIAL 1
-#define COMPLETE 2
+AttackTypes getAttackFlag(std::string attackFlag)
+{
+   static std::map<std::string, AttackTypes> const string2AttackFlag = {
+      {"D", AttackTypes::ddos},
+      {"P", AttackTypes::phishing},
+      {"M", AttackTypes::malware},
+      {"R", AttackTypes::ransomware},
+      {"D", AttackTypes::dos}};
+
+   return string2AttackFlag.find(attackFlag)->second;
+}
+
+enum class RangeFlags : uint8_t
+{
+   single,
+   partial,
+   complete
+};
+
+RangeFlags getRangeFlag(std::string rangeFlag)
+{
+   static std::map<std::string, RangeFlags> const string2RangeFlag = {
+      {"S", RangeFlags::single},
+      {"P", RangeFlags::partial},
+      {"C", RangeFlags::complete}};
+
+   return string2RangeFlag.find(rangeFlag)->second;
+}
+
+enum class AccessFlag : uint8_t
+{
+   none,
+   user
+};
+
+AccessFlag getAccessFlag(std::string accessFlag)
+{
+   static std::map<std::string, AccessFlag> const string2AccessFlag = {
+      {"S", AccessFlag::none},
+      {"P", AccessFlag::user}};
+
+   return string2AccessFlag.find(accessFlag)->second;
+}
+
+enum class AvailabilityFlags : uint8_t
+{
+   none,
+   partial,
+   complete
+};
+
+AvailabilityFlags getAvailabilityFlags(std::string availabilityFlags)
+{
+   static std::map<std::string, AvailabilityFlags> const string2AvailabilityFlags = {
+      {"N", AvailabilityFlags::none},
+      {"P", AvailabilityFlags::partial},
+      {"C", AvailabilityFlags::complete}};
+
+   return string2AvailabilityFlags.find(availabilityFlags)->second;
+}
 
 /*============================================================================*\
 * Local variables
@@ -72,34 +129,46 @@ struct DangerousIPConfig
 	std::array< int, NUM_OF_AVAILABILITY > availability_score;
 };
 
+/*===========================[Dangerous ip]===========================*/
+struct DangerousIpAddr
+{
+   std::string hash; /* change types if needed */
+   sockaddr_in ip_addr;
+   RiskFLag risk_flag;
+   AttackTypes attack_type;
+   RangeFlags range;
+   AccessFlag access;
+   AvailabilityFlags availability;
+   uint64_t counter;
+   double network_entropy;
+
+   DangerousIpAddr(
+      sockaddr_in _ip_addr,
+      AttackTypes _attack_type,
+      RangeFlags _range,
+      AccessFlag _access,
+      AvailabilityFlags _availability,
+      RiskFLag _risk_flag,
+      uint64_t _counter,
+      double _network_entropy) : ip_addr{_ip_addr}, attack_type{_attack_type}, range{_range}, access{_access}, availability{_availability}, risk_flag{_risk_flag}, counter{_counter}, network_entropy{_network_entropy} {}
+};
+
 /* Main policy configuration */
 struct HeuristicConfig
 {
-	double sensitivity;
-	double dangerous_entropy;
-	double packet_value;
-	int record_number;
-	std::string filename_malicious;
-	std::shared_ptr< DangerousIPConfig > filename_config;
+   double sensitivity;
+   double dangerous_entropy;
+   double packet_value;
+   std::string filename_malicious;
+   std::shared_ptr<DangerousIPConfig> filename_config;
+   std::vector<DangerousIpAddr> dangerousIpAdress;
+
+   HeuristicConfig(
+      double _sensitivity,
+      double _dangerous_entropy,
+      double _packet_value,
+      std::string _filename_malicious) : sensitivity{_sensitivity}, dangerous_entropy{_dangerous_entropy}, packet_value{_packet_value}, filename_malicious{_filename_malicious} {}
 };
-
-/*===========================[Dangerous ip]===========================*/
-
-/* structure to hold each element from .csv file */
-struct DangerousIpAddr
-{
-	uint8_t attack_type;
-	uint8_t range;
-	uint8_t access;
-	uint8_t availability;
-	char flag;
-	double network_entropy;
-	in_addr ip_addr;
-	uint64_t counter;
-};
-
-// /* list of ip parse from file */
-// DangerousIpAddr* dangerous_ip_record = nullptr;
 
 /*===========================[linked list]===========================*/
 
@@ -111,9 +180,6 @@ struct LinkedList
 	in_addr ip_addr;
 	uint64_t count;
 };
-
-/* Head of linked list */
-// linkedlist* headPtr = nullptr;
 
 /*===========================[Error enum]===========================*/
 enum ParseStatus

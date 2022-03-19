@@ -41,32 +41,32 @@ void Heuristic::set_default_value( HeuristicConfig* config )
 	/* Init default packet value */
 	config->packet_value = 20.0;
 
-	/* Init default score flags */
-	config->filename_config->flags_score[ H_FLAGS ] = -3;
-	config->filename_config->flags_score[ M_FLAGS ] = -2;
-	config->filename_config->flags_score[ L_FLAGS ] = -1;
+	// /* Init default score flags */
+	// config->filename_config->flags_score[ H_FLAGS ] = -3;
+	// config->filename_config->flags_score[ M_FLAGS ] = -2;
+	// config->filename_config->flags_score[ L_FLAGS ] = -1;
 
-	/* Default attack score */
-	config->filename_config->attack_score[ DDOS ]		 = -5;
-	config->filename_config->attack_score[ PHISING ]	 = -5;
-	config->filename_config->attack_score[ MALWARE ]	 = -5;
-	config->filename_config->attack_score[ RANSOMEWARE ] = -5;
-	config->filename_config->attack_score[ DoS ]		 = -5;
-	config->filename_config->attack_score[ XSS ]		 = -5;
+	// /* Default attack score */
+	// config->filename_config->attack_score[ DDOS ]		 = -5;
+	// config->filename_config->attack_score[ PHISING ]	 = -5;
+	// config->filename_config->attack_score[ MALWARE ]	 = -5;
+	// config->filename_config->attack_score[ RANSOMEWARE ] = -5;
+	// config->filename_config->attack_score[ DoS ]		 = -5;
+	// config->filename_config->attack_score[ XSS ]		 = -5;
 
-	/* Default range score */
-	config->filename_config->range_score[ SINGLE ]	 = -1;
-	config->filename_config->range_score[ PARTIAL ]	 = -2;
-	config->filename_config->range_score[ COMPLETE ] = -3;
+	// /* Default range score */
+	// config->filename_config->range_score[ SINGLE ]	 = -1;
+	// config->filename_config->range_score[ PARTIAL ]	 = -2;
+	// config->filename_config->range_score[ COMPLETE ] = -3;
 
-	/* Default Access score */
-	config->filename_config->access_score[ NONE ] = -2;
-	config->filename_config->access_score[ USER ] = -1;
+	// /* Default Access score */
+	// config->filename_config->access_score[ NONE ] = -2;
+	// config->filename_config->access_score[ USER ] = -1;
 
-	/* Default Availability score */
-	config->filename_config->availability_score[ NONE ]		= -1;
-	config->filename_config->availability_score[ PARTIAL ]	= -2;
-	config->filename_config->availability_score[ COMPLETE ] = -4;
+	// /* Default Availability score */
+	// config->filename_config->availability_score[ NONE ]		= -1;
+	// config->filename_config->availability_score[ PARTIAL ]	= -2;
+	// config->filename_config->availability_score[ COMPLETE ] = -4;
 }
 
 //-------------------------------------------------------------------------
