@@ -1,5 +1,4 @@
-#ifndef HEURISTIC_H
-#define HEURISTIC_H
+#pragma once
 
 #include <math.h>
 #include <memory>
@@ -39,5 +38,3 @@ private:
 
 	std::shared_ptr< HeuristicConfig > config;
 };
-
-#endif /* HEURISTIC_H */

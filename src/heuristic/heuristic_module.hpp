@@ -1,23 +1,20 @@
-#ifndef HEURISTIC_MODULE_H
-#define HEURISTIC_MODULE_H
+#pragma once
+
+#include <memory>
 
 #include "framework/module.h"
 #include "heuristic_types.hpp"
-#include <memory>
 
 static const char* s_name = "heuristic";
 static const char* s_help = "detection based on heuristic rules";
 
-const int gid_heuristic = 456;
+constexpr int gid_heuristic{ 456 };
 
 extern THREAD_LOCAL SimpleStats asstats;
 extern THREAD_LOCAL snort::ProfileStats heuristicPerfStats;
 
 class HeuristicModule : public snort::Module
 {
-private:
-	std::shared_ptr< HeuristicConfig > config;
-
 public:
 	HeuristicModule();
 	~HeuristicModule() override;
@@ -37,6 +34,7 @@ public:
 	snort::ProfileStats* get_profile() const override;
 
 	Usage get_usage() const override;
-};
 
-#endif /* HEURISTIC_MODULE_H */
+private:
+	std::shared_ptr< HeuristicConfig > config;
+};

@@ -1,5 +1,4 @@
-#ifndef _HEURISTIC_TYPES_H_
-#define _HEURISTIC_TYPES_H_
+#pragma once
 
 #include <arpa/inet.h>
 #include <cstdint>
@@ -28,49 +27,49 @@
 
 enum class RiskFLag : uint8_t
 {
-   H,
-   M,
-   L
+	H,
+	M,
+	L
 };
 
-RiskFLag GetRiskFlag(std::string riskFlag);
+RiskFLag GetRiskFlag( std::string riskFlag );
 
 enum class AttackTypes : uint8_t
 {
-   ddos,
-   phishing,
-   malware,
-   ransomware,
-   dos,
+	ddos,
+	phishing,
+	malware,
+	ransomware,
+	dos,
 };
 
-AttackTypes getAttackFlag(std::string attackFlag);
+AttackTypes getAttackFlag( std::string attackFlag );
 
 enum class RangeFlags : uint8_t
 {
-   single,
-   partial,
-   complete
+	single,
+	partial,
+	complete
 };
 
-RangeFlags getRangeFlag(std::string rangeFlag);
+RangeFlags getRangeFlag( std::string rangeFlag );
 
 enum class AccessFlag : uint8_t
 {
-   none,
-   user
+	none,
+	user
 };
 
-AccessFlag getAccessFlag(std::string accessFlag);
+AccessFlag getAccessFlag( std::string accessFlag );
 
 enum class AvailabilityFlags : uint8_t
 {
-   none,
-   partial,
-   complete
+	none,
+	partial,
+	complete
 };
 
-AvailabilityFlags getAvailabilityFlags(std::string availabilityFlags);
+AvailabilityFlags getAvailabilityFlags( std::string availabilityFlags );
 
 /*============================================================================*\
 * Local variables
@@ -91,42 +90,56 @@ struct DangerousIPConfig
 /*===========================[Dangerous ip]===========================*/
 struct DangerousIpAddr
 {
-   std::string hash; /* change types if needed */
-   sockaddr_in ip_addr;
-   RiskFLag risk_flag;
-   AttackTypes attack_type;
-   RangeFlags range;
-   AccessFlag access;
-   AvailabilityFlags availability;
-   uint64_t counter;
-   double network_entropy;
+	std::string hash; /* change types if needed */
+	sockaddr_in ip_addr;
+	RiskFLag risk_flag;
+	AttackTypes attack_type;
+	RangeFlags range;
+	AccessFlag access;
+	AvailabilityFlags availability;
+	uint64_t counter;
+	double network_entropy;
 
-   DangerousIpAddr(
-      sockaddr_in _ip_addr,
-      AttackTypes _attack_type,
-      RangeFlags _range,
-      AccessFlag _access,
-      AvailabilityFlags _availability,
-      RiskFLag _risk_flag,
-      uint64_t _counter,
-      double _network_entropy) : ip_addr{_ip_addr}, attack_type{_attack_type}, range{_range}, access{_access}, availability{_availability}, risk_flag{_risk_flag}, counter{_counter}, network_entropy{_network_entropy} {}
+	DangerousIpAddr( sockaddr_in _ip_addr,
+					 AttackTypes _attack_type,
+					 RangeFlags _range,
+					 AccessFlag _access,
+					 AvailabilityFlags _availability,
+					 RiskFLag _risk_flag,
+					 uint64_t _counter,
+					 double _network_entropy )
+		: ip_addr{ _ip_addr },
+		  attack_type{ _attack_type },
+		  range{ _range },
+		  access{ _access },
+		  availability{ _availability },
+		  risk_flag{ _risk_flag },
+		  counter{ _counter },
+		  network_entropy{ _network_entropy }
+	{
+	}
 };
 
 /* Main policy configuration */
 struct HeuristicConfig
 {
-   double sensitivity;
-   double dangerous_entropy;
-   double packet_value;
-   std::string filename_malicious;
-   std::shared_ptr<DangerousIPConfig> filename_config;
-   std::vector<DangerousIpAddr> dangerousIpAdress;
+	double sensitivity;
+	double dangerous_entropy;
+	double packet_value;
+	std::string filename_malicious;
+	std::shared_ptr< DangerousIPConfig > filename_config;
+	std::vector< DangerousIpAddr > dangerousIpAdress;
 
-   HeuristicConfig(
-      double _sensitivity,
-      double _dangerous_entropy,
-      double _packet_value,
-      std::string _filename_malicious) : sensitivity{_sensitivity}, dangerous_entropy{_dangerous_entropy}, packet_value{_packet_value}, filename_malicious{_filename_malicious} {}
+	HeuristicConfig( double _sensitivity,
+					 double _dangerous_entropy,
+					 double _packet_value,
+					 std::string _filename_malicious )
+		: sensitivity{ _sensitivity },
+		  dangerous_entropy{ _dangerous_entropy },
+		  packet_value{ _packet_value },
+		  filename_malicious{ _filename_malicious }
+	{
+	}
 };
 
 /*===========================[linked list]===========================*/
@@ -146,5 +159,3 @@ enum ParseStatus
 	STATUS_OK	 = 0,
 	STATUS_ERROR = 1
 };
-
-#endif /* _HEURISTIC_TYPES_H_ */
