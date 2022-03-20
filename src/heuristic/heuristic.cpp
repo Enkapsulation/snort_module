@@ -1,18 +1,9 @@
-#include <iostream>
-#include <memory>
-#include <string_view>
-
-#include "detection/detection_engine.h"
-#include "events/event_queue.h"
-#include "framework/inspector.h"
-#include "framework/module.h"
-#include "log/messages.h"
-#include "main/snort_debug.h"
-#include "profiler/profiler.h"
-#include "protocols/packet.h"
-
 #include "heuristic.hpp"
 #include "heuristic_types.hpp"
+
+#include <iostream>
+
+#include "log/messages.h"
 
 using namespace snort;
 
@@ -73,7 +64,7 @@ void Heuristic::set_default_value( HeuristicConfig* config )
 //-------------------------------------------------------------------------
 // class stuff
 //-------------------------------------------------------------------------
-Heuristic::Heuristic( HeuristicModule* mod ) : config( mod->get_config() ) {}
+Heuristic::Heuristic( const std::shared_ptr< HeuristicConfig >& config ) : m_config( config ) {}
 
 Heuristic::~Heuristic() = default;
 
@@ -284,68 +275,3 @@ void Heuristic::eval( Packet* pkt )
 	// 	write_structure_csv( config, dangerous_ip_record );
 	// }
 }
-
-std::string_view Heuristic::getName()
-{
-	return s_name;
-}
-
-std::string_view Heuristic::getHelp()
-{
-	return s_help;
-}
-
-//-------------------------------------------------------------------------
-// api stuff
-//-------------------------------------------------------------------------
-static Module* mod_ctor()
-{
-	return new HeuristicModule( Heuristic::getName().data(), Heuristic::getHelp().data() );
-}
-
-static void mod_dtor( Module* module )
-{
-	delete module;
-}
-
-static Inspector* heu_ctor( Module* module )
-{
-	return new Heuristic( ( HeuristicModule* )module );
-}
-
-static void heu_dtor( Inspector* inspector )
-{
-	delete inspector;
-}
-
-static const InspectApi as_api = {
-	{ PT_INSPECTOR,
-	  sizeof( InspectApi ),
-	  INSAPI_VERSION,
-	  0,
-	  API_RESERVED,
-	  API_OPTIONS,
-	  Heuristic::getName().data(),
-	  Heuristic::getHelp().data(),
-	  mod_ctor,
-	  mod_dtor },
-	IT_NETWORK,
-	PROTO_BIT__ALL,
-	nullptr, // buffers
-	nullptr, // service
-	nullptr, // pinit
-	nullptr, // pterm
-	nullptr, // tinit
-	nullptr, // tterm
-	heu_ctor,
-	heu_dtor,
-	nullptr, // ssn
-	nullptr, // reset
-};
-
-#ifdef BUILDING_SO
-SO_PUBLIC const BaseApi* snort_plugins[] =
-#else
-const BaseApi* nin_heuristic[] =
-#endif
-	{ &as_api.base, nullptr };

@@ -1,12 +1,16 @@
 #include "heuristic_module.hpp"
+#include "heuristic.hpp"
+#include "heuristic_types.hpp"
 #include "utils.hpp"
+
+#include "detection/detection_engine.h"
 
 // THREAD_LOCAL SimpleStats asstats;
 
 using namespace snort;
 
 //-------------------------------------------------------------------------
-// heurstic stuff
+// heurstic params
 //-------------------------------------------------------------------------
 static const Parameter heuristic_params[]
 	= { { "sensitivity", Parameter::PT_REAL, nullptr, nullptr, "detection threshold" },
@@ -23,10 +27,12 @@ static const Parameter s_params[]
 static const RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 
 //-------------------------------------------------------------------------
-// arp_spoof module
+// heuristic module
 //-------------------------------------------------------------------------
-HeuristicModule::HeuristicModule( const char* name, const char* help )
-	: Module( name, help, s_params ), m_config( nullptr )
+HeuristicModule::HeuristicModule()
+	: Module( s_name.data(), s_help.data(), s_params ),
+	  m_config( nullptr ),
+	  m_inspector( std::make_unique< Heuristic >( m_config ) )
 {
 }
 
@@ -121,4 +127,19 @@ unsigned HeuristicModule::get_gid() const
 HeuristicModule::Usage HeuristicModule::get_usage() const
 {
 	return INSPECT;
+}
+
+snort::Inspector* HeuristicModule::getInspector() const
+{
+	return static_cast< snort::Inspector* >( m_inspector.get() );
+}
+
+std::string_view HeuristicModule::getName()
+{
+	return s_name;
+}
+
+std::string_view HeuristicModule::getHelp()
+{
+	return s_help;
 }

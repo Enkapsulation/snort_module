@@ -1,17 +1,24 @@
 #pragma once
 
 #include <memory>
+#include <string_view>
 
 #include "framework/module.h"
-#include "heuristic_types.hpp"
 
 extern THREAD_LOCAL SimpleStats asstats;
 extern THREAD_LOCAL snort::ProfileStats heuristicPerfStats;
 
+class Heuristic;
+struct HeuristicConfig;
+
+namespace snort
+{
+class Inspector;
+}
 class HeuristicModule : public snort::Module
 {
 public:
-	HeuristicModule( const char* name, const char* help );
+	HeuristicModule();
 	~HeuristicModule() override;
 
 	bool set( const char*, snort::Value&, snort::SnortConfig* ) override;
@@ -30,7 +37,16 @@ public:
 
 	Usage get_usage() const override;
 
+	snort::Inspector* getInspector() const;
+
+	static std::string_view getName();
+	static std::string_view getHelp();
+
 private:
 	std::shared_ptr< HeuristicConfig > m_config;
+	std::unique_ptr< Heuristic > m_inspector;
+
+	static constexpr std::string_view s_name{ "heuristic" };
+	static constexpr std::string_view s_help{ "detection based on heuristic rules" };
 	static constexpr unsigned s_idHeuristic{ 456U };
 };

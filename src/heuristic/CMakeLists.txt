@@ -10,6 +10,8 @@ pkg_search_module ( SNORT3 REQUIRED snort>=3 )
 
 add_library (
     heuristic MODULE
+    create_module.hpp
+    create_module.cpp
 	heuristic.hpp
     heuristic.cpp
     heuristic_types.hpp
