@@ -25,7 +25,10 @@ static const RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 //-------------------------------------------------------------------------
 // arp_spoof module
 //-------------------------------------------------------------------------
-HeuristicModule::HeuristicModule() : Module( s_name, s_help, s_params ), config( nullptr ) {}
+HeuristicModule::HeuristicModule( const char* name, const char* help )
+	: Module( name, help, s_params ), m_config( nullptr )
+{
+}
 
 HeuristicModule::~HeuristicModule() = default;
 
@@ -39,23 +42,23 @@ ProfileStats* HeuristicModule::get_profile() const
 	return &heuristicPerfStats;
 }
 
-bool HeuristicModule::set( const char*, Value& v, SnortConfig* )
+bool HeuristicModule::set( const char*, Value& value, SnortConfig* )
 {
-	if( v.is( "sensitivity" ) )
+	if( value.is( "sensitivity" ) )
 	{
-		config->sensitivity = v.get_real();
+		m_config->sensitivity = value.get_real();
 	}
-	else if( v.is( "dangerous_entropy" ) )
+	else if( value.is( "dangerous_entropy" ) )
 	{
-		config->dangerous_entropy = v.get_real();
+		m_config->dangerous_entropy = value.get_real();
 	}
-	else if( v.is( "packet_value" ) )
+	else if( value.is( "packet_value" ) )
 	{
-		config->packet_value = v.get_real();
+		m_config->packet_value = value.get_real();
 	}
-	else if( v.is( "filename_malicious" ) )
+	else if( value.is( "filename_malicious" ) )
 	{
-		config->filename_malicious = v.get_as_string();
+		m_config->filename_malicious = value.get_as_string();
 	}
 	else
 	{
@@ -67,7 +70,7 @@ bool HeuristicModule::set( const char*, Value& v, SnortConfig* )
 
 bool HeuristicModule::begin( const char*, int, SnortConfig* )
 {
-	if( !config )
+	if( !m_config )
 	{
 		/* Set default vaule config*/
 		double defaultSensitivity			 = 20.0;
@@ -75,7 +78,7 @@ bool HeuristicModule::begin( const char*, int, SnortConfig* )
 		double defaultPacketValue			 = 15.0;
 		std::string defaultFilenameMalicious = "";
 
-		config = std::make_shared< HeuristicConfig >(
+		m_config = std::make_shared< HeuristicConfig >(
 			defaultSensitivity, defaultDangerousEntropy, defaultPacketValue, defaultFilenameMalicious );
 
 		/* Set default value for flags*/
@@ -95,8 +98,8 @@ bool HeuristicModule::end( const char*, int idx, SnortConfig* )
 
 std::shared_ptr< HeuristicConfig > HeuristicModule::get_config()
 {
-	std::shared_ptr< HeuristicConfig > temp = config;
-	config									= nullptr;
+	std::shared_ptr< HeuristicConfig > temp = m_config;
+	m_config								= nullptr;
 	return temp;
 }
 
@@ -112,7 +115,7 @@ PegCount* HeuristicModule::get_counts() const
 
 unsigned HeuristicModule::get_gid() const
 {
-	return gid_heuristic;
+	return s_idHeuristic;
 }
 
 HeuristicModule::Usage HeuristicModule::get_usage() const

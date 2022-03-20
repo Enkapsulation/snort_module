@@ -1,7 +1,9 @@
 #pragma once
 
-#include <math.h>
+#include <cmath>
 #include <memory>
+#include <string>
+#include <string_view>
 
 #include "detection/detection_engine.h"
 #include "events/event_queue.h"
@@ -32,9 +34,14 @@ public:
 	void show( const SnortConfig* ) const override;
 	void eval( Packet* ) override;
 
+	static std::string_view getName();
+	static std::string_view getHelp();
+
 private:
 	void heuristic_show_config( HeuristicConfig* config ) const;
 	void set_default_value( HeuristicConfig* config );
 
+	static constexpr std::string_view s_name{ "heuristic" };
+	static constexpr std::string_view s_help{ "detection based on heuristic rules" };
 	std::shared_ptr< HeuristicConfig > config;
 };

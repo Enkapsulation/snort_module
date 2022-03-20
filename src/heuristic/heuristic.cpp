@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <string_view>
 
 #include "detection/detection_engine.h"
 #include "events/event_queue.h"
@@ -284,12 +285,22 @@ void Heuristic::eval( Packet* pkt )
 	// }
 }
 
+std::string_view Heuristic::getName()
+{
+	return s_name;
+}
+
+std::string_view Heuristic::getHelp()
+{
+	return s_help;
+}
+
 //-------------------------------------------------------------------------
 // api stuff
 //-------------------------------------------------------------------------
 static Module* mod_ctor()
 {
-	return new HeuristicModule;
+	return new HeuristicModule( Heuristic::getName().data(), Heuristic::getHelp().data() );
 }
 
 static void mod_dtor( Module* module )
@@ -314,8 +325,8 @@ static const InspectApi as_api = {
 	  0,
 	  API_RESERVED,
 	  API_OPTIONS,
-	  s_name,
-	  s_help,
+	  Heuristic::getName().data(),
+	  Heuristic::getHelp().data(),
 	  mod_ctor,
 	  mod_dtor },
 	IT_NETWORK,
