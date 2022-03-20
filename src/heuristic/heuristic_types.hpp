@@ -71,6 +71,7 @@ enum class AvailabilityFlags : uint8_t
 
 AvailabilityFlags getAvailabilityFlags( std::string availabilityFlags );
 
+
 /*============================================================================*\
 * Local variables
 \*============================================================================*/

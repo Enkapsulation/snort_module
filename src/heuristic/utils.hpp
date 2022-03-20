@@ -1,5 +1,5 @@
-#pragma once
 
+#pragma once
 #include <iterator>
 #include <iostream>
 #include <fstream>
@@ -111,4 +111,5 @@ public:
 private:
 	std::istream* m_str;
 	CSVRow m_row;
+
 };
