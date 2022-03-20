@@ -1,7 +1,9 @@
 #include "heuristic.hpp"
 #include "heuristic_types.hpp"
+#include "config.hpp"
 
 #include <iostream>
+#include <string>
 
 #include "log/messages.h"
 
@@ -12,26 +14,13 @@ using namespace snort;
 //-------------------------------------------------------------------------
 void Heuristic::heuristic_show_config( HeuristicConfig* config ) const
 {
-	std::string msg;
 	ConfigLogger::log_option( "heuristic" );
-
-	msg += "{ sensitivity: " + std::to_string( config->sensitivity ) + "\n";
-	msg += " entropy: " + std::to_string( config->dangerous_entropy ) + "\n";
-	msg += " default packet value: " + std::to_string( config->packet_value ) + "\n";
-	msg += " Filename: " + config->filename_malicious + "}";
-	ConfigLogger::log_list( "", msg.c_str() );
+	ConfigLogger::log_list( "", std::string( *config ).c_str() );
 }
 
 void Heuristic::set_default_value( HeuristicConfig* config )
 {
-	/* Init default sensitivity */
-	config->sensitivity = 15.0;
-
-	/* Init default entropy */
-	config->dangerous_entropy = 6.0;
-
-	/* Init default packet value */
-	config->packet_value = 20.0;
+	( *config ) = HeuristicConfig::getDefaultConfig();
 
 	// /* Init default score flags */
 	// config->filename_config->flags_score[ H_FLAGS ] = -3;

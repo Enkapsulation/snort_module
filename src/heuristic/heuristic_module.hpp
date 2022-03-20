@@ -9,7 +9,7 @@ extern THREAD_LOCAL SimpleStats asstats;
 extern THREAD_LOCAL snort::ProfileStats heuristicPerfStats;
 
 class Heuristic;
-struct HeuristicConfig;
+class HeuristicConfig;
 
 namespace snort
 {
@@ -25,7 +25,7 @@ public:
 	bool begin( const char*, int, snort::SnortConfig* ) override;
 	bool end( const char*, int, snort::SnortConfig* ) override;
 
-	std::shared_ptr< HeuristicConfig > get_config();
+	std::shared_ptr< HeuristicConfig > get_config() const;
 
 	const PegInfo* get_pegs() const override;
 	PegCount* get_counts() const override;

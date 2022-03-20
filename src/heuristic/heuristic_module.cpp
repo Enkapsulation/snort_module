@@ -2,6 +2,7 @@
 #include "heuristic.hpp"
 #include "heuristic_types.hpp"
 #include "utils.hpp"
+#include "config.hpp"
 
 #include "detection/detection_engine.h"
 
@@ -50,45 +51,17 @@ ProfileStats* HeuristicModule::get_profile() const
 
 bool HeuristicModule::set( const char*, Value& value, SnortConfig* )
 {
-	if( value.is( "sensitivity" ) )
-	{
-		m_config->sensitivity = value.get_real();
-	}
-	else if( value.is( "dangerous_entropy" ) )
-	{
-		m_config->dangerous_entropy = value.get_real();
-	}
-	else if( value.is( "packet_value" ) )
-	{
-		m_config->packet_value = value.get_real();
-	}
-	else if( value.is( "filename_malicious" ) )
-	{
-		m_config->filename_malicious = value.get_as_string();
-	}
-	else
-	{
-		return false;
-	}
-
-	return true;
+	return m_config->set( value );
 }
 
 bool HeuristicModule::begin( const char*, int, SnortConfig* )
 {
-	if( !m_config )
+	if( m_config )
 	{
-		/* Set default vaule config*/
-		double defaultSensitivity			 = 20.0;
-		double defaultDangerousEntropy		 = 6.0;
-		double defaultPacketValue			 = 15.0;
-		std::string defaultFilenameMalicious = "";
-
-		m_config = std::make_shared< HeuristicConfig >(
-			defaultSensitivity, defaultDangerousEntropy, defaultPacketValue, defaultFilenameMalicious );
-
-		/* Set default value for flags*/
+		return true;
 	}
+
+	m_config = std::make_shared< HeuristicConfig >( HeuristicConfig::getDefaultConfig() );
 
 	return true;
 }
@@ -102,11 +75,9 @@ bool HeuristicModule::end( const char*, int idx, SnortConfig* )
 	return true;
 }
 
-std::shared_ptr< HeuristicConfig > HeuristicModule::get_config()
+std::shared_ptr< HeuristicConfig > HeuristicModule::get_config() const
 {
-	std::shared_ptr< HeuristicConfig > temp = m_config;
-	m_config								= nullptr;
-	return temp;
+	return m_config;
 }
 
 const PegInfo* HeuristicModule::get_pegs() const

@@ -6,7 +6,7 @@
 
 // THREAD_LOCAL const Trace* heu_trace = nullptr;
 
-struct HeuristicConfig;
+class HeuristicConfig;
 
 class Heuristic : public snort::Inspector
 {

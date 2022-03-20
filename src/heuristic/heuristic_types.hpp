@@ -78,7 +78,7 @@ AvailabilityFlags getAvailabilityFlags( std::string availabilityFlags );
 /*===========================[Heurstic structure]===========================*/
 
 /* Structre define file config for subpreprocessor */
-struct DangerousIPConfig
+struct DangerousIpConfig
 {
 	std::array< int, NUM_OF_FLAGS > flags_score;
 	std::array< int, NUM_OF_ATTACK > attack_score;
@@ -116,28 +116,6 @@ struct DangerousIpAddr
 		  risk_flag{ _risk_flag },
 		  counter{ _counter },
 		  network_entropy{ _network_entropy }
-	{
-	}
-};
-
-/* Main policy configuration */
-struct HeuristicConfig
-{
-	double sensitivity;
-	double dangerous_entropy;
-	double packet_value;
-	std::string filename_malicious;
-	std::shared_ptr< DangerousIPConfig > filename_config;
-	std::vector< DangerousIpAddr > dangerousIpAdress;
-
-	HeuristicConfig( double _sensitivity,
-					 double _dangerous_entropy,
-					 double _packet_value,
-					 std::string _filename_malicious )
-		: sensitivity{ _sensitivity },
-		  dangerous_entropy{ _dangerous_entropy },
-		  packet_value{ _packet_value },
-		  filename_malicious{ _filename_malicious }
 	{
 	}
 };
