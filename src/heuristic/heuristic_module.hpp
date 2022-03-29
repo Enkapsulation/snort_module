@@ -1,12 +1,12 @@
 #pragma once
 
+#include "framework/module.h"
+#include "profiler/profiler.h"
 #include <memory>
 #include <string_view>
 
-#include "framework/module.h"
-
-extern THREAD_LOCAL SimpleStats asstats;
-extern THREAD_LOCAL snort::ProfileStats heuristicPerfStats;
+static THREAD_LOCAL SimpleStats asstats;
+static THREAD_LOCAL snort::ProfileStats heuristicPerfStats;
 
 class Heuristic;
 class HeuristicConfig;

@@ -97,6 +97,10 @@ add_subdirectory ( src )
 
 string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_UPPER)
 
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+execute_process( COMMAND ln -sf "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json" WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" )
+
+
 message("
 -------------------------------------------------------
 ${CMAKE_PROJECT_NAME} version ${EXTRA_VERSION}
@@ -112,3 +116,4 @@ Compiler options:
     EXE_LDFLAGS:    ${CMAKE_EXE_LINKER_FLAGS}
     MODULE_LDFLAGS: ${CMAKE_MODULE_LINKER_FLAGS}
 ")
+

@@ -41,3 +41,4 @@
 
 # Clang things
 .cache
+compile_commands.json

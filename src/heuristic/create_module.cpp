@@ -1,8 +1,8 @@
 #include "create_module.hpp"
 #include <memory>
 
-#include "heuristic_module.hpp"
 #include "detection/detection_engine.h"
+#include "heuristic_module.hpp"
 
 using namespace snort;
 using namespace Create;
@@ -53,9 +53,11 @@ static const InspectApi as_api = {
 	nullptr, // reset
 };
 
-#ifdef BUILDING_SO
-SO_PUBLIC const BaseApi* snort_plugins[] =
-#else
-const BaseApi* nin_heuristic[] =
-#endif
-	{ &as_api.base, nullptr };
+// #ifdef BUILDING_SO
+// SO_PUBLIC const BaseApi* snort_plugins[] =
+// #else
+// const BaseApi* nin_heuristic[] =
+// #endif
+// 	{ &as_api.base, nullptr };
+
+SO_PUBLIC const BaseApi* snort_plugins[] = { &as_api.base, nullptr };
