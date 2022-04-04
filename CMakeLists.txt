@@ -22,7 +22,7 @@ include (${CMAKE_MODULE_PATH}/configure_options.cmake)
 
 set (CPACK_GENERATOR TGZ)
 set (CPACK_PACKAGE_NAME "snort_module")
-set (CPACK_PACKAGE_VENDOR "Kosciejo")
+set (CPACK_PACKAGE_VENDOR "KosciejoAndSebastiano")
 set (CPACK_PACKAGE_VERSION_MAJOR "${EXTRA_VERSION_MAJOR}")
 set (CPACK_PACKAGE_VERSION_MINOR "${EXTRA_VERSION_MINOR}")
 set (CPACK_PACKAGE_VERSION_PATCH "${EXTRA_VERSION_PATCH}")
@@ -97,9 +97,10 @@ add_subdirectory ( src )
 
 string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_UPPER)
 
-set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
-execute_process( COMMAND ln -sf "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json" WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" )
-
+if( UNIX )
+    set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+    execute_process( COMMAND ln -sf "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json" WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" )
+endif ( UNIX )
 
 message("
 -------------------------------------------------------

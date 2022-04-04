@@ -95,7 +95,6 @@ bool HeuristicModule::begin( const char*, int, SnortConfig* )
 	}
 
 	m_config = std::make_shared< HeuristicConfig >( HeuristicConfig::getDefaultConfig() );
-
 	return true;
 }
 
@@ -146,4 +145,9 @@ std::string_view HeuristicModule::getName()
 std::string_view HeuristicModule::getHelp()
 {
 	return s_help;
+}
+
+void HeuristicModule::testCsv()
+{
+	m_inspector->readCsv();
 }

@@ -10,8 +10,6 @@
 #include <string_view>
 #include <vector>
 
-#include "heuristic_types.hpp"
-
 class CSVRow
 {
 public:
@@ -103,12 +101,26 @@ public:
 	{
 		return ( ( this == &rhs ) || ( ( this->m_str == NULL ) && ( rhs.m_str == NULL ) ) );
 	}
-	bool operator!=( CSVIterator const& rhs )
-	{
-		return !( ( *this ) == rhs );
-	}
+
+	bool operator!=( CSVIterator const& rhs );
 
 private:
 	std::istream* m_str;
 	CSVRow m_row;
+};
+
+class CSVRange
+{
+	std::istream& stream;
+
+public:
+	CSVRange( std::istream& str ) : stream( str ) {}
+	CSVIterator begin() const
+	{
+		return CSVIterator{ stream };
+	}
+	CSVIterator end() const
+	{
+		return CSVIterator{};
+	}
 };

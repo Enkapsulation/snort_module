@@ -4,15 +4,26 @@
 #include "detection/detection_engine.h"
 #include "heuristic_module.hpp"
 
+#include <iostream>
+
 using namespace snort;
 using namespace Create;
 
 //-------------------------------------------------------------------------
 // api stuff
 //-------------------------------------------------------------------------
+
+void justTest()
+{
+	auto testModule = HeuristicModule();
+	testModule.begin( nullptr, 0, nullptr );
+	testModule.testCsv();
+}
+
 static Module* mod_ctor()
 {
 	g_heuristicModule = std::make_unique< HeuristicModule >();
+	justTest();
 	return g_heuristicModule.get();
 }
 
