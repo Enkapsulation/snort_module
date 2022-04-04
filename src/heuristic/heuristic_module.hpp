@@ -5,9 +5,6 @@
 #include <memory>
 #include <string_view>
 
-static THREAD_LOCAL SimpleStats asstats;
-static THREAD_LOCAL snort::ProfileStats heuristicPerfStats;
-
 class Heuristic;
 class HeuristicConfig;
 

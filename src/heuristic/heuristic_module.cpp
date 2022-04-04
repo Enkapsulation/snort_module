@@ -8,7 +8,8 @@
 #include "detection/detection_engine.h"
 #include <cstddef>
 
-// THREAD_LOCAL SimpleStats asstats;
+static THREAD_LOCAL SimpleStats asstats;
+static THREAD_LOCAL snort::ProfileStats heuristicPerfStats;
 
 using namespace snort;
 
