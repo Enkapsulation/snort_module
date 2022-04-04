@@ -53,11 +53,4 @@ static const InspectApi as_api = {
 	nullptr, // reset
 };
 
-// #ifdef BUILDING_SO
-// SO_PUBLIC const BaseApi* snort_plugins[] =
-// #else
-// const BaseApi* nin_heuristic[] =
-// #endif
-// 	{ &as_api.base, nullptr };
-
 SO_PUBLIC const BaseApi* snort_plugins[] = { &as_api.base, nullptr };

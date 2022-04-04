@@ -1,14 +1,14 @@
 
 #pragma once
-#include <iterator>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <string>
-#include <cstdint>
 #include <arpa/inet.h>
+#include <cstdint>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <sstream>
+#include <string>
 #include <string_view>
+#include <vector>
 
 #include "heuristic_types.hpp"
 
@@ -111,5 +111,4 @@ public:
 private:
 	std::istream* m_str;
 	CSVRow m_row;
-
 };

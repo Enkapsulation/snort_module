@@ -1,6 +1,6 @@
 #include "heuristic.hpp"
-#include "heuristic_types.hpp"
 #include "config.hpp"
+#include "heuristic_types.hpp"
 
 #include <iostream>
 #include <string>
@@ -69,9 +69,6 @@ void Heuristic::eval( Packet* pkt )
 {
 	std::cout << "Hello World from -> " << pkt->is_icmp() << std::endl;
 
-	// char src_addr[ 500 ];
-	// char dst_addr[ 500 ];
-	// int result				  = -1;
 	// double packet_probability = 0.0;
 
 	/* Log */
@@ -101,7 +98,6 @@ void Heuristic::eval( Packet* pkt )
 
 	// if( -1 != result )
 	// {
-
 	// 	switch( dangerous_ip_record[ result ].attack_type )
 	// 	{
 	// 	case DDOS:

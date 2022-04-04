@@ -1,10 +1,12 @@
 #include "heuristic_module.hpp"
+#include "config.hpp"
+#include "framework/parameter.h"
 #include "heuristic.hpp"
 #include "heuristic_types.hpp"
 #include "utils.hpp"
-#include "config.hpp"
 
 #include "detection/detection_engine.h"
+#include <cstddef>
 
 // THREAD_LOCAL SimpleStats asstats;
 
@@ -13,17 +15,47 @@ using namespace snort;
 //-------------------------------------------------------------------------
 // heurstic params
 //-------------------------------------------------------------------------
+static const Parameter risk_flag[] = { { "H", Parameter::PT_INT, nullptr, nullptr, "Value for flag High" },
+									   { "M", Parameter::PT_INT, nullptr, nullptr, "Value for flag Medium" },
+									   { "L", Parameter::PT_INT, nullptr, nullptr, "Value for flag Low" },
+									   { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
+
+static const Parameter attack_flag[] = { { "D", Parameter::PT_INT, nullptr, nullptr, "Value for DDoS flag" },
+										 { "P", Parameter::PT_INT, nullptr, nullptr, "Value for Phishing flag" },
+										 { "M", Parameter::PT_INT, nullptr, nullptr, "Value for Malware flag" },
+										 { "R", Parameter::PT_INT, nullptr, nullptr, "Value for Ransomware flag" },
+										 { "S", Parameter::PT_INT, nullptr, nullptr, "Value for DoS flag" },
+										 { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
+
+static const Parameter range_flag[] = { { "S", Parameter::PT_INT, nullptr, nullptr, "Value for flag Single" },
+										{ "P", Parameter::PT_INT, nullptr, nullptr, "Value for flag Partial" },
+										{ "C", Parameter::PT_INT, nullptr, nullptr, "Value for flag Complete" },
+										{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
+
+static const Parameter access_flag[] = { { "S", Parameter::PT_INT, nullptr, nullptr, "Value for flag Single" },
+										 { "P", Parameter::PT_INT, nullptr, nullptr, "Value for flag Partial" },
+										 { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
+
+static const Parameter availability_flag[] = { { "N", Parameter::PT_INT, nullptr, nullptr, "Value for flag None" },
+											   { "P", Parameter::PT_INT, nullptr, nullptr, "Value for flag Partial" },
+											   { "C", Parameter::PT_INT, nullptr, nullptr, "Value for flag Complete" },
+											   { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
+
 static const Parameter heuristic_params[]
 	= { { "sensitivity", Parameter::PT_REAL, nullptr, nullptr, "detection threshold" },
 		{ "entropy", Parameter::PT_REAL, nullptr, nullptr, "packet entropy threshold" },
 		{ "packet_value", Parameter::PT_REAL, nullptr, nullptr, "start packet value" },
 		{ "filename_malicious", Parameter::PT_STRING, nullptr, nullptr, "Path to .CSV with malicius IP address" },
-
+		{ "risk", Parameter::PT_LIST, risk_flag, nullptr, "Value for risk flag" },
+		{ "attack_type", Parameter::PT_LIST, attack_flag, nullptr, "Value for attack type flag" },
+		{ "range", Parameter::PT_LIST, range_flag, nullptr, "Value for range flag" },
+		{ "access", Parameter::PT_LIST, range_flag, nullptr, "Value for access flag" },
+		{ "availability", Parameter::PT_LIST, range_flag, nullptr, "Value for availability flag" },
 		{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
-static const Parameter s_params[]
-	= { { "configuration", Parameter::PT_LIST, heuristic_params, nullptr, "heursitic configuration" },
-		{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
+// static const Parameter s_params[]
+// 	= { { "configuration", Parameter::PT_LIST, heuristic_params, nullptr, "heursitic configuration" },
+// 		{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
 static const RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 
@@ -31,7 +63,7 @@ static const RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 // heuristic module
 //-------------------------------------------------------------------------
 HeuristicModule::HeuristicModule()
-	: Module( s_name.data(), s_help.data(), s_params ),
+	: Module( s_name.data(), s_help.data(), heuristic_params ),
 	  m_config( nullptr ),
 	  m_inspector( std::make_unique< Heuristic >( m_config ) )
 {

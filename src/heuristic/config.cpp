@@ -1,6 +1,6 @@
 #include "config.hpp"
-#include "heuristic_types.hpp"
 #include "framework/value.h"
+#include "heuristic_types.hpp"
 
 HeuristicConfig::HeuristicConfig( double sensitivity,
 								  double dangerousEntropy,
@@ -46,6 +46,9 @@ bool HeuristicConfig::set( const snort::Value& value )
 	else if( valueName == s_filenameMaliciousName.data() )
 	{
 		setFilenameMalicious( value.get_as_string() );
+	}
+	else if( valueName )
+	{
 	}
 	else
 	{
