@@ -58,7 +58,7 @@ static const Parameter heuristic_params[]
 // 	= { { "configuration", Parameter::PT_LIST, heuristic_params, nullptr, "heursitic configuration" },
 // 		{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
-static const RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
+static constexpr RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 
 //-------------------------------------------------------------------------
 // heuristic module
@@ -120,7 +120,7 @@ const PegInfo* HeuristicModule::get_pegs() const
 
 PegCount* HeuristicModule::get_counts() const
 {
-	return ( PegCount* )&asstats;
+	return &asstats.total_packets;
 }
 
 unsigned HeuristicModule::get_gid() const
