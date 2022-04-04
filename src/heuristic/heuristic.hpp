@@ -18,7 +18,7 @@ public:
 	void eval( snort::Packet* ) override;
 
 private:
-	void heuristic_show_config( HeuristicConfig* config ) const;
+	void heuristic_show_config( const HeuristicConfig* config ) const;
 	void set_default_value( HeuristicConfig* config );
 
 	std::shared_ptr< HeuristicConfig > m_config;

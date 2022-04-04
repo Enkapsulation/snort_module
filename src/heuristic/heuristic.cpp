@@ -12,7 +12,7 @@ using namespace snort;
 //-------------------------------------------------------------------------
 // implementation stuff
 //-------------------------------------------------------------------------
-void Heuristic::heuristic_show_config( HeuristicConfig* config ) const
+void Heuristic::heuristic_show_config( const HeuristicConfig* config ) const
 {
 	ConfigLogger::log_option( "heuristic" );
 	ConfigLogger::log_list( "", std::string( *config ).c_str() );
@@ -61,7 +61,7 @@ void Heuristic::show( const SnortConfig* config ) const
 {
 	if( config )
 	{
-		heuristic_show_config( ( HeuristicConfig* )config );
+		heuristic_show_config( reinterpret_cast< const HeuristicConfig* >( config ) );
 	}
 }
 
