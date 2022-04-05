@@ -108,7 +108,7 @@ void HeuristicConfig::setPacketValue( double packetValue )
 	m_packetValue = packetValue;
 }
 
-void HeuristicConfig::setFilenameMalicious( std::string filenameMalicious )
+void HeuristicConfig::setFilenameMalicious( const std::string& filenameMalicious )
 {
 	m_filenameMalicious = filenameMalicious;
 }

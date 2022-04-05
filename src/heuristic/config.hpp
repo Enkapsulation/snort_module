@@ -34,7 +34,7 @@ private:
 	void setSensitivity( double );
 	void setDangerousEntropy( double );
 	void setPacketValue( double );
-	void setFilenameMalicious( std::string );
+	void setFilenameMalicious( const std::string& );
 	void setFilenameConfig( std::shared_ptr< DangerousIpConfig > );
 	void setDangerousIpAdress( const std::vector< DangerousIpAddr >& );
 

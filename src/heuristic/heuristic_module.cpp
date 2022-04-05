@@ -65,7 +65,7 @@ static constexpr RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 //-------------------------------------------------------------------------
 HeuristicModule::HeuristicModule()
 	: Module( s_name.data(), s_help.data(), heuristic_params ),
-	  m_config( nullptr ),
+	  m_config( std::make_shared< HeuristicConfig >( HeuristicConfig::getDefaultConfig() ) ),
 	  m_inspector( std::make_unique< Heuristic >( m_config ) )
 {
 }
@@ -89,21 +89,11 @@ bool HeuristicModule::set( const char*, Value& value, SnortConfig* )
 
 bool HeuristicModule::begin( const char*, int, SnortConfig* )
 {
-	if( m_config )
-	{
-		return true;
-	}
-
-	m_config = std::make_shared< HeuristicConfig >( HeuristicConfig::getDefaultConfig() );
 	return true;
 }
 
 bool HeuristicModule::end( const char*, int idx, SnortConfig* )
 {
-	// if ( !config )
-	// {
-	//     config = new HeuristicConfig();
-	// }
 	return true;
 }
 
