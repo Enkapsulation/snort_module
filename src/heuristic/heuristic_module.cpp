@@ -82,7 +82,7 @@ ProfileStats* HeuristicModule::get_profile() const
 	return &heuristicPerfStats;
 }
 
-bool HeuristicModule::set( const char*, Value& value, SnortConfig* )
+bool HeuristicModule::set( const char*, Value& value, SnortConfig* config )
 {
 	return m_config->set( value );
 }

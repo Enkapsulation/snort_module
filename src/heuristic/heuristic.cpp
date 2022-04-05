@@ -59,11 +59,11 @@ Heuristic::Heuristic( const std::shared_ptr< HeuristicConfig >& config ) : m_con
 
 Heuristic::~Heuristic() = default;
 
-void Heuristic::show( const SnortConfig* config ) const
+void Heuristic::show( const SnortConfig* ) const
 {
-	if( config )
+	if( m_config )
 	{
-		heuristic_show_config( reinterpret_cast< const HeuristicConfig* >( config ) );
+		heuristic_show_config( m_config.get() );
 	}
 }
 
@@ -267,12 +267,9 @@ bool Heuristic::readCsv()
 {
 	if( !m_config )
 	{
-		std::cout << "DupaDebug: "
-				  << "where config";
 		return false;
 	}
 
-	std::cout << "DupaDebug: " << m_config->getFilenameMalicious();
 	// std::ifstream maliciousFile( m_config->getFilenameMalicious() );
 
 	// return readCsv( maliciousFile );
