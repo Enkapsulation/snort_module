@@ -1,11 +1,16 @@
 #include "heuristic_types.hpp"
 
-RiskFLag GetRiskFlag( std::string riskFlag )
-{
-	static std::map< std::string, RiskFLag > const string2RiskFLag
-		= { { "H", RiskFLag::H }, { "M", RiskFLag::M }, { "L", RiskFLag::L } };
+static const std::map< std::string, RiskFLag > string2RiskFLag
+	= { { "H", RiskFLag::H }, { "M", RiskFLag::M }, { "L", RiskFLag::L } };
 
-	return string2RiskFLag.find( riskFlag )->second;
+RiskFLag GetRiskFlag( std::string riskFlagStr )
+{
+	const auto& riskFlag{ string2RiskFLag.find( riskFlagStr ) };
+	if( riskFlag != string2RiskFLag.cend() )
+	{
+		return riskFlag->second;
+	}
+	return RiskFLag::H;
 }
 
 AttackTypes getAttackFlag( std::string attackFlag )
@@ -30,7 +35,7 @@ RangeFlags getRangeFlag( std::string rangeFlag )
 AccessFlag getAccessFlag( std::string accessFlag )
 {
 	static std::map< std::string, AccessFlag > const string2AccessFlag
-		= { { "S", AccessFlag::none }, { "P", AccessFlag::user } };
+		= { { "N", AccessFlag::none }, { "U", AccessFlag::user } };
 
 	return string2AccessFlag.find( accessFlag )->second;
 }

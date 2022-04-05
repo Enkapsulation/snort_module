@@ -15,6 +15,18 @@ class DangerousIpAddr;
 /* Main policy configuration */
 class HeuristicConfig
 {
+	enum CsvEncoder
+	{
+		AdressIp,
+		RiskFlag,
+		AttackType,
+		RangeFlag,
+		AccessFlag,
+		AvaiabilityFlag,
+		Counter,
+		PacketEntropy
+	};
+
 public:
 	HeuristicConfig( double sensitivity, double dangerousEntropy, double packetValue, std::string filenameMalicious );
 
@@ -38,6 +50,7 @@ private:
 	void setFilenameConfig( std::shared_ptr< DangerousIpConfig > );
 	void setDangerousIpAdress( const std::vector< DangerousIpAddr >& );
 	void readCSV();
+	void loadDangerousIp( std::ifstream& );
 
 	static constexpr std::string_view s_sensitivityName{ "sensitivity" };
 	static constexpr std::string_view s_dangerousEntropyName{ "dangerous_entropy" };

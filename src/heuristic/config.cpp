@@ -1,9 +1,14 @@
-#include "config.hpp"
-#include "framework/value.h"
-
 #include <fstream>
+#include <iostream>
 
+#include "framework/value.h"
+#include <arpa/inet.h>
+#include <iterator>
+#include <netinet/in.h>
+
+#include "config.hpp"
 #include "heuristic_types.hpp"
+#include "utils.hpp"
 
 HeuristicConfig::HeuristicConfig( double sensitivity,
 								  double dangerousEntropy,
@@ -127,23 +132,36 @@ void HeuristicConfig::setDangerousIpAdress( const std::vector< DangerousIpAddr >
 	m_dangerousIpAdress = dangerousIpAdress;
 }
 
-#include "utils.hpp"
-#include <iostream>
-
 void HeuristicConfig::readCSV()
 {
 	std::ifstream maliciousFile( getFilenameMalicious() );
 
 	if( maliciousFile.bad() )
 	{
-		std::cout << "Where file" << std::endl;
+		std::cout << "ERROR: Where file" << std::endl;
 		return;
 	}
 
-	int i = 0;
-	for( CSVIterator loop( maliciousFile ); loop != CSVIterator(); ++loop )
+	loadDangerousIp( maliciousFile );
+}
+
+void HeuristicConfig::loadDangerousIp( std::ifstream& file )
+{
+	for( const auto& row : CSVRange( file ) )
 	{
-		std::cout << i << "  : " << ( *loop )[ 0 ] << std::endl;
-		++i;
+		sockaddr_in ip_addr;
+		inet_pton( AF_INET, row[ AdressIp ].c_str(), &ip_addr.sin_addr );
+		RiskFLag risk_flag			   = GetRiskFlag( row[ RiskFlag ] );
+		AttackTypes attack_type		   = getAttackFlag( row[ AttackType ] );
+		RangeFlags range			   = getRangeFlag( row[ RangeFlag ] );
+		::AccessFlag access			   = getAccessFlag( row[ AccessFlag ] );
+		AvailabilityFlags availability = getAvailabilityFlags( row[ AvaiabilityFlag ] );
+		auto counter				   = std::stoi( row[ Counter ] );
+		double network_entropy		   = std::stod( row[ PacketEntropy ] );
+
+		DangerousIpAddr ipAddrInfo(
+			ip_addr, attack_type, range, access, availability, risk_flag, counter, network_entropy );
+
+		m_dangerousIpAdress.push_back( ipAddrInfo );
 	}
 }
