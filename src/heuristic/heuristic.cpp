@@ -69,25 +69,24 @@ void Heuristic::show( const SnortConfig* ) const
 
 void Heuristic::eval( Packet* pkt )
 {
+	double packet_probability = 0.0;
 	std::cout << "Hello World from -> " << pkt->is_icmp() << std::endl;
 
-	// double packet_probability = 0.0;
-
 	/* Log */
-	// std::string_view type_attack;
+	std::string_view type_attack;
 
 	/* transfer start packet value */
 	// double ranking = config->packet_value;
 
-	// if( ( nullptr == config ) )
-	// {
-	// 	LogMessage( "[ERROR] config is NULL" );
-	// 	return;
-	// }
-	// else if( ( false == pkt->has_ip_hdr() ) )
-	// {
-	// 	return;
-	// }
+	if( ( nullptr == m_config ) )
+	{
+		LogMessage( "[ERROR] config is NULL" );
+		return;
+	}
+	else if( ( false == pkt->has_ip_hdr() ) )
+	{
+		return;
+	}
 	// else
 	// {
 	// 	if( pkt->is_ip4() )
