@@ -17,9 +17,6 @@ public:
 	void show( const snort::SnortConfig* ) const override;
 	void eval( snort::Packet* ) override;
 
-	bool readCsv();
-	bool readCsv( std::istream& istream );
-
 private:
 	void heuristic_show_config( const HeuristicConfig* config ) const;
 	void set_default_value( HeuristicConfig* config );

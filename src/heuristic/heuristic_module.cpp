@@ -136,8 +136,3 @@ std::string_view HeuristicModule::getHelp()
 {
 	return s_help;
 }
-
-void HeuristicModule::testCsv()
-{
-	m_inspector->readCsv();
-}

@@ -39,8 +39,6 @@ public:
 	static std::string_view getName();
 	static std::string_view getHelp();
 
-	void testCsv();
-
 private:
 	std::shared_ptr< HeuristicConfig > m_config;
 	std::unique_ptr< Heuristic > m_inspector;

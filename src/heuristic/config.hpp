@@ -37,6 +37,7 @@ private:
 	void setFilenameMalicious( const std::string& );
 	void setFilenameConfig( std::shared_ptr< DangerousIpConfig > );
 	void setDangerousIpAdress( const std::vector< DangerousIpAddr >& );
+	void readCSV();
 
 	static constexpr std::string_view s_sensitivityName{ "sensitivity" };
 	static constexpr std::string_view s_dangerousEntropyName{ "dangerous_entropy" };

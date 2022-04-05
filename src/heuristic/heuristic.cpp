@@ -262,31 +262,3 @@ void Heuristic::eval( Packet* pkt )
 	// 	write_structure_csv( config, dangerous_ip_record );
 	// }
 }
-
-bool Heuristic::readCsv()
-{
-	if( !m_config )
-	{
-		return false;
-	}
-
-	// std::ifstream maliciousFile( m_config->getFilenameMalicious() );
-
-	// return readCsv( maliciousFile );
-	return true;
-}
-
-bool Heuristic::readCsv( std::istream& istream )
-{
-	if( istream.bad() )
-	{
-		return false;
-	}
-
-	for( auto& row : CSVRange( istream ) )
-	{
-		std::cout << "4th Element(" << row[ 3 ] << ")\n";
-	}
-
-	return true;
-}

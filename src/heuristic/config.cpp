@@ -1,5 +1,8 @@
 #include "config.hpp"
 #include "framework/value.h"
+
+#include <fstream>
+
 #include "heuristic_types.hpp"
 
 HeuristicConfig::HeuristicConfig( double sensitivity,
@@ -46,6 +49,7 @@ bool HeuristicConfig::set( const snort::Value& value )
 	else if( valueName == s_filenameMaliciousName.data() )
 	{
 		setFilenameMalicious( value.get_as_string() );
+		readCSV();
 	}
 	else if( valueName )
 	{
@@ -121,4 +125,25 @@ void HeuristicConfig::setFilenameConfig( std::shared_ptr< DangerousIpConfig > fi
 void HeuristicConfig::setDangerousIpAdress( const std::vector< DangerousIpAddr >& dangerousIpAdress )
 {
 	m_dangerousIpAdress = dangerousIpAdress;
+}
+
+#include "utils.hpp"
+#include <iostream>
+
+void HeuristicConfig::readCSV()
+{
+	std::ifstream maliciousFile( getFilenameMalicious() );
+
+	if( maliciousFile.bad() )
+	{
+		std::cout << "Where file" << std::endl;
+		return;
+	}
+
+	int i = 0;
+	for( CSVIterator loop( maliciousFile ); loop != CSVIterator(); ++loop )
+	{
+		std::cout << i << "  : " << ( *loop )[ 0 ] << std::endl;
+		++i;
+	}
 }
