@@ -70,7 +70,8 @@ void Heuristic::show( const SnortConfig* ) const
 void Heuristic::eval( Packet* pkt )
 {
 	double packet_probability = 0.0;
-	std::cout << "Hello World from -> " << pkt->is_icmp() << std::endl;
+	// std::cout << "Hello World from -> " << pkt->is_icmp() << std::endl;
+	LogMessage( "Hello World from -> %d; ", pkt->is_icmp() );
 
 	/* Log */
 	std::string_view type_attack;
@@ -80,12 +81,24 @@ void Heuristic::eval( Packet* pkt )
 
 	if( ( nullptr == m_config ) )
 	{
-		LogMessage( "[ERROR] config is NULL" );
+		LogMessage( "[ERROR] config is NULL\n" );
 		return;
 	}
 	else if( ( false == pkt->has_ip_hdr() ) )
 	{
+		LogMessage( " Packet hasn't IP header\n" );
 		return;
+	}
+	else
+	{
+		char cli_ip_str[ INET6_ADDRSTRLEN ];
+		// pkt->flow->client_ip.ntop( cli_ip_str, sizeof( cli_ip_str ) );
+
+		LogMessage( " Packet client addr \n" );
+		// auto packetClientAddr = pkt->flow->client_ip.get_ip4_value();
+		// std::cout <<  << std::endl;
+		// LogMessage( " Packet client addr %c\n", cli_ip_str );
+		// std::cout << "Packet addr " << cli_ip_str << std::endl;
 	}
 	// else
 	// {
