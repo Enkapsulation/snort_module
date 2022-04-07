@@ -40,7 +40,7 @@ public:
 	double getPacketValue() const;
 	std::string getFilenameMalicious() const;
 	std::shared_ptr< DangerousIpConfig > getFilenameConfig() const;
-	const std::vector< DangerousIpAddr >& getDangerousIpAdress() const;
+	const std::vector< DangerousIpAddr >& getDangerousIpAdresses() const;
 
 private:
 	void setSensitivity( double );
@@ -48,7 +48,6 @@ private:
 	void setPacketValue( double );
 	void setFilenameMalicious( const std::string& );
 	void setFilenameConfig( std::shared_ptr< DangerousIpConfig > );
-	void setDangerousIpAdress( const std::vector< DangerousIpAddr >& );
 	void readCSV();
 	void loadDangerousIp( std::ifstream& );
 
@@ -67,5 +66,5 @@ private:
 	double m_packetValue;
 	std::string m_filenameMalicious;
 	std::shared_ptr< DangerousIpConfig > m_filenameConfig;
-	std::vector< DangerousIpAddr > m_dangerousIpAdress;
+	std::vector< DangerousIpAddr > m_dangerousIpAdresses;
 };

@@ -19,7 +19,7 @@ HeuristicConfig::HeuristicConfig( double sensitivity,
 	  m_packetValue( packetValue ),
 	  m_filenameMalicious( filenameMalicious ),
 	  m_filenameConfig( nullptr ),
-	  m_dangerousIpAdress()
+	  m_dangerousIpAdresses()
 {
 }
 
@@ -97,9 +97,9 @@ std::shared_ptr< DangerousIpConfig > HeuristicConfig::getFilenameConfig() const
 	return m_filenameConfig;
 }
 
-const std::vector< DangerousIpAddr >& HeuristicConfig::getDangerousIpAdress() const
+const std::vector< DangerousIpAddr >& HeuristicConfig::getDangerousIpAdresses() const
 {
-	return m_dangerousIpAdress;
+	return m_dangerousIpAdresses;
 }
 
 void HeuristicConfig::setSensitivity( double sensitivity )
@@ -127,18 +127,13 @@ void HeuristicConfig::setFilenameConfig( std::shared_ptr< DangerousIpConfig > fi
 	m_filenameConfig = filenameConfig;
 }
 
-void HeuristicConfig::setDangerousIpAdress( const std::vector< DangerousIpAddr >& dangerousIpAdress )
-{
-	m_dangerousIpAdress = dangerousIpAdress;
-}
-
 void HeuristicConfig::readCSV()
 {
 	std::ifstream maliciousFile( getFilenameMalicious() );
 
 	if( maliciousFile.bad() )
 	{
-		std::cout << "ERROR: Where file" << std::endl;
+		std::cout << "ERROR: Where malicious file" << std::endl;
 		return;
 	}
 
@@ -162,6 +157,11 @@ void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 		DangerousIpAddr ipAddrInfo(
 			ip_addr, attack_type, range, access, availability, risk_flag, counter, network_entropy );
 
-		m_dangerousIpAdress.push_back( ipAddrInfo );
+		m_dangerousIpAdresses.push_back( ipAddrInfo );
+	}
+
+	if( m_dangerousIpAdresses.empty() )
+	{
+		std::cout << "ERROR: Where malicious file" << std::endl;
 	}
 }

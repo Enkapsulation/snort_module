@@ -2,6 +2,7 @@
 #include "config.hpp"
 #include "heuristic_types.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -95,7 +96,27 @@ void Heuristic::eval( Packet* packet )
 		return;
 	}
 
+	const auto& dangerousIpAdresses{ m_config->getDangerousIpAdresses() };
+
+	DangerousIpAddr test{ dangerousIpAdresses.at( 0 ) };
 	const auto clientIp{ getClientIp( packet ) };
+	// sockaddr_in clientAddr;
+	// inet_pton( AF_INET, clientIp.c_str(), &clientAddr.sin_addr );
+
+	// TO DO DangerousIpAddr clientIpAddr instead of 'test' I am going to sleep
+
+	auto result = std::binary_search( dangerousIpAdresses.cbegin(),
+									  dangerousIpAdresses.cend(),
+									  test,
+									  []( const DangerousIpAddr& r1, const DangerousIpAddr& r2 )
+									  { return r1.ip_addr.sin_addr.s_addr == r2.ip_addr.sin_addr.s_addr; } );
+
+	if( result )
+	{
+		LogMessage( "GOT IT\n" );
+	}
+
+	// auto result = binarySearch( dangerous_ip_record, 0, config->record_number - 1, GET_SRC_IPv4( pkt ) );
 
 	// double packet_probability{ 0.0 };
 	// std::string type_attack{};
