@@ -42,11 +42,11 @@ EXTERNAL_NET = 'any'
 
 -- the following are quite capable with defaults:
 
--- stream = { }
--- stream_ip = { }
+stream = { }
+stream_ip = { }
 -- stream_icmp = { }
--- stream_tcp = { }
--- stream_udp = { }
+stream_tcp = { }
+stream_udp = { }
 -- stream_user = { }
 -- stream_file = { }
 

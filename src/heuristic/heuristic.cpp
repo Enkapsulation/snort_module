@@ -67,39 +67,61 @@ void Heuristic::show( const SnortConfig* ) const
 	}
 }
 
-void Heuristic::eval( Packet* pkt )
+bool Heuristic::validate( const Packet* packet ) const
 {
-	double packet_probability = 0.0;
-	// std::cout << "Hello World from -> " << pkt->is_icmp() << std::endl;
-	LogMessage( "Hello World from -> %d; ", pkt->is_icmp() );
+	if( !packet->flow )
+	{
+		LogMessage( "[WARRNING] Packet hasn't flow\n" );
+		return false;
+	}
 
-	/* Log */
-	std::string_view type_attack;
+	return true;
+}
+
+std::string Heuristic::getClientIp( const Packet* packet ) const
+{
+	std::string clientIp{};
+	packet->flow->client_ip.ntop( clientIp.data(), INET6_ADDRSTRLEN );
+
+	LogMessage( "Client IP: %s\n", clientIp.c_str() );
+
+	return clientIp;
+}
+
+void Heuristic::eval( Packet* packet )
+{
+	if( !validate( packet ) )
+	{
+		return;
+	}
+
+	const auto clientIp{ getClientIp( packet ) };
+
+	// double packet_probability{ 0.0 };
+	// std::string type_attack{};
 
 	/* transfer start packet value */
 	// double ranking = config->packet_value;
 
-	if( ( nullptr == m_config ) )
-	{
-		LogMessage( "[ERROR] config is NULL\n" );
-		return;
-	}
-	else if( ( false == pkt->has_ip_hdr() ) )
-	{
-		LogMessage( " Packet hasn't IP header\n" );
-		return;
-	}
-	else
-	{
-		char cli_ip_str[ INET6_ADDRSTRLEN ];
-		// pkt->flow->client_ip.ntop( cli_ip_str, sizeof( cli_ip_str ) );
+	// if( !m_config )
+	// {
+	// 	LogMessage( "[ERROR] No config\n" );
+	// 	return;
+	// }
+	// else if( !pkt->has_ip_hdr() )
+	// {
+	// 	LogMessage( "Packet hasn't IP header\n" );
+	// 	return;
+	// }
+	// else
+	// {
+	// char cli_ip_str[ INET6_ADDRSTRLEN ];
+	// pkt->flow->client_ip.ntop( cli_ip_str, sizeof( cli_ip_str ) );
 
-		LogMessage( " Packet client addr \n" );
-		// auto packetClientAddr = pkt->flow->client_ip.get_ip4_value();
-		// std::cout <<  << std::endl;
-		// LogMessage( " Packet client addr %c\n", cli_ip_str );
-		// std::cout << "Packet addr " << cli_ip_str << std::endl;
-	}
+	// const auto packetClientAddr{ packet->flow->client_ip.get_ip4_value() };
+	// LogMessage( " Packet client addr %c\n", cli_ip_str );
+	// std::cout << "Packet addr " << cli_ip_str << std::endl;
+	// }
 	// else
 	// {
 	// 	if( pkt->is_ip4() )

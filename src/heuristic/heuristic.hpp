@@ -21,5 +21,8 @@ private:
 	void heuristic_show_config( const HeuristicConfig* config ) const;
 	void set_default_value( HeuristicConfig* config );
 
+	std::string getClientIp( const snort::Packet* packet ) const;
+	bool validate( const snort::Packet* packet ) const;
+
 	std::shared_ptr< HeuristicConfig > m_config;
 };
