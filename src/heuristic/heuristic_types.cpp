@@ -68,3 +68,10 @@ eAvailabilityFlags getAvailabilityFlags( std::string availabilityFlags )
 	}
 	return eAvailabilityFlags::complete;
 }
+
+sockaddr_in DangerousIpAddr::makeSockaddr( std::string ip )
+{
+	sockaddr_in ip_addr{};
+	inet_pton( AF_INET, ip.c_str(), &ip_addr.sin_addr );
+	return ip_addr;
+}

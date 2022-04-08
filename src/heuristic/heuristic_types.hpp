@@ -60,8 +60,9 @@ enum class eAvailabilityFlags : uint8_t
 };
 
 eAvailabilityFlags getAvailabilityFlags( std::string availabilityFlags );
-struct DangerousIpAddr
+class DangerousIpAddr
 {
+public:
 	std::string hash; /* change types if needed */
 	sockaddr_in ip_addr;
 	eRiskFLag risk_flag;
@@ -90,4 +91,6 @@ struct DangerousIpAddr
 		  network_entropy{ _network_entropy }
 	{
 	}
+
+	static sockaddr_in makeSockaddr( std::string ip );
 };

@@ -81,10 +81,10 @@ bool Heuristic::validate( const Packet* packet ) const
 
 std::string Heuristic::getClientIp( const Packet* packet ) const
 {
-	std::string clientIp{};
-	packet->flow->client_ip.ntop( clientIp.data(), INET6_ADDRSTRLEN );
+	char clientIp[ INET6_ADDRSTRLEN ];
+	packet->flow->client_ip.ntop( clientIp, sizeof( clientIp ) );
 
-	LogMessage( "Client IP: %s\n", clientIp.c_str() );
+	LogMessage( "Client IP: %s\n", clientIp );
 
 	return clientIp;
 }
@@ -97,21 +97,15 @@ void Heuristic::eval( Packet* packet )
 	}
 
 	const auto& dangerousIpAdresses{ m_config->getDangerousIpAdresses() };
+	const auto ipToCompare{ DangerousIpAddr::makeSockaddr( getClientIp( packet ) ) };
 
-	DangerousIpAddr test{ dangerousIpAdresses.at( 0 ) };
-	const auto clientIp{ getClientIp( packet ) };
-	// sockaddr_in clientAddr;
-	// inet_pton( AF_INET, clientIp.c_str(), &clientAddr.sin_addr );
+	const auto& found = std::find_if( dangerousIpAdresses.begin(),
+									  dangerousIpAdresses.end(),
+									  [ & ]( const DangerousIpAddr& dangerousIpAddr ) {
+										  return dangerousIpAddr.ip_addr.sin_addr.s_addr == ipToCompare.sin_addr.s_addr;
+									  } );
 
-	// TO DO DangerousIpAddr clientIpAddr instead of 'test' I am going to sleep
-
-	auto result = std::binary_search( dangerousIpAdresses.cbegin(),
-									  dangerousIpAdresses.cend(),
-									  test,
-									  []( const DangerousIpAddr& r1, const DangerousIpAddr& r2 )
-									  { return r1.ip_addr.sin_addr.s_addr == r2.ip_addr.sin_addr.s_addr; } );
-
-	if( result )
+	if( found != dangerousIpAdresses.cend() )
 	{
 		LogMessage( "GOT IT\n" );
 	}

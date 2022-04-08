@@ -144,8 +144,7 @@ void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 {
 	for( const auto& row : CSVRange( file ) )
 	{
-		sockaddr_in ip_addr;
-		inet_pton( AF_INET, row[ adressIp ].c_str(), &ip_addr.sin_addr );
+		sockaddr_in ip_addr{ DangerousIpAddr::makeSockaddr( row[ adressIp ].c_str() ) };
 		eRiskFLag risk_flag				= getRiskFlag( row[ riskFlag ] );
 		eAttackTypes attack_type		= getAttackFlag( row[ attackType ] );
 		eRangeFlags range				= getRangeFlag( row[ rangeFlag ] );
