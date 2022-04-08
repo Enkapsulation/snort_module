@@ -145,17 +145,17 @@ void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 	for( const auto& row : CSVRange( file ) )
 	{
 		sockaddr_in ip_addr;
-		inet_pton( AF_INET, row[ AdressIp ].c_str(), &ip_addr.sin_addr );
-		RiskFLag risk_flag			   = GetRiskFlag( row[ RiskFlag ] );
-		AttackTypes attack_type		   = getAttackFlag( row[ AttackType ] );
-		RangeFlags range			   = getRangeFlag( row[ RangeFlag ] );
-		::AccessFlag access			   = getAccessFlag( row[ AccessFlag ] );
-		AvailabilityFlags availability = getAvailabilityFlags( row[ AvaiabilityFlag ] );
-		auto counter				   = std::stoi( row[ Counter ] );
-		double network_entropy		   = std::stod( row[ PacketEntropy ] );
+		inet_pton( AF_INET, row[ adressIp ].c_str(), &ip_addr.sin_addr );
+		eRiskFLag risk_flag				= getRiskFlag( row[ riskFlag ] );
+		eAttackTypes attack_type		= getAttackFlag( row[ attackType ] );
+		eRangeFlags range				= getRangeFlag( row[ rangeFlag ] );
+		eAccessFlag access				= getAccessFlag( row[ accessFlag ] );
+		eAvailabilityFlags availability = getAvailabilityFlags( row[ avaiabilityFlag ] );
+		auto packet_counter				= std::stoi( row[ counter ] );
+		double network_entropy			= std::stod( row[ packetEntropy ] );
 
 		DangerousIpAddr ipAddrInfo(
-			ip_addr, attack_type, range, access, availability, risk_flag, counter, network_entropy );
+			ip_addr, attack_type, range, access, availability, risk_flag, packet_counter, network_entropy );
 
 		m_dangerousIpAdresses.push_back( ipAddrInfo );
 	}

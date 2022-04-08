@@ -1,69 +1,70 @@
 #include "heuristic_types.hpp"
 
-static const std::map< std::string, RiskFLag > string2RiskFLag
-	= { { "H", RiskFLag::H }, { "M", RiskFLag::M }, { "L", RiskFLag::L } };
+static const std::map< std::string, eRiskFLag > string2RiskFLag
+	= { { "H", eRiskFLag::H }, { "M", eRiskFLag::M }, { "L", eRiskFLag::L } };
 
-RiskFLag GetRiskFlag( std::string riskFlag )
+eRiskFLag getRiskFlag( std::string riskFlag )
 {
 	const auto& risk_flag{ string2RiskFLag.find( riskFlag ) };
 	if( risk_flag != string2RiskFLag.cend() )
 	{
 		return risk_flag->second;
 	}
-	return RiskFLag::H;
+	return eRiskFLag::H;
 }
 
-static const std::map< std::string, AttackTypes > string2AttackFlag = { { "D", AttackTypes::ddos },
-																		{ "P", AttackTypes::phishing },
-																		{ "M", AttackTypes::malware },
-																		{ "R", AttackTypes::ransomware },
-																		{ "S", AttackTypes::dos } };
+static const std::map< std::string, eAttackTypes > string2AttackFlag = { { "D", eAttackTypes::ddos },
+																		 { "P", eAttackTypes::phishing },
+																		 { "M", eAttackTypes::malware },
+																		 { "R", eAttackTypes::ransomware },
+																		 { "S", eAttackTypes::dos } };
 
-AttackTypes getAttackFlag( std::string attackFlag )
+eAttackTypes getAttackFlag( std::string attackFlag )
 {
 	const auto& attack_flag{ string2AttackFlag.find( attackFlag ) };
 	if( attack_flag != string2AttackFlag.cend() )
 	{
 		return attack_flag->second;
 	}
-	return AttackTypes::malware;
+	return eAttackTypes::malware;
 }
 
-static std::map< std::string, RangeFlags > const string2RangeFlag
-	= { { "S", RangeFlags::single }, { "P", RangeFlags::partial }, { "C", RangeFlags::complete } };
+static std::map< std::string, eRangeFlags > const string2RangeFlag
+	= { { "S", eRangeFlags::single }, { "P", eRangeFlags::partial }, { "C", eRangeFlags::complete } };
 
-RangeFlags getRangeFlag( std::string rangeFlag )
+eRangeFlags getRangeFlag( std::string rangeFlag )
 {
 	const auto& range_flag{ string2RangeFlag.find( rangeFlag ) };
 	if( range_flag != string2RangeFlag.cend() )
 	{
 		return range_flag->second;
 	}
-	return RangeFlags::complete;
+	return eRangeFlags::complete;
 }
 
-static std::map< std::string, AccessFlag > const string2AccessFlag
-	= { { "N", AccessFlag::none }, { "U", AccessFlag::user } };
+static std::map< std::string, eAccessFlag > const string2AccessFlag
+	= { { "N", eAccessFlag::none }, { "U", eAccessFlag::user } };
 
-AccessFlag getAccessFlag( std::string accessFlag )
+eAccessFlag getAccessFlag( std::string accessFlag )
 {
 	const auto& access_flag{ string2AccessFlag.find( accessFlag ) };
 	if( access_flag != string2AccessFlag.cend() )
 	{
 		return access_flag->second;
 	}
-	return AccessFlag::user;
+	return eAccessFlag::user;
 }
 
-static std::map< std::string, AvailabilityFlags > const string2AvailabilityFlags
-	= { { "N", AvailabilityFlags::none }, { "P", AvailabilityFlags::partial }, { "C", AvailabilityFlags::complete } };
+static std::map< std::string, eAvailabilityFlags > const string2AvailabilityFlags = {
+	{ "N", eAvailabilityFlags::none }, { "P", eAvailabilityFlags::partial }, { "C", eAvailabilityFlags::complete }
+};
 
-AvailabilityFlags getAvailabilityFlags( std::string availabilityFlags )
+eAvailabilityFlags getAvailabilityFlags( std::string availabilityFlags )
 {
 	const auto& availability_flag{ string2AvailabilityFlags.find( availabilityFlags ) };
 	if( availability_flag != string2AvailabilityFlags.cend() )
 	{
 		return availability_flag->second;
 	}
-	return AvailabilityFlags::complete;
+	return eAvailabilityFlags::complete;
 }

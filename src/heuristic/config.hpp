@@ -4,6 +4,8 @@
 #include <string_view>
 #include <vector>
 
+#include "heuristic_types.hpp"
+
 namespace snort
 {
 class Value;
@@ -17,14 +19,14 @@ class HeuristicConfig
 {
 	enum CsvEncoder
 	{
-		AdressIp,
-		RiskFlag,
-		AttackType,
-		RangeFlag,
-		AccessFlag,
-		AvaiabilityFlag,
-		Counter,
-		PacketEntropy
+		adressIp,
+		riskFlag,
+		attackType,
+		rangeFlag,
+		accessFlag,
+		avaiabilityFlag,
+		counter,
+		packetEntropy
 	};
 
 public:
