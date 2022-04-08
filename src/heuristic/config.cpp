@@ -1,12 +1,15 @@
 #include <fstream>
 #include <iostream>
 
+#include "flag.hpp"
 #include "framework/value.h"
 #include <arpa/inet.h>
 #include <iterator>
+#include <map>
 #include <netinet/in.h>
 
 #include "config.hpp"
+#include "flag_config.hpp"
 #include "heuristic_types.hpp"
 #include "utils.hpp"
 

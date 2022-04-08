@@ -63,7 +63,6 @@ eAvailabilityFlags getAvailabilityFlags( std::string availabilityFlags );
 class DangerousIpAddr
 {
 public:
-	std::string hash; // change types if needed ??????????????????????????
 	sockaddr_in ip_addr;
 	eRiskFLag risk_flag;
 	eAttackTypes attack_type;

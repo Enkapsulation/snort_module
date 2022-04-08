@@ -24,33 +24,6 @@ void Heuristic::heuristic_show_config( const HeuristicConfig* config ) const
 void Heuristic::set_default_value( HeuristicConfig* config )
 {
 	( *config ) = HeuristicConfig::getDefaultConfig();
-
-	// /* Init default score flags */
-	// config->filename_config->flags_score[ H_FLAGS ] = -3;
-	// config->filename_config->flags_score[ M_FLAGS ] = -2;
-	// config->filename_config->flags_score[ L_FLAGS ] = -1;
-
-	// /* Default attack score */
-	// config->filename_config->attack_score[ DDOS ]		 = -5;
-	// config->filename_config->attack_score[ PHISING ]	 = -5;
-	// config->filename_config->attack_score[ MALWARE ]	 = -5;
-	// config->filename_config->attack_score[ RANSOMEWARE ] = -5;
-	// config->filename_config->attack_score[ DoS ]		 = -5;
-	// config->filename_config->attack_score[ XSS ]		 = -5;
-
-	// /* Default range score */
-	// config->filename_config->range_score[ SINGLE ]	 = -1;
-	// config->filename_config->range_score[ PARTIAL ]	 = -2;
-	// config->filename_config->range_score[ COMPLETE ] = -3;
-
-	// /* Default Access score */
-	// config->filename_config->access_score[ NONE ] = -2;
-	// config->filename_config->access_score[ USER ] = -1;
-
-	// /* Default Availability score */
-	// config->filename_config->availability_score[ NONE ]		= -1;
-	// config->filename_config->availability_score[ PARTIAL ]	= -2;
-	// config->filename_config->availability_score[ COMPLETE ] = -4;
 }
 
 //-------------------------------------------------------------------------
@@ -110,26 +83,6 @@ void Heuristic::eval( Packet* packet )
 		LogMessage( "GOT IT\n" );
 	}
 
-	// auto result = binarySearch( dangerous_ip_record, 0, config->record_number - 1, GET_SRC_IPv4( pkt ) );
-
-	// double packet_probability{ 0.0 };
-	// std::string type_attack{};
-
-	/* transfer start packet value */
-	// double ranking = config->packet_value;
-
-	// if( !m_config )
-	// {
-	// 	LogMessage( "[ERROR] No config\n" );
-	// 	return;
-	// }
-	// else if( !pkt->has_ip_hdr() )
-	// {
-	// 	LogMessage( "Packet hasn't IP header\n" );
-	// 	return;
-	// }
-	// else
-	// {
 	// char cli_ip_str[ INET6_ADDRSTRLEN ];
 	// pkt->flow->client_ip.ntop( cli_ip_str, sizeof( cli_ip_str ) );
 
