@@ -22,6 +22,11 @@ add_library (
     heuristic_module.cpp
     utils.hpp
     utils.cpp
+    # flag.hpp
+    # risk_flag.cpp
+    # risk_flag.hpp
+    # dangerous_ip_addr.cpp
+    # dangerous_ip_addr.hpp
 )
 
 set_target_properties (

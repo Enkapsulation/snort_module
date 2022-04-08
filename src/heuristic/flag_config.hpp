@@ -4,23 +4,23 @@
 #include <map>
 #include <string>
 
-using namespace defaultValueFlag;
+// using namespace defaultValueFlag;
 
-class RiskFLag
-{
-public:
-	RiskFLag( double high, double medium, double low );
-	double getFLagValue( std::string ) const;
+// class RiskFLag
+// {
+// public:
+// 	RiskFLag( double high, double medium, double low );
+// 	double getFLagValue( std::string ) const;
 
-private:
-	void setDefaultValue( std::string, double );
+// private:
+// 	void setDefaultValue( std::string, double );
 
-	double m_high{ defaultValueFlag::s_defaultRiskHigh };
-	double m_medium{ defaultValueFlag::s_defaultRiskMedium };
-	double m_low{ defaultValueFlag::s_defaultRiskLow };
+// 	double m_high{ defaultValueFlag::s_defaultRiskHigh };
+// 	double m_medium{ defaultValueFlag::s_defaultRiskMedium };
+// 	double m_low{ defaultValueFlag::s_defaultRiskLow };
 
-	std::map< std::string, double > riskFlagValue = { { "H", m_high }, { "M", m_medium }, { "L", m_low } };
-};
+// 	std::map< std::string, double > riskFlagValue = { { "H", m_high }, { "M", m_medium }, { "L", m_low } };
+// };
 
 class AttackType
 {

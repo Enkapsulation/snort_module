@@ -1,26 +1,26 @@
 #pragma once
 
-namespace defaultValueFlag
+namespace Parameters::Default
 {
-constexpr double s_defaultRiskHigh{ -3 };
-constexpr double s_defaultRiskMedium{ -2 };
-constexpr double s_defaultRiskLow{ -1 };
+static constexpr double s_highRisk{ -3.0 };
+static constexpr double s_mediumRisk{ -2.0 };
+static constexpr double s_lowRisk{ -1.0 };
 
-constexpr int s_defaultAttackTypeDDoS{ -5 };
-constexpr int s_defaultAttackTypePhishing{ -5 };
-constexpr int s_defaultAttackTypeMalware{ -5 };
-constexpr int s_defaultAttackTypeRansomware{ -5 };
-constexpr int s_defaultAttackTypeDoS{ -5 };
+static constexpr int s_AttackTypeDDoS{ -5 };
+static constexpr int s_AttackTypePhishing{ -5 };
+static constexpr int s_AttackTypeMalware{ -5 };
+static constexpr int s_AttackTypeRansomware{ -5 };
+static constexpr int s_AttackTypeDoS{ -5 };
 
-constexpr int s_defaultRangeSingle{ -1 };
-constexpr int s_defaultRangePartial{ -2 };
-constexpr int s_defaultRangeComplete{ -3 };
+static constexpr int s_rangeSingle{ -1 };
+static constexpr int s_rangePartial{ -2 };
+static constexpr int s_rangeComplete{ -3 };
 
-constexpr int s_defaultAccessNone{ -2 };
-constexpr int s_defaultAccessUser{ -1 };
+static constexpr int s_accessNone{ -2 };
+static constexpr int s_accessUser{ -1 };
 
-constexpr int s_defaultAvailabilityNone{ -1 };
-constexpr int s_defaultAvailabilityPartial{ -2 };
-constexpr int s_defaultAvailabilityComplete{ -4 };
+static constexpr int s_availabilityNone{ -1 };
+static constexpr int s_availabilityPartial{ -2 };
+static constexpr int s_availabilityComplete{ -4 };
 
-} // namespace defaultValueFlag
+} // namespace Parameters::Default
