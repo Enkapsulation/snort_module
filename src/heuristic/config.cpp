@@ -7,6 +7,7 @@
 #include <iterator>
 #include <map>
 #include <netinet/in.h>
+#include <optional>
 
 #include "config.hpp"
 #include "utils.hpp"
@@ -22,6 +23,24 @@ HeuristicConfig::HeuristicConfig( float sensitivity,
 	  m_filenameConfig( nullptr ),
 	  m_dangerousIpAdresses()
 {
+}
+
+std::optional< DangerousIpAddr* > HeuristicConfig::find( std::string ip ) const
+{
+	const auto ipToCompare{ DangerousIpAddr::makeSockaddr( ip ) };
+
+	auto suspiciousIpAddrIterator
+		= std::find_if( m_dangerousIpAdresses.begin(),
+						m_dangerousIpAdresses.end(),
+						[ & ]( const DangerousIpAddr& dangerousIpAddr )
+						{ return dangerousIpAddr.m_ipAddr.sin_addr.s_addr == ipToCompare.sin_addr.s_addr; } );
+
+	if( suspiciousIpAddrIterator != m_dangerousIpAdresses.cend() )
+	{
+		return const_cast< DangerousIpAddr* >( &( *suspiciousIpAddrIterator ) );
+	}
+
+	return std::nullopt;
 }
 
 HeuristicConfig::operator std::string() const

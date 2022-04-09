@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <string>
 
 #include "log/messages.h"
@@ -45,7 +46,7 @@ bool Heuristic::validate( const Packet* packet ) const
 {
 	if( !packet->flow )
 	{
-		LogMessage( "[WARRNING] Packet hasn't flow\n" );
+		// LogMessage( "[WARRNING] Packet hasn't flow\n" );
 		return false;
 	}
 
@@ -57,9 +58,57 @@ std::string Heuristic::getClientIp( const Packet* packet ) const
 	char clientIp[ INET6_ADDRSTRLEN ];
 	packet->flow->client_ip.ntop( clientIp, sizeof( clientIp ) );
 
-	LogMessage( "Client IP: %s\n", clientIp );
+	// LogMessage( "Client IP: %s\n", clientIp );
 
 	return clientIp;
+}
+
+std::string Heuristic::getServerIp( const Packet* packet ) const
+{
+	char serverIp[ INET6_ADDRSTRLEN ];
+	packet->flow->server_ip.ntop( serverIp, sizeof( serverIp ) );
+
+	// LogMessage( "Server IP: %s\n", serverIp );
+
+	return serverIp;
+}
+
+float Heuristic::computeFlags( const DangerousIpAddr& dangerousIpAddr ) const
+{
+	auto packetValue{ m_config->getPacketValue() };
+
+	packetValue -= dangerousIpAddr.m_riskFlag.getValue();
+	packetValue -= dangerousIpAddr.m_attackType.getValue();
+	packetValue -= dangerousIpAddr.m_rangeFlag.getValue();
+	packetValue -= dangerousIpAddr.m_accessFlag.getValue();
+	packetValue -= dangerousIpAddr.m_availabilityFlag.getValue();
+
+	return packetValue;
+}
+
+void Heuristic::printAttackInfo( std::string clientIp,
+								 std::string serverIp,
+								 const float packetValue,
+								 const DangerousIpAddr& dangerousIpAddr ) const
+{
+	LogMessage( "[FLOW]%s->%s, [ATTACK]:%c, [DANGEROUS]%c, [VALUE]%lf, [ENTROPY]:%lf\n",
+				clientIp.c_str(),
+				serverIp.c_str(),
+				dangerousIpAddr.m_attackType.getIdentifier(),
+				dangerousIpAddr.m_riskFlag.getIdentifier(),
+				packetValue,
+				dangerousIpAddr.m_networkEntropy );
+}
+
+void Heuristic::checkValue( std::string clientIp,
+							std::string serverIp,
+							const float packetValue,
+							const DangerousIpAddr& dangerousIpAddr ) const
+{
+	if( packetValue < m_config->getSensitivity() )
+	{
+		printAttackInfo( clientIp, serverIp, packetValue, dangerousIpAddr );
+	}
 }
 
 void Heuristic::eval( Packet* packet )
@@ -70,16 +119,19 @@ void Heuristic::eval( Packet* packet )
 	}
 
 	const auto& dangerousIpAdresses{ m_config->getDangerousIpAdresses() };
-	const auto ipToCompare{ DangerousIpAddr::makeSockaddr( getClientIp( packet ) ) };
+	const auto clientIp{ getClientIp( packet ) };
+	auto searchResult{ m_config->find( clientIp ) };
 
-	const auto& found
-		= std::find_if( dangerousIpAdresses.begin(),
-						dangerousIpAdresses.end(),
-						[ & ]( const DangerousIpAddr& dangerousIpAddr )
-						{ return dangerousIpAddr.m_ipAddr.sin_addr.s_addr == ipToCompare.sin_addr.s_addr; } );
-
-	if( found != dangerousIpAdresses.cend() )
+	if( !searchResult )
 	{
-		LogMessage( "GOT IT\n" );
+		return;
 	}
+
+	auto& suspiciousIpAddr{ *searchResult.value() };
+
+	suspiciousIpAddr.incrementCounter();
+
+	const auto packetValue{ computeFlags( suspiciousIpAddr ) };
+
+	checkValue( clientIp, getServerIp( packet ), packetValue, suspiciousIpAddr );
 }

@@ -4,8 +4,7 @@
 
 #include "detection/detection_engine.h"
 
-// THREAD_LOCAL const Trace* heu_trace = nullptr;
-
+class DangerousIpAddr;
 class HeuristicConfig;
 
 class Heuristic : public snort::Inspector
@@ -21,7 +20,19 @@ private:
 	void heuristic_show_config( const HeuristicConfig* config ) const;
 	void set_default_value( HeuristicConfig* config );
 
+	float computeFlags( const DangerousIpAddr& dangerousIpAddr ) const;
+	void checkValue( std::string clientIp,
+					 std::string serverIp,
+					 const float packetValue,
+					 const DangerousIpAddr& dangerousIpAddr ) const;
+
+	void printAttackInfo( std::string clientIp,
+						  std::string serverIp,
+						  const float packetValue,
+						  const DangerousIpAddr& dangerousIpAddr ) const;
+
 	std::string getClientIp( const snort::Packet* packet ) const;
+	std::string getServerIp( const snort::Packet* packet ) const;
 	bool validate( const snort::Packet* packet ) const;
 
 	std::shared_ptr< HeuristicConfig > m_config;

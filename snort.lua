@@ -44,11 +44,11 @@ EXTERNAL_NET = 'any'
 
 stream = { }
 stream_ip = { }
--- stream_icmp = { }
+stream_icmp = { }
 stream_tcp = { }
 stream_udp = { }
--- stream_user = { }
--- stream_file = { }
+stream_user = { }
+stream_file = { }
 
 -- arp_spoof = { }
 -- back_orifice = { }
@@ -68,7 +68,7 @@ dns = { }
 -- ssl = { }
 -- telnet = { }
 -- dpx = { }
-heuristic = { filename_malicious = "Snort2File/test.csv" }
+heuristic = { filename_malicious = "/home/swnek/snort_module/Snort2File/test.csv" }
 
 
 -- dce_smb = { }

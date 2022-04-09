@@ -1,6 +1,7 @@
 #pragma once
 #include "dangerous_ip_addr.hpp"
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -30,11 +31,12 @@ class HeuristicConfig
 public:
 	HeuristicConfig( float sensitivity, float dangerousEntropy, float packetValue, std::string filenameMalicious );
 
+	std::optional< DangerousIpAddr* > find( std::string ip ) const;
+
 	operator std::string() const;
-
 	bool set( const snort::Value& value );
-	static HeuristicConfig getDefaultConfig();
 
+	static HeuristicConfig getDefaultConfig();
 	float getSensitivity() const;
 	float getDangerousEntropy() const;
 	float getPacketValue() const;

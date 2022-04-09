@@ -25,5 +25,7 @@ public:
 					 uint64_t packetCounter,
 					 float networkEntropy );
 
+	void incrementCounter();
+
 	static sockaddr_in makeSockaddr( std::string ip );
 };

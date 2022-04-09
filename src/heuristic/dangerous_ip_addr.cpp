@@ -19,6 +19,11 @@ DangerousIpAddr::DangerousIpAddr( sockaddr_in ipAddr,
 {
 }
 
+void DangerousIpAddr::incrementCounter()
+{
+	++m_packetCounter;
+}
+
 sockaddr_in DangerousIpAddr::makeSockaddr( std::string ip )
 {
 	sockaddr_in ip_addr{};
