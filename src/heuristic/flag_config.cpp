@@ -5,82 +5,116 @@
 
 namespace Parameters
 {
-static const std::map< char, double > s_riskFlags
+RiskFlag::RiskFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
+
+static const std::map< char, float > s_riskFlags
 	= { { 'H', Default::s_highRisk }, { 'M', Default::s_mediumRisk }, { 'L', Default::s_lowRisk } };
 
-float RiskFlag::getValueFromIdentifier() const
+float RiskFlag::getValueFromIdentifier( const char identifier ) const
 {
-	const auto& riskFlag{ s_riskFlags.find( m_identifier ) };
+	const auto& riskFlag{ s_riskFlags.find( identifier ) };
 
 	if( riskFlag != s_riskFlags.cend() )
 	{
 		return riskFlag->second;
 	}
 
+	return getDefault();
+}
+
+float RiskFlag::getDefault() const
+{
 	return Default::s_highRisk;
 }
 
-static const std::map< char, double > s_attackFlags = { { 'D', Default::s_AttackTypeDDoS },
-														{ 'P', Default::s_AttackTypePhishing },
-														{ 'M', Default::s_AttackTypeMalware },
-														{ 'R', Default::s_AttackTypeRansomware },
-														{ 'S', Default::s_AttackTypeDoS } };
+static const std::map< char, float > s_attackFlags = { { 'D', Default::s_attackTypeDDoS },
+													   { 'P', Default::s_attackTypePhishing },
+													   { 'M', Default::s_attackTypeMalware },
+													   { 'R', Default::s_attackTypeRansomware },
+													   { 'S', Default::s_attackTypeDoS } };
 
-float AttackType::getValueFromIdentifier() const
+AttackType::AttackType( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
+
+float AttackType::getValueFromIdentifier( const char identifier ) const
 {
-	const auto& attackFlag{ s_attackFlags.find( m_identifier ) };
+	const auto& attackFlag{ s_attackFlags.find( identifier ) };
 
-	if( attackFlag != s_riskFlags.cend() )
+	if( attackFlag != s_attackFlags.cend() )
 	{
 		return attackFlag->second;
 	}
 
-	return Default::s_AttackTypeMalware;
+	return getDefault();
 }
 
-static const std::map< char, double > s_rangeFlags
+float AttackType::getDefault() const
+{
+	return Default::s_attackTypeMalware;
+}
+
+static const std::map< char, float > s_rangeFlags
 	= { { 'S', Default::s_rangeSingle }, { 'P', Default::s_rangePartial }, { 'C', Default::s_rangeComplete } };
 
-float RangeFLag::getValueFromIdentifier() const
-{
-	const auto& rangeFlag{ s_rangeFlags.find( m_identifier ) };
+RangeFlag::RangeFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
 
-	if( rangeFlag != s_riskFlags.cend() )
+float RangeFlag::getValueFromIdentifier( const char identifier ) const
+{
+	const auto& rangeFlag{ s_rangeFlags.find( identifier ) };
+
+	if( rangeFlag != s_rangeFlags.cend() )
 	{
 		return rangeFlag->second;
 	}
 
-	return Default::s_rangePartial;
+	return getDefault();
 }
 
-static const std::map< char, double > s_accessFlags
-	= { { 'N', Default::s_accessNone }, { 'U', Default::s_accessUser } };
-
-float AccessFlag::getValueFromIdentifier() const
+float RangeFlag::getDefault() const
 {
-	const auto& accessFlag{ s_accessFlags.find( m_identifier ) };
+	return Default::s_rangeSingle;
+}
 
-	if( accessFlag != s_riskFlags.cend() )
+static const std::map< char, float > s_accessFlags = { { 'N', Default::s_accessNone }, { 'U', Default::s_accessUser } };
+
+AccessFlag::AccessFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
+
+float AccessFlag::getValueFromIdentifier( const char identifier ) const
+{
+	const auto& accessFlag{ s_accessFlags.find( identifier ) };
+
+	if( accessFlag != s_accessFlags.cend() )
 	{
 		return accessFlag->second;
 	}
 
+	return getDefault();
+}
+
+float AccessFlag::getDefault() const
+{
 	return Default::s_accessNone;
 }
 
-static const std::map< char, double > s_availabilityFlags = { { 'N', Default::s_availabilityNone },
-															  { 'P', Default::s_availabilityPartial },
-															  { 'C', Default::s_availabilityComplete } };
+static const std::map< char, float > s_availabilityFlags = { { 'N', Default::s_availabilityNone },
+															 { 'P', Default::s_availabilityPartial },
+															 { 'C', Default::s_availabilityComplete } };
 
-float AvailabilityFlag::getValueFromIdentifier() const
+AvailabilityFlag::AvailabilityFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
+
+float AvailabilityFlag::getValueFromIdentifier( const char identifier ) const
 {
-	const auto& availabilityFlag{ s_availabilityFlags.find( m_identifier ) };
+	const auto& availabilityFlag{ s_availabilityFlags.find( identifier ) };
 
-	if( availabilityFlag != s_riskFlags.cend() )
+	if( availabilityFlag != s_availabilityFlags.cend() )
 	{
 		return availabilityFlag->second;
 	}
 
-	return Default::s_availabilityComplete;
+	return getDefault();
+}
+
+float AvailabilityFlag::getDefault() const
+{
+	return Default::s_availabilityNone;
 }
 } // namespace Parameters

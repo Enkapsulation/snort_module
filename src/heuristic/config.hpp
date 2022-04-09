@@ -1,10 +1,9 @@
 #pragma once
+#include "dangerous_ip_addr.hpp"
 #include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
-
-#include "heuristic_types.hpp"
 
 namespace snort
 {
@@ -12,42 +11,41 @@ class Value;
 }
 
 class DangerousIpConfig;
-class DangerousIpAddr;
 
 /* Main policy configuration */
 class HeuristicConfig
 {
 	enum CsvEncoder
 	{
-		adressIp,
-		riskFlag,
-		attackType,
-		rangeFlag,
-		accessFlag,
-		avaiabilityFlag,
-		counter,
-		packetEntropy
+		AdressIp,
+		RiskFlag,
+		AttackType,
+		RangeFlag,
+		AccessFlag,
+		AvaiabilityFlag,
+		Counter,
+		PacketEntropy
 	};
 
 public:
-	HeuristicConfig( double sensitivity, double dangerousEntropy, double packetValue, std::string filenameMalicious );
+	HeuristicConfig( float sensitivity, float dangerousEntropy, float packetValue, std::string filenameMalicious );
 
 	operator std::string() const;
 
 	bool set( const snort::Value& value );
 	static HeuristicConfig getDefaultConfig();
 
-	double getSensitivity() const;
-	double getDangerousEntropy() const;
-	double getPacketValue() const;
+	float getSensitivity() const;
+	float getDangerousEntropy() const;
+	float getPacketValue() const;
 	std::string getFilenameMalicious() const;
 	std::shared_ptr< DangerousIpConfig > getFilenameConfig() const;
 	const std::vector< DangerousIpAddr >& getDangerousIpAdresses() const;
 
 private:
-	void setSensitivity( double );
-	void setDangerousEntropy( double );
-	void setPacketValue( double );
+	void setSensitivity( float );
+	void setDangerousEntropy( float );
+	void setPacketValue( float );
 	void setFilenameMalicious( const std::string& );
 	void setFilenameConfig( std::shared_ptr< DangerousIpConfig > );
 	void readCSV();
@@ -58,14 +56,14 @@ private:
 	static constexpr std::string_view s_packetValueName{ "packet_value" };
 	static constexpr std::string_view s_filenameMaliciousName{ "filename_malicious" };
 
-	static constexpr double s_defaultSensitivity{ 20.0 };
-	static constexpr double s_defaultDangerousEntropy{ 6.0 };
-	static constexpr double s_defaultPacketValue{ 15.0 };
+	static constexpr float s_defaultSensitivity{ 20.0 };
+	static constexpr float s_defaultDangerousEntropy{ 6.0 };
+	static constexpr float s_defaultPacketValue{ 15.0 };
 	static constexpr std::string_view s_defaultFilenameMalicious{ "" };
 
-	double m_sensitivity;
-	double m_dangerousEntropy;
-	double m_packetValue;
+	float m_sensitivity;
+	float m_dangerousEntropy;
+	float m_packetValue;
 	std::string m_filenameMalicious;
 	std::shared_ptr< DangerousIpConfig > m_filenameConfig;
 	std::vector< DangerousIpAddr > m_dangerousIpAdresses;

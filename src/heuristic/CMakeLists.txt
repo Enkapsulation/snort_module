@@ -16,17 +16,15 @@ add_library (
     create_module.cpp
 	heuristic.hpp
     heuristic.cpp
-    heuristic_types.hpp
-    heuristic_types.cpp
     heuristic_module.hpp
     heuristic_module.cpp
     utils.hpp
     utils.cpp
-    # flag.hpp
-    # risk_flag.cpp
-    # risk_flag.hpp
-    # dangerous_ip_addr.cpp
-    # dangerous_ip_addr.hpp
+    flag.hpp
+    flag_config.cpp
+    flag_config.hpp
+    dangerous_ip_addr.cpp
+    dangerous_ip_addr.hpp
 )
 
 set_target_properties (

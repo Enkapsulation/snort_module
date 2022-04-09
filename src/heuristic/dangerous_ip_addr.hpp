@@ -1,5 +1,5 @@
 #pragma once
-#include "risk_flag.hpp"
+#include "flag_config.hpp"
 
 #include <arpa/inet.h>
 #include <string>
@@ -9,10 +9,21 @@ class DangerousIpAddr
 public:
 	sockaddr_in m_ipAddr;
 	Parameters::RiskFlag m_riskFlag;
+	Parameters::AttackType m_attackType;
+	Parameters::RangeFlag m_rangeFlag;
+	Parameters::AccessFlag m_accessFlag;
+	Parameters::AvailabilityFlag m_availabilityFlag;
 	uint64_t m_packetCounter;
-	double m_networkEntropy;
+	float m_networkEntropy;
 
-	DangerousIpAddr( sockaddr_in ipAddr, Parameters::RiskFlag riskFlag, uint64_t packetCounter, double networkEntropy );
+	DangerousIpAddr( sockaddr_in ipAddr,
+					 Parameters::RiskFlag riskFlag,
+					 Parameters::AttackType m_attackType,
+					 Parameters::RangeFlag m_rangeFlag,
+					 Parameters::AccessFlag m_accessFlag,
+					 Parameters::AvailabilityFlag m_availabilityFlag,
+					 uint64_t packetCounter,
+					 float networkEntropy );
 
 	static sockaddr_in makeSockaddr( std::string ip );
 };

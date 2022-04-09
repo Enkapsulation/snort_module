@@ -9,13 +9,11 @@
 #include <netinet/in.h>
 
 #include "config.hpp"
-#include "flag_config.hpp"
-#include "heuristic_types.hpp"
 #include "utils.hpp"
 
-HeuristicConfig::HeuristicConfig( double sensitivity,
-								  double dangerousEntropy,
-								  double packetValue,
+HeuristicConfig::HeuristicConfig( float sensitivity,
+								  float dangerousEntropy,
+								  float packetValue,
 								  std::string filenameMalicious )
 	: m_sensitivity( sensitivity ),
 	  m_dangerousEntropy( dangerousEntropy ),
@@ -75,17 +73,17 @@ HeuristicConfig HeuristicConfig::getDefaultConfig()
 	return { s_defaultSensitivity, s_defaultDangerousEntropy, s_defaultPacketValue, s_defaultFilenameMalicious.data() };
 }
 
-double HeuristicConfig::getSensitivity() const
+float HeuristicConfig::getSensitivity() const
 {
 	return m_sensitivity;
 }
 
-double HeuristicConfig::getDangerousEntropy() const
+float HeuristicConfig::getDangerousEntropy() const
 {
 	return m_dangerousEntropy;
 }
 
-double HeuristicConfig::getPacketValue() const
+float HeuristicConfig::getPacketValue() const
 {
 	return m_packetValue;
 }
@@ -105,17 +103,17 @@ const std::vector< DangerousIpAddr >& HeuristicConfig::getDangerousIpAdresses() 
 	return m_dangerousIpAdresses;
 }
 
-void HeuristicConfig::setSensitivity( double sensitivity )
+void HeuristicConfig::setSensitivity( float sensitivity )
 {
 	m_sensitivity = sensitivity;
 };
 
-void HeuristicConfig::setDangerousEntropy( double dangerousEntropy )
+void HeuristicConfig::setDangerousEntropy( float dangerousEntropy )
 {
 	m_dangerousEntropy = dangerousEntropy;
 }
 
-void HeuristicConfig::setPacketValue( double packetValue )
+void HeuristicConfig::setPacketValue( float packetValue )
 {
 	m_packetValue = packetValue;
 }
@@ -145,21 +143,32 @@ void HeuristicConfig::readCSV()
 
 void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 {
+
 	for( const auto& row : CSVRange( file ) )
 	{
-		sockaddr_in ip_addr{ DangerousIpAddr::makeSockaddr( row[ adressIp ].c_str() ) };
-		eRiskFLag risk_flag				= getRiskFlag( row[ riskFlag ] );
-		eAttackTypes attack_type		= getAttackFlag( row[ attackType ] );
-		eRangeFlags range				= getRangeFlag( row[ rangeFlag ] );
-		eAccessFlag access				= getAccessFlag( row[ accessFlag ] );
-		eAvailabilityFlags availability = getAvailabilityFlags( row[ avaiabilityFlag ] );
-		auto packet_counter				= std::stoi( row[ counter ] );
-		double network_entropy			= std::stod( row[ packetEntropy ] );
+		sockaddr_in ip_addr{ DangerousIpAddr::makeSockaddr( row[ AdressIp ].c_str() ) };
 
-		DangerousIpAddr ipAddrInfo(
-			ip_addr, attack_type, range, access, availability, risk_flag, packet_counter, network_entropy );
+		auto getChar = [ & ]( CsvEncoder whichFlag ) { return row[ whichFlag ].data()[ 0 ]; };
 
-		m_dangerousIpAdresses.push_back( ipAddrInfo );
+		Parameters::RiskFlag riskFlag( getChar( RiskFlag ) );
+		Parameters::AttackType attackTypeFlag( getChar( AttackType ) );
+		Parameters::RangeFlag rangeFlag( getChar( RangeFlag ) );
+		Parameters::AccessFlag accessFlag( getChar( AccessFlag ) );
+		Parameters::AvailabilityFlag avaiabilityFlag( getChar( AvaiabilityFlag ) );
+
+		auto packet_counter	  = std::stoi( row[ Counter ] );
+		float network_entropy = std::stod( row[ PacketEntropy ] );
+
+		DangerousIpAddr dangerousIpAddr( ip_addr,
+										 riskFlag,
+										 attackTypeFlag,
+										 rangeFlag,
+										 accessFlag,
+										 avaiabilityFlag,
+										 packet_counter,
+										 network_entropy );
+
+		m_dangerousIpAdresses.push_back( dangerousIpAddr );
 	}
 
 	if( m_dangerousIpAdresses.empty() )

@@ -1,6 +1,6 @@
 #include "heuristic.hpp"
 #include "config.hpp"
-#include "heuristic_types.hpp"
+#include "dangerous_ip_addr.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -72,11 +72,11 @@ void Heuristic::eval( Packet* packet )
 	const auto& dangerousIpAdresses{ m_config->getDangerousIpAdresses() };
 	const auto ipToCompare{ DangerousIpAddr::makeSockaddr( getClientIp( packet ) ) };
 
-	const auto& found = std::find_if( dangerousIpAdresses.begin(),
-									  dangerousIpAdresses.end(),
-									  [ & ]( const DangerousIpAddr& dangerousIpAddr ) {
-										  return dangerousIpAddr.ip_addr.sin_addr.s_addr == ipToCompare.sin_addr.s_addr;
-									  } );
+	const auto& found
+		= std::find_if( dangerousIpAdresses.begin(),
+						dangerousIpAdresses.end(),
+						[ & ]( const DangerousIpAddr& dangerousIpAddr )
+						{ return dangerousIpAddr.m_ipAddr.sin_addr.s_addr == ipToCompare.sin_addr.s_addr; } );
 
 	if( found != dangerousIpAdresses.cend() )
 	{
@@ -234,7 +234,7 @@ void Heuristic::eval( Packet* packet )
 	/* Probability */
 	// dangerous_ip_record[ result ].counter += 1;
 	// packet_probability
-	// 	= ( ( double )( dangerous_ip_record[ result ].counter ) / ( ( double )pc.total_from_daq ) );
+	// 	= ( ( float )( dangerous_ip_record[ result ].counter ) / ( ( float )pc.total_from_daq ) );
 	// dangerous_ip_record[ result ].network_entropy = ENTROPY( packet_probability );
 
 	/* Entoropy */

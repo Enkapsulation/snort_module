@@ -6,30 +6,40 @@ namespace Parameters
 class RiskFlag : public Flag
 {
 public:
-	float getValueFromIdentifier() const override;
+	explicit RiskFlag( char identifier );
+	float getValueFromIdentifier( const char identifier ) const override;
+	float getDefault() const override;
 };
 
 class AttackType : public Flag
 {
 public:
-	float getValueFromIdentifier() const override;
+	explicit AttackType( char identifier );
+	float getValueFromIdentifier( const char identifier ) const override;
+	float getDefault() const override;
 };
 
-class RangeFLag : public Flag
+class RangeFlag : public Flag
 {
 public:
-	float getValueFromIdentifier() const override;
+	explicit RangeFlag( char identifier );
+	float getValueFromIdentifier( const char identifier ) const override;
+	float getDefault() const override;
 };
 
 class AccessFlag : public Flag
 {
 public:
-	float getValueFromIdentifier() const override;
+	explicit AccessFlag( char identifier );
+	float getValueFromIdentifier( const char identifier ) const override;
+	float getDefault() const override;
 };
 
 class AvailabilityFlag : public Flag
 {
 public:
-	float getValueFromIdentifier() const override;
+	explicit AvailabilityFlag( char identifier );
+	float getValueFromIdentifier( const char identifier ) const override;
+	float getDefault() const override;
 };
 } // namespace Parameters
