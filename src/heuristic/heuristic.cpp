@@ -12,6 +12,8 @@
 
 #include "utils.hpp"
 
+long long Heuristic::s_allPacketsCount{ 0 };
+
 using namespace snort;
 
 //-------------------------------------------------------------------------
@@ -76,15 +78,7 @@ std::string Heuristic::getServerIp( const Packet* packet ) const
 
 float Heuristic::computeFlags( const DangerousIpAddr& dangerousIpAddr ) const
 {
-	auto packetValue{ m_config->getPacketValue() };
-
-	packetValue -= dangerousIpAddr.m_riskFlag.getValue();
-	packetValue -= dangerousIpAddr.m_attackType.getValue();
-	packetValue -= dangerousIpAddr.m_rangeFlag.getValue();
-	packetValue -= dangerousIpAddr.m_accessFlag.getValue();
-	packetValue -= dangerousIpAddr.m_availabilityFlag.getValue();
-
-	return packetValue;
+	return m_config->getPacketValue() - dangerousIpAddr.getValueAllFlags();
 }
 
 void Heuristic::printAttackInfo( std::string clientIp,
@@ -112,11 +106,9 @@ void Heuristic::checkThreshold( std::string clientIp,
 	}
 }
 
-static long long s_allPacketsCount{ 0 };
-
 float Heuristic::computeEntropy( double probability ) const
 {
-	return -1.0 * ( std::log( probability ) / log2 );
+	return -( std::log( probability ) / log2value );
 }
 
 float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
@@ -128,7 +120,9 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 
 	dangerousIpAddr.m_networkEntropy = computeEntropy( packet_probability );
 
-	return packetValue - 0.5 * dangerousIpAddr.m_networkEntropy;
+	static constexpr auto magicNumberForThatMoment{ 0.5 };
+
+	return packetValue - magicNumberForThatMoment * dangerousIpAddr.m_networkEntropy;
 }
 
 void Heuristic::eval( Packet* packet )

@@ -28,4 +28,5 @@ public:
 	void incrementCounter();
 
 	static sockaddr_in makeSockaddr( std::string ip );
+	float getValueAllFlags() const;
 };

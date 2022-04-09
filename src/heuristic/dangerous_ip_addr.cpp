@@ -30,3 +30,16 @@ sockaddr_in DangerousIpAddr::makeSockaddr( std::string ip )
 	inet_pton( AF_INET, ip.c_str(), &ip_addr.sin_addr );
 	return ip_addr;
 }
+
+float DangerousIpAddr::getValueAllFlags() const
+{
+	float value{ 0.F };
+
+	value += m_riskFlag.getValue();
+	value += m_attackType.getValue();
+	value += m_rangeFlag.getValue();
+	value += m_accessFlag.getValue();
+	value += m_availabilityFlag.getValue();
+
+	return value;
+}

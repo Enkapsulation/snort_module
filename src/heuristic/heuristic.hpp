@@ -40,5 +40,6 @@ private:
 
 	std::shared_ptr< HeuristicConfig > m_config;
 
-	static constexpr double log2{ 0.69314718056 };
+	static constexpr double log2value{ 0.69314718056 };
+	static long long s_allPacketsCount;
 };
