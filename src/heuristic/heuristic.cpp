@@ -3,6 +3,7 @@
 #include "dangerous_ip_addr.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <iterator>
 #include <string>
@@ -110,9 +111,30 @@ void Heuristic::checkThreshold( std::string clientIp,
 		printAttackInfo( clientIp, serverIp, packetValue, dangerousIpAddr );
 	}
 }
-#include <snort/daq/daq_user.h>
+
+static long long s_allPacketsCount{ 0 };
+
+float Heuristic::computeEntropy( double probability ) const
+{
+	return -1.0 * ( std::log( probability ) / log2 );
+}
+
+float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
+{
+	const auto packetValue{ computeFlags( dangerousIpAddr ) };
+
+	const auto packet_probability{ static_cast< double >( dangerousIpAddr.m_packetCounter )
+								   / static_cast< double >( s_allPacketsCount ) };
+
+	dangerousIpAddr.m_networkEntropy = computeEntropy( packet_probability );
+
+	return packetValue - 0.5 * dangerousIpAddr.m_networkEntropy;
+}
+
 void Heuristic::eval( Packet* packet )
 {
+	++s_allPacketsCount;
+
 	if( !validate( packet ) )
 	{
 		return;
@@ -131,7 +153,5 @@ void Heuristic::eval( Packet* packet )
 
 	suspiciousIpAddr.incrementCounter();
 
-	const auto packetValue{ computeFlags( suspiciousIpAddr ) };
-
-	checkThreshold( clientIp, getServerIp( packet ), packetValue, suspiciousIpAddr );
+	checkThreshold( clientIp, getServerIp( packet ), computePacketValue( suspiciousIpAddr ), suspiciousIpAddr );
 }

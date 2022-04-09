@@ -21,6 +21,9 @@ private:
 	void set_default_value( HeuristicConfig* config );
 
 	float computeFlags( const DangerousIpAddr& dangerousIpAddr ) const;
+	float computeEntropy( double probability ) const;
+	float computePacketValue( DangerousIpAddr& dangerousIpAddr ) const;
+
 	void checkThreshold( std::string clientIp,
 						 std::string serverIp,
 						 const float packetValue,
@@ -36,4 +39,6 @@ private:
 	bool validate( const snort::Packet* packet ) const;
 
 	std::shared_ptr< HeuristicConfig > m_config;
+
+	static constexpr double log2{ 0.69314718056 };
 };
