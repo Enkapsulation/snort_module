@@ -100,17 +100,17 @@ void Heuristic::printAttackInfo( std::string clientIp,
 				dangerousIpAddr.m_networkEntropy );
 }
 
-void Heuristic::checkValue( std::string clientIp,
-							std::string serverIp,
-							const float packetValue,
-							const DangerousIpAddr& dangerousIpAddr ) const
+void Heuristic::checkThreshold( std::string clientIp,
+								std::string serverIp,
+								const float packetValue,
+								const DangerousIpAddr& dangerousIpAddr ) const
 {
 	if( packetValue < m_config->getSensitivity() )
 	{
 		printAttackInfo( clientIp, serverIp, packetValue, dangerousIpAddr );
 	}
 }
-
+#include <snort/daq/daq_user.h>
 void Heuristic::eval( Packet* packet )
 {
 	if( !validate( packet ) )
@@ -133,5 +133,5 @@ void Heuristic::eval( Packet* packet )
 
 	const auto packetValue{ computeFlags( suspiciousIpAddr ) };
 
-	checkValue( clientIp, getServerIp( packet ), packetValue, suspiciousIpAddr );
+	checkThreshold( clientIp, getServerIp( packet ), packetValue, suspiciousIpAddr );
 }

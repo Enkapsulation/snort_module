@@ -21,10 +21,10 @@ private:
 	void set_default_value( HeuristicConfig* config );
 
 	float computeFlags( const DangerousIpAddr& dangerousIpAddr ) const;
-	void checkValue( std::string clientIp,
-					 std::string serverIp,
-					 const float packetValue,
-					 const DangerousIpAddr& dangerousIpAddr ) const;
+	void checkThreshold( std::string clientIp,
+						 std::string serverIp,
+						 const float packetValue,
+						 const DangerousIpAddr& dangerousIpAddr ) const;
 
 	void printAttackInfo( std::string clientIp,
 						  std::string serverIp,
