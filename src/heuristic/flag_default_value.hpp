@@ -23,4 +23,7 @@ static constexpr float s_availabilityNone{ 1.F };
 static constexpr float s_availabilityPartial{ 2.F };
 static constexpr float s_availabilityComplete{ 4.F };
 
+static constexpr float s_riskFlagFactor{ 0.65F };
+static constexpr float s_attackTypeFlagFactor{ 1.F - s_riskFlagFactor };
+
 } // namespace Parameters::Default

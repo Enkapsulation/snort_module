@@ -24,7 +24,7 @@ float RiskFlag::getValueFromIdentifier( const char identifier ) const
 
 float RiskFlag::getDefault() const
 {
-	return Default::s_highRisk;
+	return Default::s_riskFlagFactor * Default::s_highRisk;
 }
 
 static const std::map< char, float > s_attackFlags = { { 'D', Default::s_attackTypeDDoS },
@@ -49,7 +49,7 @@ float AttackType::getValueFromIdentifier( const char identifier ) const
 
 float AttackType::getDefault() const
 {
-	return Default::s_attackTypeMalware;
+	return Default::s_attackTypeFlagFactor * Default::s_attackTypeMalware;
 }
 
 static const std::map< char, float > s_rangeFlags
