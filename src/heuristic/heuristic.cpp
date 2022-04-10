@@ -108,7 +108,7 @@ void Heuristic::checkThreshold( std::string clientIp,
 
 float Heuristic::computeEntropy( double probability ) const
 {
-	return -( std::log( probability ) / log2value );
+	return -( std::log( probability ) / ln2value );
 }
 
 float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
@@ -120,9 +120,9 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 
 	dangerousIpAddr.m_networkEntropy = computeEntropy( packet_probability );
 
-	static constexpr auto magicNumberForThatMoment{ 0.5 };
+	static constexpr auto mathConstant{ 0.5 };
 
-	return packetValue - magicNumberForThatMoment * dangerousIpAddr.m_networkEntropy;
+	return packetValue - mathConstant * dangerousIpAddr.m_networkEntropy;
 }
 
 void Heuristic::eval( Packet* packet )
