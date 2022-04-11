@@ -13,12 +13,9 @@
 #include "config.hpp"
 #include "utils.hpp"
 
-HeuristicConfig::HeuristicConfig( float sensitivity,
-								  float dangerousEntropy,
-								  float packetValue,
-								  std::string filenameMalicious )
+HeuristicConfig::HeuristicConfig( float sensitivity, float entropy, float packetValue, std::string filenameMalicious )
 	: m_sensitivity( sensitivity ),
-	  m_dangerousEntropy( dangerousEntropy ),
+	  m_entropy( entropy ),
 	  m_packetValue( packetValue ),
 	  m_filenameMalicious( filenameMalicious ),
 	  m_filenameConfig( nullptr ),
@@ -49,7 +46,7 @@ HeuristicConfig::operator std::string() const
 	std::string msg{};
 
 	msg += "{ sensitivity: " + std::to_string( getSensitivity() ) + "\n";
-	msg += " entropy: " + std::to_string( getDangerousEntropy() ) + "\n";
+	msg += " entropy: " + std::to_string( getEntropy() ) + "\n";
 	msg += " default packet value: " + std::to_string( getPacketValue() ) + "\n";
 	msg += " Filename: " + getFilenameMalicious() + "}";
 
@@ -70,9 +67,9 @@ bool HeuristicConfig::set( const snort::Value& value )
 	{
 		setSensitivity( value.get_real() );
 	}
-	else if( valueName == s_dangerousEntropyName )
+	else if( valueName == s_entropyName )
 	{
-		setDangerousEntropy( value.get_real() );
+		setEntropy( value.get_real() );
 	}
 	else if( valueName == s_packetValueName )
 	{
@@ -93,7 +90,7 @@ bool HeuristicConfig::set( const snort::Value& value )
 
 HeuristicConfig HeuristicConfig::getDefaultConfig()
 {
-	return { s_defaultSensitivity, s_defaultDangerousEntropy, s_defaultPacketValue, s_defaultFilenameMalicious.data() };
+	return { s_defaultSensitivity, s_defaultEntropy, s_defaultPacketValue, s_defaultFilenameMalicious.data() };
 }
 
 float HeuristicConfig::getSensitivity() const
@@ -101,9 +98,9 @@ float HeuristicConfig::getSensitivity() const
 	return m_sensitivity;
 }
 
-float HeuristicConfig::getDangerousEntropy() const
+float HeuristicConfig::getEntropy() const
 {
-	return m_dangerousEntropy;
+	return m_entropy;
 }
 
 float HeuristicConfig::getPacketValue() const
@@ -131,9 +128,9 @@ void HeuristicConfig::setSensitivity( float sensitivity )
 	m_sensitivity = sensitivity;
 };
 
-void HeuristicConfig::setDangerousEntropy( float dangerousEntropy )
+void HeuristicConfig::setEntropy( float entropy )
 {
-	m_dangerousEntropy = dangerousEntropy;
+	m_entropy = entropy;
 }
 
 void HeuristicConfig::setPacketValue( float packetValue )

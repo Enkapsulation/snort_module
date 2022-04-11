@@ -107,7 +107,10 @@ void Heuristic::checkThreshold( std::string clientIp,
 								const float packetValue,
 								const DangerousIpAddr& dangerousIpAddr ) const
 {
-	if( packetValue < m_config->getSensitivity() )
+	const auto isSenitivityExceeded{ packetValue < m_config->getSensitivity() };
+	const auto isEntropyExceeded{ m_config->getEntropy() < dangerousIpAddr.m_networkEntropy };
+
+	if( isSenitivityExceeded || isEntropyExceeded )
 	{
 		printAttackInfo( clientIp, serverIp, packetValue, dangerousIpAddr );
 	}
