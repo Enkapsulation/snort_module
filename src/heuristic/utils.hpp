@@ -55,11 +55,11 @@ inline std::istream& operator>>( std::istream& str, CSVRow& data )
 class CSVIterator
 {
 public:
-	typedef std::input_iterator_tag iterator_category;
-	typedef CSVRow value_type;
-	typedef std::size_t difference_type;
-	typedef CSVRow* pointer;
-	typedef CSVRow& reference;
+	using iterator_category = std::input_iterator_tag;
+	using value_type		= CSVRow;
+	using difference_type	= std::size_t;
+	using pointer			= CSVRow*;
+	using reference			= CSVRow&;
 
 	CSVIterator( std::istream& str ) : m_str( str.good() ? &str : NULL )
 	{
@@ -114,7 +114,8 @@ class CSVRange
 	std::istream& stream;
 
 public:
-	CSVRange( std::istream& str ) : stream( str ) {}
+	explicit CSVRange( std::istream& str ) : stream( str ) {}
+
 	CSVIterator begin() const
 	{
 		return CSVIterator{ stream };
