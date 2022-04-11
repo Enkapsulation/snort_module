@@ -23,6 +23,11 @@ HeuristicConfig::HeuristicConfig( float sensitivity, float entropy, float packet
 {
 }
 
+HeuristicConfig::~HeuristicConfig()
+{
+	saveAllDangerousIps();
+}
+
 std::optional< DangerousIpAddr* > HeuristicConfig::find( std::string ip ) const
 {
 	const auto ipToCompare{ DangerousIpAddr::makeSockaddr( ip ) };
@@ -168,7 +173,6 @@ void HeuristicConfig::readCSV()
 	}
 
 	loadDangerousIp( maliciousFile );
-	saveAllDangerousIps();
 }
 
 void HeuristicConfig::loadDangerousIp( std::ifstream& file )

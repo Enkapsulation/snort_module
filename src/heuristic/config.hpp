@@ -30,6 +30,7 @@ class HeuristicConfig
 
 public:
 	HeuristicConfig( float sensitivity, float entropy, float packetValue, std::string filenameMalicious );
+	~HeuristicConfig();
 
 	std::optional< DangerousIpAddr* > find( std::string ip ) const;
 
