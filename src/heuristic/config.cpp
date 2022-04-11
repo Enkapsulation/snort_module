@@ -154,7 +154,7 @@ void HeuristicConfig::setFilenameConfig( std::shared_ptr< DangerousIpConfig > fi
 
 void HeuristicConfig::saveAllDangerousIps()
 {
-	std::ofstream outputFile( "outPut.csv", std::ios::app );
+	std::ofstream outputFile( "scan_result.csv", std::ios::app );
 	for( const auto& ip : m_dangerousIpAdresses )
 	{
 		outputFile << ip;
