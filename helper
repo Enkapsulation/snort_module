@@ -1,0 +1,1 @@
+sudo snort --warn-all -c ../snort.lua --plugin-path /usr/local/lib/x86_64-linux-gnu/snort/plugins/extra/ -i wlp7s0 -L dump -A alert_full

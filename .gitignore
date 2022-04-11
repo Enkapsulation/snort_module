@@ -33,4 +33,12 @@
 
 # build folder 
 /build
-/cmake
+.vscode
+
+# tmp
+*lua
+*.conf
+
+# Clang things
+.cache
+compile_commands.json
