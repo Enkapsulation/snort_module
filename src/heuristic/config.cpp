@@ -8,6 +8,7 @@
 #include <map>
 #include <netinet/in.h>
 #include <optional>
+#include <string>
 
 #include "config.hpp"
 #include "utils.hpp"
@@ -57,27 +58,30 @@ HeuristicConfig::operator std::string() const
 
 bool HeuristicConfig::set( const snort::Value& value )
 {
-	const auto& valueName{ value.get_name() };
 
-	if( valueName == s_sensitivityName.data() )
+	const auto& valueName{ static_cast< std::string >( value.get_name() ) };
+
+	if( valueName.empty() )
+	{
+		return false;
+	}
+
+	if( valueName == s_sensitivityName )
 	{
 		setSensitivity( value.get_real() );
 	}
-	else if( valueName == s_dangerousEntropyName.data() )
+	else if( valueName == s_dangerousEntropyName )
 	{
 		setDangerousEntropy( value.get_real() );
 	}
-	else if( valueName == s_packetValueName.data() )
+	else if( valueName == s_packetValueName )
 	{
 		setPacketValue( value.get_real() );
 	}
-	else if( valueName == s_filenameMaliciousName.data() )
+	else if( valueName == s_filenameMaliciousName )
 	{
 		setFilenameMalicious( value.get_as_string() );
 		readCSV();
-	}
-	else if( valueName )
-	{
 	}
 	else
 	{
