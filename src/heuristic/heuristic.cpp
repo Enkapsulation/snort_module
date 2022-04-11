@@ -120,10 +120,13 @@ float Heuristic::computeEntropy( double probability ) const
 
 float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 {
-	const auto packetValue{ computeFlags( dangerousIpAddr ) };
+	const auto& packetsCount{ getPacketsCount() };
 
+	assert( packetsCount > 0 );
+
+	const auto packetValue{ computeFlags( dangerousIpAddr ) };
 	const auto packet_probability{ static_cast< double >( dangerousIpAddr.m_packetCounter )
-								   / static_cast< double >( getPacketsCount() ) };
+								   / static_cast< double >( packetsCount ) };
 
 	dangerousIpAddr.m_networkEntropy = computeEntropy( packet_probability );
 
