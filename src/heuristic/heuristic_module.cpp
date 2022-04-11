@@ -140,3 +140,8 @@ std::string_view HeuristicModule::getHelp()
 {
 	return s_help;
 }
+
+void HeuristicModule::setCounts( PegCount counts )
+{
+	heuristic_stats.total_packets = counts;
+}

@@ -16,29 +16,26 @@
 
 using namespace snort;
 
-//-------------------------------------------------------------------------
-// implementation stuff
-//-------------------------------------------------------------------------
+PegCount Heuristic::m_allPacketCount{ 0 };
+
 void Heuristic::heuristic_show_config( const HeuristicConfig* config ) const
 {
 	ConfigLogger::log_option( "heuristic" );
 	ConfigLogger::log_list( "", std::string( *config ).c_str() );
 }
 
-void Heuristic::set_default_value( HeuristicConfig* config )
-{
-	( *config ) = HeuristicConfig::getDefaultConfig();
-}
-
-//-------------------------------------------------------------------------
-// class stuff
-//-------------------------------------------------------------------------
 Heuristic::Heuristic( const std::shared_ptr< HeuristicConfig >& config, HeuristicModule* module )
 	: m_config( config ), m_module( module )
 {
 }
 
 Heuristic::~Heuristic() = default;
+
+bool Heuristic::configure( snort::SnortConfig* )
+{
+	m_allPacketCount = m_config->getInitialCount();
+	return true;
+}
 
 void Heuristic::show( const SnortConfig* ) const
 {
@@ -81,7 +78,13 @@ std::string Heuristic::getServerIp( const Packet* packet ) const
 
 PegCount Heuristic::getPacketsCount() const
 {
-	return *m_module->get_counts();
+	return m_allPacketCount;
+}
+
+void Heuristic::incrementAllPacketsCounters()
+{
+	m_module->incrementPacketCounter();
+	++m_allPacketCount;
 }
 
 float Heuristic::computeFlags( const DangerousIpAddr& dangerousIpAddr ) const
@@ -125,7 +128,6 @@ float Heuristic::computeEntropy( double probability ) const
 float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 {
 	const auto& packetsCount{ getPacketsCount() };
-
 	assert( packetsCount > 0 );
 
 	const auto packetValue{ computeFlags( dangerousIpAddr ) };
@@ -139,7 +141,7 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 
 void Heuristic::eval( Packet* packet )
 {
-	m_module->incrementPacketCounter();
+	incrementAllPacketsCounters();
 
 	if( !validate( packet ) )
 	{

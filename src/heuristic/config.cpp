@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <fstream>
 #include <iostream>
 
@@ -127,6 +128,11 @@ const std::vector< DangerousIpAddr >& HeuristicConfig::getDangerousIpAdresses() 
 	return m_dangerousIpAdresses;
 }
 
+PegCount HeuristicConfig::getInitialCount() const
+{
+	return m_initialPacketCounter;
+}
+
 void HeuristicConfig::setSensitivity( float sensitivity )
 {
 	m_sensitivity = sensitivity;
@@ -177,6 +183,8 @@ void HeuristicConfig::readCSV()
 
 void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 {
+	PegCount allPacketFromFiles{ 0 };
+
 	for( const auto& row : CSVRange( file ) )
 	{
 		sockaddr_in ip_addr{ DangerousIpAddr::makeSockaddr( row[ AdressIp ].c_str() ) };
@@ -201,8 +209,12 @@ void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 										 packet_counter,
 										 network_entropy );
 
+		allPacketFromFiles += packet_counter;
+
 		m_dangerousIpAdresses.push_back( dangerousIpAddr );
 	}
+
+	m_initialPacketCounter = allPacketFromFiles;
 
 	if( m_dangerousIpAdresses.empty() )
 	{

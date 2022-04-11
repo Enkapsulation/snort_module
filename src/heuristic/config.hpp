@@ -2,6 +2,7 @@
 #include "dangerous_ip_addr.hpp"
 #include <memory>
 #include <optional>
+#include <snort/framework/counts.h>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -45,6 +46,8 @@ public:
 	std::shared_ptr< DangerousIpConfig > getFilenameConfig() const;
 	const std::vector< DangerousIpAddr >& getDangerousIpAdresses() const;
 
+	PegCount getInitialCount() const;
+
 private:
 	void setSensitivity( float );
 	void setEntropy( float );
@@ -71,4 +74,5 @@ private:
 	std::string m_filenameMalicious;
 	std::shared_ptr< DangerousIpConfig > m_filenameConfig;
 	std::vector< DangerousIpAddr > m_dangerousIpAdresses;
+	PegCount m_initialPacketCounter{ 0 };
 };

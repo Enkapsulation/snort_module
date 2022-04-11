@@ -23,6 +23,7 @@ public:
 	bool end( const char*, int, snort::SnortConfig* ) override;
 
 	void incrementPacketCounter();
+	void setCounts( PegCount counts );
 
 	std::shared_ptr< HeuristicConfig > get_config() const;
 

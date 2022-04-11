@@ -17,8 +17,10 @@ public:
 
 	void show( const snort::SnortConfig* ) const override;
 	void eval( snort::Packet* ) override;
+	bool configure( snort::SnortConfig* ) override;
 
 private:
+	void incrementAllPacketsCounters();
 	void heuristic_show_config( const HeuristicConfig* config ) const;
 	void set_default_value( HeuristicConfig* config );
 
@@ -44,5 +46,6 @@ private:
 	std::shared_ptr< HeuristicConfig > m_config;
 	HeuristicModule* m_module{ nullptr };
 
+	static PegCount m_allPacketCount;
 	static constexpr double ln2value{ 0.69314718056 };
 };
