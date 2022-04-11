@@ -7,7 +7,7 @@
 #include "detection/detection_engine.h"
 #include <cstddef>
 
-static THREAD_LOCAL SimpleStats asstats;
+static THREAD_LOCAL SimpleStats heuristic_stats;
 static THREAD_LOCAL snort::ProfileStats heuristicPerfStats;
 
 using namespace snort;
@@ -65,7 +65,7 @@ static constexpr RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 HeuristicModule::HeuristicModule()
 	: Module( s_name.data(), s_help.data(), heuristic_params ),
 	  m_config( std::make_shared< HeuristicConfig >( HeuristicConfig::getDefaultConfig() ) ),
-	  m_inspector( std::make_unique< Heuristic >( m_config ) )
+	  m_inspector( std::make_unique< Heuristic >( m_config, this ) )
 {
 }
 
@@ -91,9 +91,14 @@ bool HeuristicModule::begin( const char*, int, SnortConfig* )
 	return true;
 }
 
-bool HeuristicModule::end( const char*, int idx, SnortConfig* )
+bool HeuristicModule::end( const char*, int, SnortConfig* )
 {
 	return true;
+}
+
+void HeuristicModule::incrementPacketCounter()
+{
+	++heuristic_stats.total_packets;
 }
 
 std::shared_ptr< HeuristicConfig > HeuristicModule::get_config() const
@@ -108,7 +113,7 @@ const PegInfo* HeuristicModule::get_pegs() const
 
 PegCount* HeuristicModule::get_counts() const
 {
-	return &asstats.total_packets;
+	return &heuristic_stats.total_packets;
 }
 
 unsigned HeuristicModule::get_gid() const

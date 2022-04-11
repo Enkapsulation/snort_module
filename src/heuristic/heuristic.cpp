@@ -1,6 +1,7 @@
 #include "heuristic.hpp"
 #include "config.hpp"
 #include "dangerous_ip_addr.hpp"
+#include "heuristic_module.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -11,8 +12,6 @@
 #include "log/messages.h"
 
 #include "utils.hpp"
-
-long long Heuristic::s_allPacketsCount{ 0 };
 
 using namespace snort;
 
@@ -33,7 +32,10 @@ void Heuristic::set_default_value( HeuristicConfig* config )
 //-------------------------------------------------------------------------
 // class stuff
 //-------------------------------------------------------------------------
-Heuristic::Heuristic( const std::shared_ptr< HeuristicConfig >& config ) : m_config( config ) {}
+Heuristic::Heuristic( const std::shared_ptr< HeuristicConfig >& config, HeuristicModule* module )
+	: m_config( config ), m_module( module )
+{
+}
 
 Heuristic::~Heuristic() = default;
 
@@ -76,6 +78,11 @@ std::string Heuristic::getServerIp( const Packet* packet ) const
 	return serverIp;
 }
 
+PegCount Heuristic::getPacketsCount() const
+{
+	return *m_module->get_counts();
+}
+
 float Heuristic::computeFlags( const DangerousIpAddr& dangerousIpAddr ) const
 {
 	return m_config->getPacketValue() - dangerousIpAddr.getValueAllFlags();
@@ -116,7 +123,7 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 	const auto packetValue{ computeFlags( dangerousIpAddr ) };
 
 	const auto packet_probability{ static_cast< double >( dangerousIpAddr.m_packetCounter )
-								   / static_cast< double >( s_allPacketsCount ) };
+								   / static_cast< double >( getPacketsCount() ) };
 
 	dangerousIpAddr.m_networkEntropy = computeEntropy( packet_probability );
 
@@ -127,7 +134,7 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 
 void Heuristic::eval( Packet* packet )
 {
-	++s_allPacketsCount;
+	m_module->incrementPacketCounter();
 
 	if( !validate( packet ) )
 	{

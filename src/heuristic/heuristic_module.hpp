@@ -22,6 +22,8 @@ public:
 	bool begin( const char*, int, snort::SnortConfig* ) override;
 	bool end( const char*, int, snort::SnortConfig* ) override;
 
+	void incrementPacketCounter();
+
 	std::shared_ptr< HeuristicConfig > get_config() const;
 
 	const PegInfo* get_pegs() const override;

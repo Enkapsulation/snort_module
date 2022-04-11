@@ -6,11 +6,12 @@
 
 class DangerousIpAddr;
 class HeuristicConfig;
+class HeuristicModule;
 
 class Heuristic : public snort::Inspector
 {
 public:
-	Heuristic( const std::shared_ptr< HeuristicConfig >& );
+	Heuristic( const std::shared_ptr< HeuristicConfig >&, HeuristicModule* );
 	virtual ~Heuristic();
 
 	void show( const snort::SnortConfig* ) const override;
@@ -36,10 +37,11 @@ private:
 
 	std::string getClientIp( const snort::Packet* packet ) const;
 	std::string getServerIp( const snort::Packet* packet ) const;
+	PegCount getPacketsCount() const;
 	bool validate( const snort::Packet* packet ) const;
 
 	std::shared_ptr< HeuristicConfig > m_config;
+	HeuristicModule* m_module{ nullptr };
 
 	static constexpr double ln2value{ 0.69314718056 };
-	static long long s_allPacketsCount;
 };
