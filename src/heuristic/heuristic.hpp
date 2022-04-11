@@ -2,7 +2,8 @@
 
 #include <memory>
 
-#include "detection/detection_engine.h"
+#include <detection/detection_engine.h>
+#include <snort/framework/counts.h>
 
 class DangerousIpAddr;
 class HeuristicConfig;
