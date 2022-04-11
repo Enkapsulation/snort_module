@@ -2,6 +2,7 @@
 #include "flag_config.hpp"
 
 #include <arpa/inet.h>
+#include <iostream>
 #include <string>
 
 class DangerousIpAddr
@@ -24,6 +25,8 @@ public:
 					 Parameters::AvailabilityFlag m_availabilityFlag,
 					 uint64_t packetCounter,
 					 float networkEntropy );
+
+	friend std::ostream& operator<<( std::ostream& output, const DangerousIpAddr& dangerousIpAddr );
 
 	void incrementCounter();
 

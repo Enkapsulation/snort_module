@@ -1,4 +1,5 @@
 #include "dangerous_ip_addr.hpp"
+#include <string>
 
 DangerousIpAddr::DangerousIpAddr( sockaddr_in ipAddr,
 								  Parameters::RiskFlag riskFlag,
@@ -17,6 +18,20 @@ DangerousIpAddr::DangerousIpAddr( sockaddr_in ipAddr,
 	  m_packetCounter( packetCounter ),
 	  m_networkEntropy( networkEntropy )
 {
+}
+
+std::ostream& operator<<( std::ostream& output, const DangerousIpAddr& dangerousIpAddr )
+{
+	const auto ipAddInstr{ std::string( inet_ntoa( dangerousIpAddr.m_ipAddr.sin_addr ) ) };
+	output << ipAddInstr << ",";
+	output << dangerousIpAddr.m_riskFlag.getIdentifier() << ",";
+	output << dangerousIpAddr.m_attackType.getIdentifier() << ",";
+	output << dangerousIpAddr.m_rangeFlag.getIdentifier() << ",";
+	output << dangerousIpAddr.m_accessFlag.getIdentifier() << ",";
+	output << dangerousIpAddr.m_availabilityFlag.getIdentifier() << ",";
+	output << dangerousIpAddr.m_packetCounter << ",";
+	output << dangerousIpAddr.m_networkEntropy << std::endl;
+	return output;
 }
 
 void DangerousIpAddr::incrementCounter()

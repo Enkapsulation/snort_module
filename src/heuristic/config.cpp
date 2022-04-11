@@ -55,7 +55,6 @@ HeuristicConfig::operator std::string() const
 
 bool HeuristicConfig::set( const snort::Value& value )
 {
-
 	const auto& valueName{ static_cast< std::string >( value.get_name() ) };
 
 	if( valueName.empty() )
@@ -148,6 +147,16 @@ void HeuristicConfig::setFilenameConfig( std::shared_ptr< DangerousIpConfig > fi
 	m_filenameConfig = filenameConfig;
 }
 
+void HeuristicConfig::saveAllDangerousIps()
+{
+	std::ofstream outputFile( "outPut.csv", std::ios::app );
+	for( const auto& ip : m_dangerousIpAdresses )
+	{
+		outputFile << ip;
+	}
+	outputFile.close();
+}
+
 void HeuristicConfig::readCSV()
 {
 	std::ifstream maliciousFile( getFilenameMalicious() );
@@ -159,11 +168,11 @@ void HeuristicConfig::readCSV()
 	}
 
 	loadDangerousIp( maliciousFile );
+	saveAllDangerousIps();
 }
 
 void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 {
-
 	for( const auto& row : CSVRange( file ) )
 	{
 		sockaddr_in ip_addr{ DangerousIpAddr::makeSockaddr( row[ AdressIp ].c_str() ) };

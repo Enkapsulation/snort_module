@@ -11,6 +11,7 @@
 
 #include "log/messages.h"
 
+#include "flag_default_value.hpp"
 #include "utils.hpp"
 
 using namespace snort;
@@ -133,9 +134,7 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 
 	dangerousIpAddr.m_networkEntropy = computeEntropy( packet_probability );
 
-	static constexpr auto mathConstant{ 0.5 };
-
-	return packetValue - mathConstant * dangerousIpAddr.m_networkEntropy;
+	return packetValue - Parameters::Default::s_entropyFactor * dangerousIpAddr.m_networkEntropy;
 }
 
 void Heuristic::eval( Packet* packet )

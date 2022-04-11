@@ -50,6 +50,7 @@ private:
 	void setPacketValue( float );
 	void setFilenameMalicious( const std::string& );
 	void setFilenameConfig( std::shared_ptr< DangerousIpConfig > );
+	void saveAllDangerousIps();
 	void readCSV();
 	void loadDangerousIp( std::ifstream& );
 
