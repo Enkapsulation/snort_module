@@ -1,5 +1,6 @@
 #pragma once
 #include "dangerous_ip_addr.hpp"
+#include <map>
 #include <memory>
 #include <optional>
 #include <string>
@@ -45,7 +46,7 @@ public:
 	std::shared_ptr< DangerousIpConfig > getFilenameConfig() const;
 	const std::vector< DangerousIpAddr >& getDangerousIpAdresses() const;
 
-private:
+public:
 	void setSensitivity( float );
 	void setEntropy( float );
 	void setPacketValue( float );
