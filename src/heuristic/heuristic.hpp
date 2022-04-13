@@ -19,8 +19,7 @@ public:
 	void eval( snort::Packet* ) override;
 
 private:
-	void heuristic_show_config( const HeuristicConfig* config ) const;
-	void set_default_value( HeuristicConfig* config );
+	void showConfig() const;
 
 	float computeFlags( const DangerousIpAddr& dangerousIpAddr ) const;
 	float computeEntropy( double probability ) const;

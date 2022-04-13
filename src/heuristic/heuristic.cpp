@@ -19,15 +19,13 @@ using namespace snort;
 //-------------------------------------------------------------------------
 // implementation stuff
 //-------------------------------------------------------------------------
-void Heuristic::heuristic_show_config( const HeuristicConfig* config ) const
+void Heuristic::showConfig() const
 {
 	ConfigLogger::log_option( "heuristic" );
-	ConfigLogger::log_list( "", std::string( *config ).c_str() );
-}
-
-void Heuristic::set_default_value( HeuristicConfig* config )
-{
-	( *config ) = HeuristicConfig::getDefaultConfig();
+	if( m_config )
+	{
+		ConfigLogger::log_list( "", std::string( *m_config ).c_str() );
+	}
 }
 
 //-------------------------------------------------------------------------
@@ -42,10 +40,7 @@ Heuristic::~Heuristic() = default;
 
 void Heuristic::show( const SnortConfig* ) const
 {
-	if( m_config )
-	{
-		heuristic_show_config( m_config.get() );
-	}
+	showConfig();
 }
 
 bool Heuristic::validate( const Packet* packet ) const
@@ -139,6 +134,8 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 
 void Heuristic::eval( Packet* packet )
 {
+	std::cout << std::string( *m_config ) << std::endl;
+
 	m_module->incrementPacketCounter();
 
 	if( !validate( packet ) )
