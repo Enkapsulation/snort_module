@@ -15,9 +15,9 @@ using namespace snort;
 //-------------------------------------------------------------------------
 // heurstic params
 //-------------------------------------------------------------------------
-static const Parameter risk_flag[] = { { "H", Parameter::PT_REAL, nullptr, nullptr, "Value for flag High" },
-									   { "M", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Medium" },
-									   { "L", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Low" },
+static const Parameter risk_flag[] = { { "Hrisk", Parameter::PT_REAL, nullptr, nullptr, "Value for flag High" },
+									   { "Mrisk", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Medium" },
+									   { "Lrisk", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Low" },
 									   { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
 static const Parameter attack_flag[] = { { "D", Parameter::PT_REAL, nullptr, nullptr, "Value for DDoS flag" },
@@ -52,10 +52,6 @@ static const Parameter heuristic_params[]
 		{ "access", Parameter::PT_LIST, range_flag, nullptr, "Value for access flag" },
 		{ "availability", Parameter::PT_LIST, range_flag, nullptr, "Value for availability flag" },
 		{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
-
-// static const Parameter s_params[]
-// 	= { { "configuration", Parameter::PT_LIST, heuristic_params, nullptr, "heursitic configuration" },
-// 		{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
 static constexpr RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 

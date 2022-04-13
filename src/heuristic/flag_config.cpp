@@ -6,10 +6,25 @@
 namespace Parameters
 {
 
-static std::map< char, float > s_riskFlags
-	= { { 'H', Default::s_highRisk }, { 'M', Default::s_mediumRisk }, { 'L', Default::s_lowRisk } };
+static std::map< std::string, float > s_riskFlags
+	= { { "Hrisk", Default::s_highRisk }, { "Mrisk", Default::s_mediumRisk }, { "Lrisk", Default::s_lowRisk } };
 
-bool setRiskFlagsMap( char identifier, float value )
+static std::map< std::string, float > s_attackFlags = { { "D", Default::s_attackTypeDDoS },
+														{ "P", Default::s_attackTypePhishing },
+														{ "M", Default::s_attackTypeMalware },
+														{ "R", Default::s_attackTypeRansomware },
+														{ "S", Default::s_attackTypeDoS } };
+static std::map< std::string, float > s_rangeFlags
+	= { { "S", Default::s_rangeSingle }, { "P", Default::s_rangePartial }, { "C", Default::s_rangeComplete } };
+
+static std::map< std::string, float > s_availabilityFlags = { { "N", Default::s_availabilityNone },
+															  { "P", Default::s_availabilityPartial },
+															  { "C", Default::s_availabilityComplete } };
+
+static std::map< std::string, float > s_accessFlags
+	= { { "N", Default::s_accessNone }, { "U", Default::s_accessUser } };
+
+bool setFlagsMaps( std::string identifier, float value )
 {
 	const auto isFound{ s_riskFlags.find( identifier ) != s_riskFlags.end() };
 	if( isFound )
@@ -18,20 +33,21 @@ bool setRiskFlagsMap( char identifier, float value )
 	}
 
 	return isFound;
+	return true;
 }
 
-RiskFlag::RiskFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
+RiskFlag::RiskFlag( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
 
-float RiskFlag::getValueFromIdentifier( const char identifier ) const
+float RiskFlag::getValueFromIdentifier( std::string identifier ) const
 {
 	const auto& riskFlag{ s_riskFlags.find( identifier ) };
 
-	if( riskFlag != s_riskFlags.cend() )
+	if( riskFlag != s_riskFlags.end() )
 	{
 		return riskFlag->second;
 	}
 
-	return getDefault();
+	return RiskFlag::getDefault();
 }
 
 float RiskFlag::getDefault() const
@@ -39,15 +55,9 @@ float RiskFlag::getDefault() const
 	return Default::s_riskFlagFactor * Default::s_highRisk;
 }
 
-static const std::map< char, float > s_attackFlags = { { 'D', Default::s_attackTypeDDoS },
-													   { 'P', Default::s_attackTypePhishing },
-													   { 'M', Default::s_attackTypeMalware },
-													   { 'R', Default::s_attackTypeRansomware },
-													   { 'S', Default::s_attackTypeDoS } };
+AttackType::AttackType( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
 
-AttackType::AttackType( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
-
-float AttackType::getValueFromIdentifier( const char identifier ) const
+float AttackType::getValueFromIdentifier( std::string identifier ) const
 {
 	const auto& attackFlag{ s_attackFlags.find( identifier ) };
 
@@ -56,7 +66,7 @@ float AttackType::getValueFromIdentifier( const char identifier ) const
 		return attackFlag->second;
 	}
 
-	return getDefault();
+	return AttackType::getDefault();
 }
 
 float AttackType::getDefault() const
@@ -64,12 +74,9 @@ float AttackType::getDefault() const
 	return Default::s_attackTypeFlagFactor * Default::s_attackTypeMalware;
 }
 
-static const std::map< char, float > s_rangeFlags
-	= { { 'S', Default::s_rangeSingle }, { 'P', Default::s_rangePartial }, { 'C', Default::s_rangeComplete } };
+RangeFlag::RangeFlag( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
 
-RangeFlag::RangeFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
-
-float RangeFlag::getValueFromIdentifier( const char identifier ) const
+float RangeFlag::getValueFromIdentifier( std::string identifier ) const
 {
 	const auto& rangeFlag{ s_rangeFlags.find( identifier ) };
 
@@ -78,7 +85,7 @@ float RangeFlag::getValueFromIdentifier( const char identifier ) const
 		return rangeFlag->second;
 	}
 
-	return getDefault();
+	return RangeFlag::getDefault();
 }
 
 float RangeFlag::getDefault() const
@@ -86,11 +93,9 @@ float RangeFlag::getDefault() const
 	return Default::s_rangeSingle;
 }
 
-static const std::map< char, float > s_accessFlags = { { 'N', Default::s_accessNone }, { 'U', Default::s_accessUser } };
+AccessFlag::AccessFlag( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
 
-AccessFlag::AccessFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
-
-float AccessFlag::getValueFromIdentifier( const char identifier ) const
+float AccessFlag::getValueFromIdentifier( std::string identifier ) const
 {
 	const auto& accessFlag{ s_accessFlags.find( identifier ) };
 
@@ -99,7 +104,7 @@ float AccessFlag::getValueFromIdentifier( const char identifier ) const
 		return accessFlag->second;
 	}
 
-	return getDefault();
+	return AccessFlag::getDefault();
 }
 
 float AccessFlag::getDefault() const
@@ -107,13 +112,11 @@ float AccessFlag::getDefault() const
 	return Default::s_accessNone;
 }
 
-static const std::map< char, float > s_availabilityFlags = { { 'N', Default::s_availabilityNone },
-															 { 'P', Default::s_availabilityPartial },
-															 { 'C', Default::s_availabilityComplete } };
+AvailabilityFlag::AvailabilityFlag( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) )
+{
+}
 
-AvailabilityFlag::AvailabilityFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
-
-float AvailabilityFlag::getValueFromIdentifier( const char identifier ) const
+float AvailabilityFlag::getValueFromIdentifier( std::string identifier ) const
 {
 	const auto& availabilityFlag{ s_availabilityFlags.find( identifier ) };
 
@@ -122,7 +125,7 @@ float AvailabilityFlag::getValueFromIdentifier( const char identifier ) const
 		return availabilityFlag->second;
 	}
 
-	return getDefault();
+	return AvailabilityFlag::getDefault();
 }
 
 float AvailabilityFlag::getDefault() const

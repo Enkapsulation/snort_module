@@ -66,13 +66,11 @@ bool HeuristicConfig::set( const snort::Value& value )
 		return false;
 	}
 
-	static constexpr size_t charSize{ 1 };
-
-	if( valueName.size() == charSize )
+	if( Parameters::setFlagsMaps( valueName, value.get_real() ) )
 	{
-		Parameters::setRiskFlagsMap( valueName.c_str()[ 0 ], value.get_real() );
+		return true;
 	}
-	else if( m_parameters.find( valueName ) != m_parameters.end() )
+	if( m_parameters.find( valueName ) != m_parameters.end() )
 	{
 		m_parameters[ valueName ] = value.get_real();
 	}
@@ -164,13 +162,11 @@ void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 	{
 		sockaddr_in ip_addr{ DangerousIpAddr::makeSockaddr( row[ AdressIp ].c_str() ) };
 
-		auto getChar = [ & ]( CsvEncoder whichFlag ) { return row[ whichFlag ].data()[ 0 ]; };
-
-		Parameters::RiskFlag riskFlag( getChar( RiskFlag ) );
-		Parameters::AttackType attackTypeFlag( getChar( AttackType ) );
-		Parameters::RangeFlag rangeFlag( getChar( RangeFlag ) );
-		Parameters::AccessFlag accessFlag( getChar( AccessFlag ) );
-		Parameters::AvailabilityFlag avaiabilityFlag( getChar( AvaiabilityFlag ) );
+		Parameters::RiskFlag riskFlag( row[ RiskFlag ] );
+		Parameters::AttackType attackTypeFlag( row[ AttackType ] );
+		Parameters::RangeFlag rangeFlag( row[ RangeFlag ] );
+		Parameters::AccessFlag accessFlag( row[ AccessFlag ] );
+		Parameters::AvailabilityFlag avaiabilityFlag( row[ AvaiabilityFlag ] );
 
 		auto packet_counter	  = std::stoi( row[ Counter ] );
 		float network_entropy = std::stod( row[ PacketEntropy ] );

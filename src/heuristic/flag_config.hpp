@@ -1,47 +1,47 @@
 #pragma once
 #include "flag.hpp"
-
+#include <string>
 namespace Parameters
 {
-bool setRiskFlagsMap( char identifier, float value );
+bool setFlagsMaps( std::string identifier, float value );
 
 class RiskFlag : public Flag
 {
 public:
-	explicit RiskFlag( char identifier );
-	float getValueFromIdentifier( const char identifier ) const override;
+	explicit RiskFlag( std::string identifier );
+	float getValueFromIdentifier( std::string identifier ) const override;
 	float getDefault() const override;
 };
 
 class AttackType : public Flag
 {
 public:
-	explicit AttackType( char identifier );
-	float getValueFromIdentifier( const char identifier ) const override;
+	explicit AttackType( std::string identifier );
+	float getValueFromIdentifier( std::string identifier ) const override;
 	float getDefault() const override;
 };
 
 class RangeFlag : public Flag
 {
 public:
-	explicit RangeFlag( char identifier );
-	float getValueFromIdentifier( const char identifier ) const override;
+	explicit RangeFlag( std::string identifier );
+	float getValueFromIdentifier( std::string identifier ) const override;
 	float getDefault() const override;
 };
 
 class AccessFlag : public Flag
 {
 public:
-	explicit AccessFlag( char identifier );
-	float getValueFromIdentifier( const char identifier ) const override;
+	explicit AccessFlag( std::string identifier );
+	float getValueFromIdentifier( std::string identifier ) const override;
 	float getDefault() const override;
 };
 
 class AvailabilityFlag : public Flag
 {
 public:
-	explicit AvailabilityFlag( char identifier );
-	float getValueFromIdentifier( const char identifier ) const override;
+	explicit AvailabilityFlag( std::string identifier );
+	float getValueFromIdentifier( std::string identifier ) const override;
 	float getDefault() const override;
 };
 } // namespace Parameters
