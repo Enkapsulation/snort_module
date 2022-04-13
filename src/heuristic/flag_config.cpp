@@ -1,5 +1,6 @@
 #include "flag_config.hpp"
 #include "flag_default_value.hpp"
+#include <array>
 #include <iostream>
 #include <map>
 #include <string>
@@ -9,20 +10,21 @@ namespace Parameters
 static std::map< std::string, float > s_riskFlags
 	= { { "Hrisk", Default::s_highRisk }, { "Mrisk", Default::s_mediumRisk }, { "Lrisk", Default::s_lowRisk } };
 
-static std::map< std::string, float > s_attackFlags = { { "D", Default::s_attackTypeDDoS },
-														{ "P", Default::s_attackTypePhishing },
-														{ "M", Default::s_attackTypeMalware },
-														{ "R", Default::s_attackTypeRansomware },
-														{ "S", Default::s_attackTypeDoS } };
-static std::map< std::string, float > s_rangeFlags
-	= { { "S", Default::s_rangeSingle }, { "P", Default::s_rangePartial }, { "C", Default::s_rangeComplete } };
+static std::map< std::string, float > s_attackFlags = { { "Dattack", Default::s_attackTypeDDoS },
+														{ "Pattack", Default::s_attackTypePhishing },
+														{ "Mattack", Default::s_attackTypeMalware },
+														{ "Rattack", Default::s_attackTypeRansomware },
+														{ "Sattack", Default::s_attackTypeDoS } };
+static std::map< std::string, float > s_rangeFlags	= { { "Srange", Default::s_rangeSingle },
+														{ "Prange", Default::s_rangePartial },
+														{ "Crange", Default::s_rangeComplete } };
 
-static std::map< std::string, float > s_availabilityFlags = { { "N", Default::s_availabilityNone },
-															  { "P", Default::s_availabilityPartial },
-															  { "C", Default::s_availabilityComplete } };
+static std::map< std::string, float > s_availabilityFlags = { { "Navailability", Default::s_availabilityNone },
+															  { "Pavailability", Default::s_availabilityPartial },
+															  { "Cavailability", Default::s_availabilityComplete } };
 
 static std::map< std::string, float > s_accessFlags
-	= { { "N", Default::s_accessNone }, { "U", Default::s_accessUser } };
+	= { { "Naccess", Default::s_accessNone }, { "Uaccess", Default::s_accessUser } };
 
 bool setFlagsMaps( std::string identifier, float value )
 {
@@ -30,10 +32,30 @@ bool setFlagsMaps( std::string identifier, float value )
 	if( isFound )
 	{
 		s_riskFlags[ identifier ] = value;
+		return true;
+	}
+	else if( s_attackFlags.find( identifier ) != s_attackFlags.end() )
+	{
+		s_attackFlags[ identifier ] = value;
+		return true;
+	}
+	else if( s_rangeFlags.find( identifier ) != s_rangeFlags.end() )
+	{
+		s_rangeFlags[ identifier ] = value;
+		return true;
+	}
+	else if( s_availabilityFlags.find( identifier ) != s_availabilityFlags.end() )
+	{
+		s_availabilityFlags[ identifier ] = value;
+		return true;
+	}
+	else if( s_accessFlags.find( identifier ) != s_accessFlags.end() )
+	{
+		s_accessFlags[ identifier ] = value;
+		return true;
 	}
 
-	return isFound;
-	return true;
+	return false;
 }
 
 RiskFlag::RiskFlag( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
