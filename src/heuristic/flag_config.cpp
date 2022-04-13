@@ -28,34 +28,51 @@ static std::map< std::string, float > s_accessFlags
 
 bool setFlagsMaps( std::string identifier, float value )
 {
-	const auto isFound{ s_riskFlags.find( identifier ) != s_riskFlags.end() };
-	if( isFound )
+	static constexpr size_t mapCount{ 5U };
+	std::array< std::map< std::string, float >*, mapCount > allMaps{
+		&s_riskFlags, &s_attackFlags, &s_rangeFlags, &s_availabilityFlags, &s_accessFlags
+	};
+
+	for( auto& map : allMaps )
 	{
-		s_riskFlags[ identifier ] = value;
-		return true;
-	}
-	else if( s_attackFlags.find( identifier ) != s_attackFlags.end() )
-	{
-		s_attackFlags[ identifier ] = value;
-		return true;
-	}
-	else if( s_rangeFlags.find( identifier ) != s_rangeFlags.end() )
-	{
-		s_rangeFlags[ identifier ] = value;
-		return true;
-	}
-	else if( s_availabilityFlags.find( identifier ) != s_availabilityFlags.end() )
-	{
-		s_availabilityFlags[ identifier ] = value;
-		return true;
-	}
-	else if( s_accessFlags.find( identifier ) != s_accessFlags.end() )
-	{
-		s_accessFlags[ identifier ] = value;
-		return true;
+		std::cout << identifier << std::endl;
+		if( map->find( identifier ) != map->end() )
+		{
+			( *map )[ identifier ] = value;
+			return true;
+		}
 	}
 
 	return false;
+
+	// const auto isFound{ s_riskFlags.find( identifier ) != s_riskFlags.end() };
+	// if( isFound )
+	// {
+	// 	s_riskFlags[ identifier ] = value;
+	// 	return true;
+	// }
+	// else if( s_attackFlags.find( identifier ) != s_attackFlags.end() )
+	// {
+	// 	s_attackFlags[ identifier ] = value;
+	// 	return true;
+	// }
+	// else if( s_rangeFlags.find( identifier ) != s_rangeFlags.end() )
+	// {
+	// 	s_rangeFlags[ identifier ] = value;
+	// 	return true;
+	// }
+	// else if( s_availabilityFlags.find( identifier ) != s_availabilityFlags.end() )
+	// {
+	// 	s_availabilityFlags[ identifier ] = value;
+	// 	return true;
+	// }
+	// else if( s_accessFlags.find( identifier ) != s_accessFlags.end() )
+	// {
+	// 	s_accessFlags[ identifier ] = value;
+	// 	return true;
+	// }
+
+	// return false;
 }
 
 RiskFlag::RiskFlag( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
@@ -123,6 +140,7 @@ float AccessFlag::getValueFromIdentifier( std::string identifier ) const
 
 	if( accessFlag != s_accessFlags.cend() )
 	{
+		std::cout << "ACCESS " << accessFlag->second;
 		return accessFlag->second;
 	}
 

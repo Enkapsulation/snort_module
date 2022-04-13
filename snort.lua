@@ -70,6 +70,7 @@ dns = { }
 -- dpx = { }
 heuristic = {
     risk = { Hrisk = 234.0, Mrisk = 333.0, Lrisk = 666.0 }, 
+    access = { Naccess = 8.0 , Uaccess = 15.0 },
     sensitivity = 111.0,
     entropy = 222.0,
     packet_value = 333.0,

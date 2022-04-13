@@ -32,8 +32,8 @@ static const Parameter range_flag[] = { { "S", Parameter::PT_INT, nullptr, nullp
 										{ "C", Parameter::PT_INT, nullptr, nullptr, "Value for flag Complete" },
 										{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
-static const Parameter access_flag[] = { { "S", Parameter::PT_INT, nullptr, nullptr, "Value for flag Single" },
-										 { "P", Parameter::PT_INT, nullptr, nullptr, "Value for flag Partial" },
+static const Parameter access_flag[] = { { "Naccess", Parameter::PT_INT, nullptr, nullptr, "Value for flag Single" },
+										 { "Uaccess", Parameter::PT_INT, nullptr, nullptr, "Value for flag Partial" },
 										 { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
 static const Parameter availability_flag[] = { { "N", Parameter::PT_INT, nullptr, nullptr, "Value for flag None" },
@@ -49,8 +49,8 @@ static const Parameter heuristic_params[]
 		{ "risk", Parameter::PT_LIST, risk_flag, nullptr, "Value for risk flag" },
 		{ "attack_type", Parameter::PT_LIST, attack_flag, nullptr, "Value for attack type flag" },
 		{ "range", Parameter::PT_LIST, range_flag, nullptr, "Value for range flag" },
-		{ "access", Parameter::PT_LIST, range_flag, nullptr, "Value for access flag" },
-		{ "availability", Parameter::PT_LIST, range_flag, nullptr, "Value for availability flag" },
+		{ "access", Parameter::PT_LIST, access_flag, nullptr, "Value for access flag" },
+		{ "availability", Parameter::PT_LIST, availability_flag, nullptr, "Value for availability flag" },
 		{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
 static constexpr RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
