@@ -134,7 +134,7 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 
 void Heuristic::eval( Packet* packet )
 {
-	std::cout << std::string( *m_config ) << std::endl;
+	// std::cout << std::string( *m_config ) << std::endl;
 
 	m_module->incrementPacketCounter();
 

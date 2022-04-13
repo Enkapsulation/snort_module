@@ -1,14 +1,26 @@
 #include "flag_config.hpp"
 #include "flag_default_value.hpp"
+#include <iostream>
 #include <map>
 #include <string>
-
 namespace Parameters
 {
-RiskFlag::RiskFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
 
-static const std::map< char, float > s_riskFlags
+static std::map< char, float > s_riskFlags
 	= { { 'H', Default::s_highRisk }, { 'M', Default::s_mediumRisk }, { 'L', Default::s_lowRisk } };
+
+bool setRiskFlagsMap( char identifier, float value )
+{
+	const auto isFound{ s_riskFlags.find( identifier ) != s_riskFlags.end() };
+	if( isFound )
+	{
+		s_riskFlags[ identifier ] = value;
+	}
+
+	return isFound;
+}
+
+RiskFlag::RiskFlag( char identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
 
 float RiskFlag::getValueFromIdentifier( const char identifier ) const
 {

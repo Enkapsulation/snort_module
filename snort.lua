@@ -68,7 +68,12 @@ dns = { }
 -- ssl = { }
 -- telnet = { }
 -- dpx = { }
-heuristic = { filename_malicious = "/home/swnek/snort_module/Snort2File/test.csv" }
+heuristic = {
+    risk = { H = 234.0, M = 333.0, L = 666.0 }, 
+    sensitivity = 111.0,
+    entropy = 222.0,
+    packet_value = 333.0,
+    filename_malicious = "/home/swnek/snort_module/MaliciousIPAddr.csv" }
 
 
 -- dce_smb = { }
@@ -76,7 +81,7 @@ heuristic = { filename_malicious = "/home/swnek/snort_module/Snort2File/test.csv
 -- dce_udp = { }
 -- dce_http_proxy = { }
 -- dce_http_server = { }
-
+-- sudo snort --warn-all -c ../snort.lua --plugin-path /usr/local/lib/x86_64-linux-gnu/snort/plugins/extra/ -i wlp7s0 -L dump -A alert_full
 -- see snort_defaults.lua for default_*
 -- gtp_inspect = default_gtp
 -- port_scan = default_med_port_scan

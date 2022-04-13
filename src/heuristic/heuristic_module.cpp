@@ -15,16 +15,16 @@ using namespace snort;
 //-------------------------------------------------------------------------
 // heurstic params
 //-------------------------------------------------------------------------
-static const Parameter risk_flag[] = { { "H", Parameter::PT_INT, nullptr, nullptr, "Value for flag High" },
-									   { "M", Parameter::PT_INT, nullptr, nullptr, "Value for flag Medium" },
-									   { "L", Parameter::PT_INT, nullptr, nullptr, "Value for flag Low" },
+static const Parameter risk_flag[] = { { "H", Parameter::PT_REAL, nullptr, nullptr, "Value for flag High" },
+									   { "M", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Medium" },
+									   { "L", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Low" },
 									   { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
-static const Parameter attack_flag[] = { { "D", Parameter::PT_INT, nullptr, nullptr, "Value for DDoS flag" },
-										 { "P", Parameter::PT_INT, nullptr, nullptr, "Value for Phishing flag" },
-										 { "M", Parameter::PT_INT, nullptr, nullptr, "Value for Malware flag" },
-										 { "R", Parameter::PT_INT, nullptr, nullptr, "Value for Ransomware flag" },
-										 { "S", Parameter::PT_INT, nullptr, nullptr, "Value for DoS flag" },
+static const Parameter attack_flag[] = { { "D", Parameter::PT_REAL, nullptr, nullptr, "Value for DDoS flag" },
+										 { "P", Parameter::PT_REAL, nullptr, nullptr, "Value for Phishing flag" },
+										 { "M", Parameter::PT_REAL, nullptr, nullptr, "Value for Malware flag" },
+										 { "R", Parameter::PT_REAL, nullptr, nullptr, "Value for Ransomware flag" },
+										 { "S", Parameter::PT_REAL, nullptr, nullptr, "Value for DoS flag" },
 										 { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
 static const Parameter range_flag[] = { { "S", Parameter::PT_INT, nullptr, nullptr, "Value for flag Single" },

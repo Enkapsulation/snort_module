@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "flag.hpp"
+#include "flag_config.hpp"
 #include "framework/value.h"
 #include <arpa/inet.h>
 #include <iterator>
@@ -48,10 +49,10 @@ HeuristicConfig::operator std::string() const
 {
 	std::string msg{};
 
-	msg += "{ sensitivity: " + std::to_string( getSensitivity() ) + "\n";
+	msg += "{\n sensitivity: " + std::to_string( getSensitivity() ) + "\n";
 	msg += " entropy: " + std::to_string( getEntropy() ) + "\n";
 	msg += " packet value: " + std::to_string( getPacketValue() ) + "\n";
-	msg += " Filename: " + getFilenameMalicious() + "}";
+	msg += " Filename: " + getFilenameMalicious() + "\n}";
 
 	return msg;
 }
@@ -65,7 +66,13 @@ bool HeuristicConfig::set( const snort::Value& value )
 		return false;
 	}
 
-	if( m_parameters.find( valueName ) != m_parameters.end() )
+	static constexpr size_t charSize{ 1 };
+
+	if( valueName.size() == charSize )
+	{
+		Parameters::setRiskFlagsMap( valueName.c_str()[ 0 ], value.get_real() );
+	}
+	else if( m_parameters.find( valueName ) != m_parameters.end() )
 	{
 		m_parameters[ valueName ] = value.get_real();
 	}

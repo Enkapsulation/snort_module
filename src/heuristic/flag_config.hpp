@@ -3,6 +3,8 @@
 
 namespace Parameters
 {
+bool setRiskFlagsMap( char identifier, float value );
+
 class RiskFlag : public Flag
 {
 public:
