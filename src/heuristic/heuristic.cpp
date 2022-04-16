@@ -93,7 +93,7 @@ void Heuristic::printAttackInfo( std::string clientIp,
 				clientIp.c_str(),
 				serverIp.c_str(),
 				dangerousIpAddr.m_attackType.getIdentifier().c_str(),
-				dangerousIpAddr.m_riskFlag.getIdentifier().c_str(),
+				dangerousIpAddr.m_dangerousFlag.getIdentifier().c_str(),
 				packetValue,
 				dangerousIpAddr.m_networkEntropy );
 }

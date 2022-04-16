@@ -5,10 +5,10 @@ namespace Parameters
 {
 bool setFlagsMaps( std::string identifier, float value );
 
-class RiskFlag : public Flag
+class DangerousFlag : public Flag
 {
 public:
-	explicit RiskFlag( std::string identifier );
+	explicit DangerousFlag( std::string identifier );
 	float getValueFromIdentifier( std::string identifier ) const override;
 	float getDefault() const override;
 };

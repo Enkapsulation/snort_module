@@ -15,10 +15,10 @@ using namespace snort;
 //-------------------------------------------------------------------------
 // heurstic params
 //-------------------------------------------------------------------------
-static const Parameter risk_flag[] = { { "Hrisk", Parameter::PT_REAL, nullptr, nullptr, "Value for flag High" },
-									   { "Mrisk", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Medium" },
-									   { "Lrisk", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Low" },
-									   { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
+static const Parameter dangerous_flag[] = { { "H", Parameter::PT_REAL, nullptr, nullptr, "Value for flag High" },
+											{ "M", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Medium" },
+											{ "L", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Low" },
+											{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
 static const Parameter attack_flag[] = { { "D", Parameter::PT_REAL, nullptr, nullptr, "Value for DDoS flag" },
 										 { "P", Parameter::PT_REAL, nullptr, nullptr, "Value for Phishing flag" },
@@ -46,7 +46,7 @@ static const Parameter heuristic_params[]
 		{ "entropy", Parameter::PT_REAL, nullptr, nullptr, "packet entropy threshold" },
 		{ "packet_value", Parameter::PT_REAL, nullptr, nullptr, "start packet value" },
 		{ "filename_malicious", Parameter::PT_STRING, nullptr, nullptr, "Path to .CSV with malicius IP address" },
-		{ "risk", Parameter::PT_LIST, risk_flag, nullptr, "Value for risk flag" },
+		{ "dangerous", Parameter::PT_LIST, dangerous_flag, nullptr, "Value for dangerous flag" },
 		{ "attack_type", Parameter::PT_LIST, attack_flag, nullptr, "Value for attack type flag" },
 		{ "range", Parameter::PT_LIST, range_flag, nullptr, "Value for range flag" },
 		{ "access", Parameter::PT_LIST, access_flag, nullptr, "Value for access flag" },

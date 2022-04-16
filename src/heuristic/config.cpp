@@ -162,7 +162,7 @@ void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 	{
 		sockaddr_in ip_addr{ DangerousIpAddr::makeSockaddr( row[ AdressIp ].c_str() ) };
 
-		Parameters::RiskFlag riskFlag( row[ RiskFlag ] );
+		Parameters::DangerousFlag dangerousFlag( row[ DangerousFlag ] );
 		Parameters::AttackType attackTypeFlag( row[ AttackType ] );
 		Parameters::RangeFlag rangeFlag( row[ RangeFlag ] );
 		Parameters::AccessFlag accessFlag( row[ AccessFlag ] );
@@ -172,7 +172,7 @@ void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 		float network_entropy = std::stod( row[ PacketEntropy ] );
 
 		DangerousIpAddr dangerousIpAddr( ip_addr,
-										 riskFlag,
+										 dangerousFlag,
 										 attackTypeFlag,
 										 rangeFlag,
 										 accessFlag,

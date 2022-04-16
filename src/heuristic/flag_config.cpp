@@ -7,8 +7,8 @@
 namespace Parameters
 {
 
-static std::map< std::string, float > s_riskFlags
-	= { { "Hrisk", Default::s_highRisk }, { "Mrisk", Default::s_mediumRisk }, { "Lrisk", Default::s_lowRisk } };
+static std::map< std::string, float > s_dangerousFlags
+	= { { "H", Default::s_dangerousHigh }, { "M", Default::s_dangerousMedium }, { "L", Default::s_dangerousLow } };
 
 static std::map< std::string, float > s_attackFlags = { { "Dattack", Default::s_attackTypeDDoS },
 														{ "Pattack", Default::s_attackTypePhishing },
@@ -30,7 +30,7 @@ bool setFlagsMaps( std::string identifier, float value )
 {
 	static constexpr size_t mapCount{ 5U };
 	std::array< std::map< std::string, float >*, mapCount > allMaps{
-		&s_riskFlags, &s_attackFlags, &s_rangeFlags, &s_availabilityFlags, &s_accessFlags
+		&s_dangerousFlags, &s_attackFlags, &s_rangeFlags, &s_availabilityFlags, &s_accessFlags
 	};
 
 	for( auto& map : allMaps )
@@ -44,54 +44,25 @@ bool setFlagsMaps( std::string identifier, float value )
 	}
 
 	return false;
-
-	// const auto isFound{ s_riskFlags.find( identifier ) != s_riskFlags.end() };
-	// if( isFound )
-	// {
-	// 	s_riskFlags[ identifier ] = value;
-	// 	return true;
-	// }
-	// else if( s_attackFlags.find( identifier ) != s_attackFlags.end() )
-	// {
-	// 	s_attackFlags[ identifier ] = value;
-	// 	return true;
-	// }
-	// else if( s_rangeFlags.find( identifier ) != s_rangeFlags.end() )
-	// {
-	// 	s_rangeFlags[ identifier ] = value;
-	// 	return true;
-	// }
-	// else if( s_availabilityFlags.find( identifier ) != s_availabilityFlags.end() )
-	// {
-	// 	s_availabilityFlags[ identifier ] = value;
-	// 	return true;
-	// }
-	// else if( s_accessFlags.find( identifier ) != s_accessFlags.end() )
-	// {
-	// 	s_accessFlags[ identifier ] = value;
-	// 	return true;
-	// }
-
-	// return false;
 }
 
-RiskFlag::RiskFlag( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
+DangerousFlag::DangerousFlag( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}
 
-float RiskFlag::getValueFromIdentifier( std::string identifier ) const
+float DangerousFlag::getValueFromIdentifier( std::string identifier ) const
 {
-	const auto& riskFlag{ s_riskFlags.find( identifier ) };
+	const auto& dangerousFlag{ s_dangerousFlags.find( identifier ) };
 
-	if( riskFlag != s_riskFlags.end() )
+	if( dangerousFlag != s_dangerousFlags.end() )
 	{
-		return riskFlag->second;
+		return dangerousFlag->second;
 	}
 
-	return RiskFlag::getDefault();
+	return DangerousFlag::getDefault();
 }
 
-float RiskFlag::getDefault() const
+float DangerousFlag::getDefault() const
 {
-	return Default::s_riskFlagFactor * Default::s_highRisk;
+	return Default::s_dangerousFlagFactor * Default::s_dangerousHigh;
 }
 
 AttackType::AttackType( std::string identifier ) : Flag( identifier, getValueFromIdentifier( identifier ) ) {}

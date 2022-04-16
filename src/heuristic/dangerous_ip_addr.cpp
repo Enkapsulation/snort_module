@@ -2,7 +2,7 @@
 #include <string>
 
 DangerousIpAddr::DangerousIpAddr( sockaddr_in ipAddr,
-								  Parameters::RiskFlag riskFlag,
+								  Parameters::DangerousFlag dangerousFlag,
 								  Parameters::AttackType attackType,
 								  Parameters::RangeFlag rangeFlag,
 								  Parameters::AccessFlag accessFlag,
@@ -10,7 +10,7 @@ DangerousIpAddr::DangerousIpAddr( sockaddr_in ipAddr,
 								  uint64_t packetCounter,
 								  float networkEntropy )
 	: m_ipAddr( ipAddr ),
-	  m_riskFlag( riskFlag ),
+	  m_dangerousFlag( dangerousFlag ),
 	  m_attackType( attackType ),
 	  m_rangeFlag( rangeFlag ),
 	  m_accessFlag( accessFlag ),
@@ -24,7 +24,7 @@ std::ostream& operator<<( std::ostream& output, const DangerousIpAddr& dangerous
 {
 	const auto ipAddInstr{ std::string( inet_ntoa( dangerousIpAddr.m_ipAddr.sin_addr ) ) };
 	output << ipAddInstr << ",";
-	output << dangerousIpAddr.m_riskFlag.getIdentifier() << ",";
+	output << dangerousIpAddr.m_dangerousFlag.getIdentifier() << ",";
 	output << dangerousIpAddr.m_attackType.getIdentifier() << ",";
 	output << dangerousIpAddr.m_rangeFlag.getIdentifier() << ",";
 	output << dangerousIpAddr.m_accessFlag.getIdentifier() << ",";
@@ -50,7 +50,7 @@ float DangerousIpAddr::getValueAllFlags() const
 {
 	float value{ 0.F };
 
-	value += m_riskFlag.getValue();
+	value += m_dangerousFlag.getValue();
 	value += m_attackType.getValue();
 	value += m_rangeFlag.getValue();
 	value += m_accessFlag.getValue();

@@ -69,12 +69,12 @@ dns = { }
 -- telnet = { }
 -- dpx = { }
 heuristic = {
-    risk = { Hrisk = 234.0, Mrisk = 333.0, Lrisk = 666.0 }, 
+    dangerous = { H = 234.0, M = 333.0, L = 666.0 },
     access = { Naccess = 8.0 , Uaccess = 15.0 },
     sensitivity = 111.0,
     entropy = 222.0,
     packet_value = 333.0,
-    filename_malicious = "/home/swnek/snort_module/MaliciousIPAddr.csv" }
+    filename_malicious = "./MaliciousIPAddr.csv" }
 
 
 -- dce_smb = { }

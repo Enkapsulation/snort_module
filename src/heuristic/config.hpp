@@ -20,7 +20,7 @@ class HeuristicConfig
 	enum CsvEncoder
 	{
 		AdressIp,
-		RiskFlag,
+		DangerousFlag,
 		AttackType,
 		RangeFlag,
 		AccessFlag,

@@ -9,7 +9,7 @@ class DangerousIpAddr
 {
 public:
 	sockaddr_in m_ipAddr;
-	Parameters::RiskFlag m_riskFlag;
+	Parameters::DangerousFlag m_dangerousFlag;
 	Parameters::AttackType m_attackType;
 	Parameters::RangeFlag m_rangeFlag;
 	Parameters::AccessFlag m_accessFlag;
@@ -18,7 +18,7 @@ public:
 	float m_networkEntropy;
 
 	DangerousIpAddr( sockaddr_in ipAddr,
-					 Parameters::RiskFlag riskFlag,
+					 Parameters::DangerousFlag m_dangerousFlag,
 					 Parameters::AttackType m_attackType,
 					 Parameters::RangeFlag m_rangeFlag,
 					 Parameters::AccessFlag m_accessFlag,
