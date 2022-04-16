@@ -20,7 +20,6 @@ public:
 
 private:
 	void showConfig() const;
-
 	float computeFlags( const DangerousIpAddr& dangerousIpAddr ) const;
 	float computeEntropy( double probability ) const;
 	float computePacketValue( DangerousIpAddr& dangerousIpAddr ) const;
@@ -42,6 +41,7 @@ private:
 
 	std::shared_ptr< HeuristicConfig > m_config;
 	HeuristicModule* m_module{ nullptr };
+	bool initStaus{ false };
 
 	static constexpr double ln2value{ 0.69314718056 };
 };

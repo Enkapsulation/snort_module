@@ -27,18 +27,18 @@ static const Parameter attack_flag[] = { { "D", Parameter::PT_REAL, nullptr, nul
 										 { "S", Parameter::PT_REAL, nullptr, nullptr, "Value for DoS flag" },
 										 { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
-static const Parameter range_flag[] = { { "S", Parameter::PT_INT, nullptr, nullptr, "Value for flag Single" },
-										{ "P", Parameter::PT_INT, nullptr, nullptr, "Value for flag Partial" },
-										{ "C", Parameter::PT_INT, nullptr, nullptr, "Value for flag Complete" },
+static const Parameter range_flag[] = { { "S", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Single" },
+										{ "P", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Partial" },
+										{ "C", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Complete" },
 										{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
-static const Parameter access_flag[] = { { "Naccess", Parameter::PT_INT, nullptr, nullptr, "Value for flag Single" },
-										 { "Uaccess", Parameter::PT_INT, nullptr, nullptr, "Value for flag Partial" },
+static const Parameter access_flag[] = { { "N", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Single" },
+										 { "U", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Partial" },
 										 { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
-static const Parameter availability_flag[] = { { "N", Parameter::PT_INT, nullptr, nullptr, "Value for flag None" },
-											   { "P", Parameter::PT_INT, nullptr, nullptr, "Value for flag Partial" },
-											   { "C", Parameter::PT_INT, nullptr, nullptr, "Value for flag Complete" },
+static const Parameter availability_flag[] = { { "N", Parameter::PT_REAL, nullptr, nullptr, "Value for flag None" },
+											   { "P", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Partial" },
+											   { "C", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Complete" },
 											   { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
 static const Parameter heuristic_params[]
@@ -47,7 +47,7 @@ static const Parameter heuristic_params[]
 		{ "packet_value", Parameter::PT_REAL, nullptr, nullptr, "start packet value" },
 		{ "filename_malicious", Parameter::PT_STRING, nullptr, nullptr, "Path to .CSV with malicius IP address" },
 		{ "dangerous", Parameter::PT_LIST, dangerous_flag, nullptr, "Value for dangerous flag" },
-		{ "attack_type", Parameter::PT_LIST, attack_flag, nullptr, "Value for attack type flag" },
+		{ "attack", Parameter::PT_LIST, attack_flag, nullptr, "Value for attack type flag" },
 		{ "range", Parameter::PT_LIST, range_flag, nullptr, "Value for range flag" },
 		{ "access", Parameter::PT_LIST, access_flag, nullptr, "Value for access flag" },
 		{ "availability", Parameter::PT_LIST, availability_flag, nullptr, "Value for availability flag" },
@@ -77,9 +77,9 @@ ProfileStats* HeuristicModule::get_profile() const
 	return &heuristicPerfStats;
 }
 
-bool HeuristicModule::set( const char*, Value& value, SnortConfig* config )
+bool HeuristicModule::set( const char* rawString, Value& value, SnortConfig* config )
 {
-	return m_config->set( value );
+	return m_config->set( rawString, value );
 }
 
 bool HeuristicModule::begin( const char*, int, SnortConfig* )

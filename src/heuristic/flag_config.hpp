@@ -3,7 +3,7 @@
 #include <string>
 namespace Parameters
 {
-bool setFlagsMaps( std::string identifier, float value );
+bool setFlagsMaps( std::string flagIdentifier, std::string identifier, float value );
 
 class DangerousFlag : public Flag
 {

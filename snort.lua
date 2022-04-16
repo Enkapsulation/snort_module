@@ -69,12 +69,16 @@ dns = { }
 -- telnet = { }
 -- dpx = { }
 heuristic = {
-    dangerous = { H = 234.0, M = 333.0, L = 666.0 },
-    access = { Naccess = 8.0 , Uaccess = 15.0 },
+    dangerous = { H = 333.0, M = 333.0, L = 666.0 },
+    attack = { D = 234.0 },
+    range = { S = 222.0 , P = 111.0, C = 133.0 },
+    availability = { N = 123.0, P = 234.0, C = 345.0 },
+    access = { N = 345.0, U = 567.0 },
     sensitivity = 111.0,
+    filename_malicious = "./MaliciousIPAddr.csv",
     entropy = 222.0,
-    packet_value = 333.0,
-    filename_malicious = "./MaliciousIPAddr.csv" }
+    packet_value = 112.0,
+}
 
 
 -- dce_smb = { }

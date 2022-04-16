@@ -10,37 +10,37 @@ namespace Parameters
 static std::map< std::string, float > s_dangerousFlags
 	= { { "H", Default::s_dangerousHigh }, { "M", Default::s_dangerousMedium }, { "L", Default::s_dangerousLow } };
 
-static std::map< std::string, float > s_attackFlags = { { "Dattack", Default::s_attackTypeDDoS },
-														{ "Pattack", Default::s_attackTypePhishing },
-														{ "Mattack", Default::s_attackTypeMalware },
-														{ "Rattack", Default::s_attackTypeRansomware },
-														{ "Sattack", Default::s_attackTypeDoS } };
-static std::map< std::string, float > s_rangeFlags	= { { "Srange", Default::s_rangeSingle },
-														{ "Prange", Default::s_rangePartial },
-														{ "Crange", Default::s_rangeComplete } };
+static std::map< std::string, float > s_attackFlags = { { "D", Default::s_attackTypeDDoS },
+														{ "P", Default::s_attackTypePhishing },
+														{ "M", Default::s_attackTypeMalware },
+														{ "R", Default::s_attackTypeRansomware },
+														{ "S", Default::s_attackTypeDoS } };
 
-static std::map< std::string, float > s_availabilityFlags = { { "Navailability", Default::s_availabilityNone },
-															  { "Pavailability", Default::s_availabilityPartial },
-															  { "Cavailability", Default::s_availabilityComplete } };
+static std::map< std::string, float > s_rangeFlags
+	= { { "S", Default::s_rangeSingle }, { "P", Default::s_rangePartial }, { "C", Default::s_rangeComplete } };
+
+static std::map< std::string, float > s_availabilityFlags = { { "N", Default::s_availabilityNone },
+															  { "P", Default::s_availabilityPartial },
+															  { "C", Default::s_availabilityComplete } };
 
 static std::map< std::string, float > s_accessFlags
-	= { { "Naccess", Default::s_accessNone }, { "Uaccess", Default::s_accessUser } };
+	= { { "N", Default::s_accessNone }, { "U", Default::s_accessUser } };
 
-bool setFlagsMaps( std::string identifier, float value )
+bool setFlagsMaps( std::string flagIdentifier, std::string identifier, float value )
 {
 	static constexpr size_t mapCount{ 5U };
-	std::array< std::map< std::string, float >*, mapCount > allMaps{
-		&s_dangerousFlags, &s_attackFlags, &s_rangeFlags, &s_availabilityFlags, &s_accessFlags
-	};
+	std::map< std::string, std::map< std::string, float >* > flagName{ { "dangerous", &s_dangerousFlags },
+																	   { "attack", &s_attackFlags },
+																	   { "range", &s_rangeFlags },
+																	   { "availability", &s_availabilityFlags },
+																	   { "access", &s_accessFlags } };
 
-	for( auto& map : allMaps )
+	const auto& flag{ flagName.find( flagIdentifier ) };
+
+	if( flag != flagName.end() )
 	{
-		std::cout << identifier << std::endl;
-		if( map->find( identifier ) != map->end() )
-		{
-			( *map )[ identifier ] = value;
-			return true;
-		}
+		( *flag->second )[ identifier ] = value;
+		return true;
 	}
 
 	return false;
@@ -111,7 +111,6 @@ float AccessFlag::getValueFromIdentifier( std::string identifier ) const
 
 	if( accessFlag != s_accessFlags.cend() )
 	{
-		std::cout << "ACCESS " << accessFlag->second;
 		return accessFlag->second;
 	}
 

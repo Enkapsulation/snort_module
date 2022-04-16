@@ -37,7 +37,7 @@ public:
 
 	operator std::string() const;
 
-	bool set( const snort::Value& value );
+	bool set( const char* rawString, const snort::Value& value );
 
 	static HeuristicConfig getDefaultConfig();
 	float getSensitivity() const;
@@ -46,6 +46,7 @@ public:
 	std::string getFilenameMalicious() const;
 	std::shared_ptr< DangerousIpConfig > getFilenameConfig() const;
 	const std::vector< DangerousIpAddr >& getDangerousIpAdresses() const;
+	void readCSV();
 
 private:
 	using Key	  = std::string;
@@ -53,7 +54,6 @@ private:
 
 	void setFilenameMalicious( const std::string& );
 	void saveAllDangerousIps();
-	void readCSV();
 	void loadDangerousIp( std::ifstream& );
 
 	float getValueFromParameters( Key key ) const;

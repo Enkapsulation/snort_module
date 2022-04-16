@@ -57,16 +57,27 @@ HeuristicConfig::operator std::string() const
 	return msg;
 }
 
-bool HeuristicConfig::set( const snort::Value& value )
+static std::string getflagIdentifier( std::string flagIdentifier )
+{
+	std::string first  = flagIdentifier.substr( flagIdentifier.find( "." ) + 1 );
+	std::string second = first.substr( 0, first.find( "." ) );
+
+	return second;
+}
+
+bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 {
 	const auto& valueName{ static_cast< std::string >( value.get_name() ) };
+	const auto& fullParam{ static_cast< std::string >( rawString ) };
 
 	if( valueName.empty() )
 	{
 		return false;
 	}
 
-	if( Parameters::setFlagsMaps( valueName, value.get_real() ) )
+	std::string flagType = getflagIdentifier( fullParam );
+
+	if( Parameters::setFlagsMaps( flagType, valueName, value.get_real() ) )
 	{
 		return true;
 	}
@@ -77,7 +88,7 @@ bool HeuristicConfig::set( const snort::Value& value )
 	else if( valueName == s_filenameMaliciousName )
 	{
 		setFilenameMalicious( value.get_as_string() );
-		readCSV();
+		// readCSV();
 	}
 	else
 	{
