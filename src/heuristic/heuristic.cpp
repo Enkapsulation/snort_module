@@ -47,7 +47,6 @@ bool Heuristic::validate( const Packet* packet ) const
 {
 	if( !packet->flow )
 	{
-		// LogMessage( "[WARRNING] Packet hasn't flow\n" );
 		return false;
 	}
 
@@ -59,8 +58,6 @@ std::string Heuristic::getClientIp( const Packet* packet ) const
 	char clientIp[ INET6_ADDRSTRLEN ];
 	packet->flow->client_ip.ntop( clientIp, sizeof( clientIp ) );
 
-	// LogMessage( "Client IP: %s\n", clientIp );
-
 	return clientIp;
 }
 
@@ -68,8 +65,6 @@ std::string Heuristic::getServerIp( const Packet* packet ) const
 {
 	char serverIp[ INET6_ADDRSTRLEN ];
 	packet->flow->server_ip.ntop( serverIp, sizeof( serverIp ) );
-
-	// LogMessage( "Server IP: %s\n", serverIp );
 
 	return serverIp;
 }
