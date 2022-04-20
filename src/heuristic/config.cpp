@@ -1,4 +1,3 @@
-#include <array>
 #include <fstream>
 #include <iostream>
 
@@ -12,7 +11,6 @@
 #include <optional>
 #include <ostream>
 #include <string>
-#include <string_view>
 
 #include "config.hpp"
 #include "utils.hpp"
@@ -59,7 +57,7 @@ HeuristicConfig::operator std::string() const
 
 bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 {
-	const auto& valueName{ static_cast< std::string >( value.get_name() ) };
+	const std::string& valueName{ value.get_name() };
 	const auto& fullParam{ static_cast< std::string >( rawString ) };
 
 	if( valueName.empty() )
@@ -75,7 +73,9 @@ bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 		return second;
 	};
 
-	if( Parameters::setFlagsMaps( flagType( valueName ), valueName, value.get_real() ) )
+	const auto isFlag{ Parameters::setFlagsMaps( flagType( fullParam ), valueName, value.get_real() ) };
+
+	if( isFlag )
 	{
 		return true;
 	}

@@ -129,10 +129,10 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 
 void Heuristic::eval( Packet* packet )
 {
-	if( !Heuristic::initStaus )
+	if( !m_initStaus )
 	{
 		m_config->readCSV();
-		Heuristic::initStaus = true;
+		m_initStaus = true;
 	}
 
 	m_module->incrementPacketCounter();

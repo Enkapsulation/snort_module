@@ -42,3 +42,6 @@
 # Clang things
 .cache
 compile_commands.json
+
+# results
+scan_result.csv

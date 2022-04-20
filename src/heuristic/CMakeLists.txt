@@ -39,7 +39,6 @@ set_target_properties (
 target_include_directories (
     heuristic PUBLIC
     ${SNORT3_INCLUDE_DIRS}
-    ${SQLite3_INCLUDE_DIRS}
 )
 
 install (
