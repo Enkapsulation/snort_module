@@ -87,8 +87,8 @@ void Heuristic::printAttackInfo( std::string clientIp,
 	LogMessage( "[FLOW]%s->%s, [ATTACK]:%s, [DANGEROUS]%s, [VALUE]%lf, [ENTROPY]:%lf\n",
 				clientIp.c_str(),
 				serverIp.c_str(),
-				dangerousIpAddr.m_attackType.getIdentifier().c_str(),
-				dangerousIpAddr.m_dangerousFlag.getIdentifier().c_str(),
+				dangerousIpAddr.getAllFlags()[ 1 ].getIdentifier().c_str(),
+				dangerousIpAddr.getAllFlags()[ 0 ].getIdentifier().c_str(),
 				packetValue,
 				dangerousIpAddr.m_networkEntropy );
 }

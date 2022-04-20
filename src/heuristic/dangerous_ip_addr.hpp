@@ -4,25 +4,17 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <string>
+#include <vector>
 
 class DangerousIpAddr
 {
 public:
 	sockaddr_in m_ipAddr;
-	Parameters::Flag m_dangerousFlag;
-	Parameters::Flag m_attackType;
-	Parameters::Flag m_rangeFlag;
-	Parameters::Flag m_accessFlag;
-	Parameters::Flag m_availabilityFlag;
 	uint64_t m_packetCounter;
 	float m_networkEntropy;
 
-	DangerousIpAddr( sockaddr_in ipAddr,
-					 Parameters::Flag m_dangerousFlag,
-					 Parameters::Flag m_attackType,
-					 Parameters::Flag m_rangeFlag,
-					 Parameters::Flag m_accessFlag,
-					 Parameters::Flag m_availabilityFlag,
+	DangerousIpAddr( const std::vector< Parameters::Flag >& m_flags,
+					 sockaddr_in ipAddr,
 					 uint64_t packetCounter,
 					 float networkEntropy );
 
@@ -32,4 +24,8 @@ public:
 
 	static sockaddr_in makeSockaddr( std::string ip );
 	float getValueAllFlags() const;
+	const std::vector< Parameters::Flag >& getAllFlags() const;
+
+private:
+	std::vector< Parameters::Flag > m_flags;
 };

@@ -13,6 +13,7 @@
 #include <ostream>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include "config.hpp"
 #include "utils.hpp"
@@ -178,17 +179,12 @@ void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 		Flag accessFlag{ FlagFactory::createFlag( FlagType::Access, row[ AccessFlag ] ) };
 		Flag avaiabilityFlag{ FlagFactory::createFlag( FlagType::Availability, row[ AvailabilityFlag ] ) };
 
+		std::vector< Flag > flags{ dangerousFlag, attackTypeFlag, rangeFlag, accessFlag, avaiabilityFlag };
+
 		auto packet_counter	  = std::stoi( row[ Counter ] );
 		float network_entropy = std::stod( row[ PacketEntropy ] );
 
-		DangerousIpAddr dangerousIpAddr( ip_addr,
-										 dangerousFlag,
-										 attackTypeFlag,
-										 rangeFlag,
-										 accessFlag,
-										 avaiabilityFlag,
-										 packet_counter,
-										 network_entropy );
+		DangerousIpAddr dangerousIpAddr( flags, ip_addr, packet_counter, network_entropy );
 
 		m_dangerousIpAdresses.push_back( dangerousIpAddr );
 	}
