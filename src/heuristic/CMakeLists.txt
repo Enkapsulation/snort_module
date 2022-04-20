@@ -13,7 +13,6 @@ add_library (
     heuristic MODULE
     config.hpp
     config.cpp
-    create_module.hpp
     create_module.cpp
 	heuristic.hpp
     heuristic.cpp

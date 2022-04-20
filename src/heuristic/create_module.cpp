@@ -1,34 +1,40 @@
-#include "create_module.hpp"
 #include <memory>
 
 #include "detection/detection_engine.h"
+#include "heuristic.hpp"
 #include "heuristic_module.hpp"
 
 #include <iostream>
 
 using namespace snort;
-using namespace Create;
 
 //-------------------------------------------------------------------------
 // api stuff
 //-------------------------------------------------------------------------
+
 static Module* mod_ctor()
 {
-	g_heuristicModule = std::make_unique< HeuristicModule >();
-	return g_heuristicModule.get();
+	return new HeuristicModule;
 }
 
-static void mod_dtor( Module* )
+static void mod_dtor( Module* module )
 {
-	g_heuristicModule.reset();
+	delete module;
 }
 
 static Inspector* heu_ctor( Module* module )
 {
-	return g_heuristicModule->getInspector();
+	HeuristicModule* heuristicModule{ dynamic_cast< HeuristicModule* >( module ) };
+	auto inspector{ new Heuristic( heuristicModule->get_config(), heuristicModule ) };
+
+	heuristicModule->setInspector( inspector );
+	return inspector;
 }
 
-static void heu_dtor( Inspector* ) {}
+static void heu_dtor( Inspector* inspector )
+{
+	delete inspector;
+}
 
 static const InspectApi as_api = {
 	{ PT_INSPECTOR,

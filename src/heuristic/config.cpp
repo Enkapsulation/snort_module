@@ -75,7 +75,7 @@ bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 		return second;
 	};
 
-	if( Parameters::setFlagsMaps( flagType( valueName ), valueName, value.get_real() ) )
+	if( Parameters::setFlagsMaps( flagType( fullParam ), valueName, value.get_real() ) )
 	{
 		return true;
 	}
