@@ -1,7 +1,7 @@
 #include "heuristic_module.hpp"
 #include "config.hpp"
 #include "framework/parameter.h"
-#include "heuristic.hpp"
+#include "heuristic_inspector.hpp"
 #include "utils.hpp"
 
 #include "detection/detection_engine.h"

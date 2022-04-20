@@ -2,11 +2,11 @@
 #include <string>
 
 DangerousIpAddr::DangerousIpAddr( sockaddr_in ipAddr,
-								  Parameters::DangerousFlag dangerousFlag,
-								  Parameters::AttackType attackType,
-								  Parameters::RangeFlag rangeFlag,
-								  Parameters::AccessFlag accessFlag,
-								  Parameters::AvailabilityFlag availabilityFlag,
+								  Parameters::Flag dangerousFlag,
+								  Parameters::Flag attackType,
+								  Parameters::Flag rangeFlag,
+								  Parameters::Flag accessFlag,
+								  Parameters::Flag availabilityFlag,
 								  uint64_t packetCounter,
 								  float networkEntropy )
 	: m_ipAddr( ipAddr ),

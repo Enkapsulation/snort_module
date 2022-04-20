@@ -13,14 +13,15 @@ add_library (
     heuristic MODULE
     config.hpp
     config.cpp
-    create_module.cpp
-	heuristic.hpp
     heuristic.cpp
+	heuristic_inspector.hpp
+    heuristic_inspector.cpp
     heuristic_module.hpp
     heuristic_module.cpp
     utils.hpp
     utils.cpp
     flag.hpp
+    flag.cpp
     flag_config.cpp
     flag_config.hpp
     dangerous_ip_addr.cpp

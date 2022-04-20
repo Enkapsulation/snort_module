@@ -3,45 +3,25 @@
 #include <string>
 namespace Parameters
 {
-bool setFlagsMaps( std::string flagIdentifier, std::string identifier, float value );
+using FlagData = std::map< std::string, float >;
 
-class DangerousFlag : public Flag
+enum class FlagType
 {
-public:
-	explicit DangerousFlag( std::string identifier );
-	float getValueFromIdentifier( std::string identifier ) const override;
-	float getDefault() const override;
+	Dangerous,
+	Attack,
+	Range,
+	Access,
+	Availability
 };
 
-class AttackType : public Flag
+class FlagFactory
 {
 public:
-	explicit AttackType( std::string identifier );
-	float getValueFromIdentifier( std::string identifier ) const override;
-	float getDefault() const override;
+	static Flag createFlag( FlagType flagType, std::string identifier );
+	static bool setFlagsData( std::string flagDataIdentifier, std::string identifier, float value );
+
+protected:
+	static float getValueFromIdentifier( FlagData flagData, std::string identifier );
 };
 
-class RangeFlag : public Flag
-{
-public:
-	explicit RangeFlag( std::string identifier );
-	float getValueFromIdentifier( std::string identifier ) const override;
-	float getDefault() const override;
-};
-
-class AccessFlag : public Flag
-{
-public:
-	explicit AccessFlag( std::string identifier );
-	float getValueFromIdentifier( std::string identifier ) const override;
-	float getDefault() const override;
-};
-
-class AvailabilityFlag : public Flag
-{
-public:
-	explicit AvailabilityFlag( std::string identifier );
-	float getValueFromIdentifier( std::string identifier ) const override;
-	float getDefault() const override;
-};
 } // namespace Parameters

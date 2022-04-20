@@ -24,7 +24,7 @@ class HeuristicConfig
 		AttackType,
 		RangeFlag,
 		AccessFlag,
-		AvaiabilityFlag,
+		AvailabilityFlag,
 		Counter,
 		PacketEntropy
 	};

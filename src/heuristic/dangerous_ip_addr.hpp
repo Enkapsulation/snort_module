@@ -9,20 +9,20 @@ class DangerousIpAddr
 {
 public:
 	sockaddr_in m_ipAddr;
-	Parameters::DangerousFlag m_dangerousFlag;
-	Parameters::AttackType m_attackType;
-	Parameters::RangeFlag m_rangeFlag;
-	Parameters::AccessFlag m_accessFlag;
-	Parameters::AvailabilityFlag m_availabilityFlag;
+	Parameters::Flag m_dangerousFlag;
+	Parameters::Flag m_attackType;
+	Parameters::Flag m_rangeFlag;
+	Parameters::Flag m_accessFlag;
+	Parameters::Flag m_availabilityFlag;
 	uint64_t m_packetCounter;
 	float m_networkEntropy;
 
 	DangerousIpAddr( sockaddr_in ipAddr,
-					 Parameters::DangerousFlag m_dangerousFlag,
-					 Parameters::AttackType m_attackType,
-					 Parameters::RangeFlag m_rangeFlag,
-					 Parameters::AccessFlag m_accessFlag,
-					 Parameters::AvailabilityFlag m_availabilityFlag,
+					 Parameters::Flag m_dangerousFlag,
+					 Parameters::Flag m_attackType,
+					 Parameters::Flag m_rangeFlag,
+					 Parameters::Flag m_accessFlag,
+					 Parameters::Flag m_availabilityFlag,
 					 uint64_t packetCounter,
 					 float networkEntropy );
 
