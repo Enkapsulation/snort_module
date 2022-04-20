@@ -1,44 +1,43 @@
 #include "flag_config.hpp"
 #include "flag_default_value.hpp"
-#include <array>
-#include <iostream>
-#include <map>
-#include <string>
 namespace Parameters
 {
-static FlagData s_dangerousFlags
+FlagData FlagFactory::s_dangerousFlags
 	= { { "H", Default::s_dangerousHigh }, { "M", Default::s_dangerousMedium }, { "L", Default::s_dangerousLow } };
 
-static FlagData s_attackFlags = { { "D", Default::s_attackTypeDDoS },
-								  { "P", Default::s_attackTypePhishing },
-								  { "M", Default::s_attackTypeMalware },
-								  { "R", Default::s_attackTypeRansomware },
-								  { "S", Default::s_attackTypeDoS } };
+FlagData FlagFactory::s_attackFlags = { { "D", Default::s_attackTypeDDoS },
+										{ "P", Default::s_attackTypePhishing },
+										{ "M", Default::s_attackTypeMalware },
+										{ "R", Default::s_attackTypeRansomware },
+										{ "S", Default::s_attackTypeDoS } };
 
-static FlagData s_rangeFlags
+FlagData FlagFactory::s_rangeFlags
 	= { { "S", Default::s_rangeSingle }, { "P", Default::s_rangePartial }, { "C", Default::s_rangeComplete } };
 
-static FlagData s_availabilityFlags = { { "N", Default::s_availabilityNone },
-										{ "P", Default::s_availabilityPartial },
-										{ "C", Default::s_availabilityComplete } };
+FlagData FlagFactory::s_availabilityFlags = { { "N", Default::s_availabilityNone },
+											  { "P", Default::s_availabilityPartial },
+											  { "C", Default::s_availabilityComplete } };
 
-static FlagData s_accessFlags = { { "N", Default::s_accessNone }, { "U", Default::s_accessUser } };
+FlagData FlagFactory::s_accessFlags = { { "N", Default::s_accessNone }, { "U", Default::s_accessUser } };
+
+AllFlagsData FlagFactory::s_flagsData{ { "dangerous", &s_dangerousFlags },
+									   { "attack", &s_attackFlags },
+									   { "range", &s_rangeFlags },
+									   { "availability", &s_availabilityFlags },
+									   { "access", &s_accessFlags } };
 
 bool FlagFactory::setFlagsData( std::string flagDataIdentifier, std::string identifier, float value )
 {
-	static constexpr size_t mapCount{ 5U };
-	std::map< std::string, FlagData* > flagName{ { "dangerous", &s_dangerousFlags },
-												 { "attack", &s_attackFlags },
-												 { "range", &s_rangeFlags },
-												 { "availability", &s_availabilityFlags },
-												 { "access", &s_accessFlags } };
+	const auto& flagData{ s_flagsData.find( flagDataIdentifier ) };
 
-	const auto& flag{ flagName.find( flagDataIdentifier ) };
-
-	if( flag != flagName.end() )
+	if( flagData != s_flagsData.end() )
 	{
-		( *flag->second )[ identifier ] = value;
-		return true;
+		const auto& flag{ flagData->second->find( identifier ) };
+		if( flag != flagData->second->cend() )
+		{
+			flag->second = value;
+			return true;
+		}
 	}
 
 	return false;
@@ -72,7 +71,6 @@ Flag FlagFactory::createFlag( FlagType flagType, std::string identifier )
 		value = 0;
 		break;
 	}
-	value = FlagFactory::getValueFromIdentifier( s_dangerousFlags, identifier );
 
 	return Flag( identifier, value );
 }

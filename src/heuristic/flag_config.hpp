@@ -1,9 +1,9 @@
 #pragma once
 #include "flag.hpp"
-#include <string>
 namespace Parameters
 {
-using FlagData = std::map< std::string, float >;
+using FlagData	   = std::map< std::string, float >;
+using AllFlagsData = const std::map< std::string, FlagData* >;
 
 enum class FlagType
 {
@@ -22,6 +22,12 @@ public:
 
 protected:
 	static float getValueFromIdentifier( FlagData flagData, std::string identifier );
+	static FlagData s_accessFlags;
+	static FlagData s_dangerousFlags;
+	static FlagData s_attackFlags;
+	static FlagData s_rangeFlags;
+	static FlagData s_availabilityFlags;
+	static AllFlagsData s_flagsData;
 };
 
 } // namespace Parameters
