@@ -25,6 +25,7 @@ add_library (
     flag_config.hpp
     dangerous_ip_addr.cpp
     dangerous_ip_addr.hpp
+    parameters_name.hpp
 )
 
 set_target_properties (

@@ -1,8 +1,8 @@
 #include "heuristic_module.hpp"
 #include "config.hpp"
-#include "flag_default_value.hpp"
 #include "framework/parameter.h"
 #include "heuristic.hpp"
+#include "parameters_name.hpp"
 #include "utils.hpp"
 
 #include "detection/detection_engine.h"
