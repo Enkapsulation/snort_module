@@ -5,7 +5,6 @@ set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 
-find_package( SQLite3 )
 include ( FindPkgConfig )
 pkg_search_module ( SNORT3 REQUIRED snort>=3 )
 
@@ -26,6 +25,7 @@ add_library (
     flag_factory.hpp
     dangerous_ip_addr.cpp
     dangerous_ip_addr.hpp
+    parameters_name.hpp
 )
 
 set_target_properties (
@@ -34,12 +34,9 @@ set_target_properties (
         PREFIX ""
 )
 
-# include_directories(${SQLite3_INCLUDE_DIRS})
-
 target_include_directories (
     heuristic PUBLIC
     ${SNORT3_INCLUDE_DIRS}
-    ${SQLite3_INCLUDE_DIRS}
 )
 
 install (

@@ -20,7 +20,7 @@ DangerousIpAddr::DangerousIpAddr( const Flags& flags,
 
 std::ostream& operator<<( std::ostream& output, const DangerousIpAddr& dangerousIpAddr )
 {
-	const auto ipAddInstr{ std::string( inet_ntoa( dangerousIpAddr.m_ipAddr.sin_addr ) ) };
+	const std::string ipAddInstr{ inet_ntoa( dangerousIpAddr.m_ipAddr.sin_addr ) };
 	output << ipAddInstr << ",";
 
 	for( const auto& flag : dangerousIpAddr.getAllFlags() )

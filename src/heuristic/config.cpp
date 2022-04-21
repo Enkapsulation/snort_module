@@ -1,4 +1,3 @@
-#include <array>
 #include <fstream>
 #include <iostream>
 
@@ -16,6 +15,7 @@
 #include <vector>
 
 #include "config.hpp"
+#include "parameters_name.hpp"
 #include "utils.hpp"
 
 using namespace Parameters;
@@ -77,7 +77,7 @@ HeuristicConfig::operator std::string() const
 
 bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 {
-	const auto& valueName{ static_cast< std::string >( value.get_name() ) };
+	const std::string& valueName{ value.get_name() };
 	const auto& fullParam{ static_cast< std::string >( rawString ) };
 
 	if( valueName.empty() )
@@ -93,15 +93,17 @@ bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 		return second;
 	};
 
-	if( Parameters::FlagFactory::setFlagsData( flagType( fullParam ), valueName, value.get_real() ) )
+	const auto isFlag{ Parameters::FlagFactory::setFlagsData( flagType( fullParam ), valueName, value.get_real() ) };
+
+	if( isFlag )
 	{
 		return true;
 	}
-	if( m_parameters.find( valueName ) != m_parameters.end() )
+	else if( m_parameters.find( valueName ) != m_parameters.end() )
 	{
 		m_parameters[ valueName ] = value.get_real();
 	}
-	else if( valueName == s_filenameMaliciousName )
+	else if( valueName == Parameters::Name::s_filenameMaliciousName )
 	{
 		setFilenameMalicious( value.get_as_string() );
 	}
@@ -113,24 +115,24 @@ bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 	return true;
 }
 
-float HeuristicConfig::getValueFromParameters( HeuristicConfig::Key key ) const
+float HeuristicConfig::getValueFromParameters( const HeuristicConfig::Key& key ) const
 {
 	return m_parameters.find( key )->second;
 }
 
 float HeuristicConfig::getSensitivity() const
 {
-	return getValueFromParameters( s_sensitivityName.data() );
+	return getValueFromParameters( Parameters::Name::s_sensitivityName.data() );
 }
 
 float HeuristicConfig::getEntropy() const
 {
-	return getValueFromParameters( s_entropyName.data() );
+	return getValueFromParameters( Parameters::Name::s_entropyName.data() );
 }
 
 float HeuristicConfig::getPacketValue() const
 {
-	return getValueFromParameters( s_packetValueName.data() );
+	return getValueFromParameters( Parameters::Name::s_packetValueName.data() );
 }
 
 std::string HeuristicConfig::getFilenameMalicious() const
@@ -145,7 +147,7 @@ void HeuristicConfig::setFilenameMalicious( const std::string& filenameMalicious
 
 void HeuristicConfig::saveAllDangerousIps()
 {
-	std::ofstream outputFile( "scan_result.csv", std::ios::app );
+	std::ofstream outputFile( s_resultFilename.data(), std::ios::app );
 
 	if( !m_dangerousIpAdresses.empty() )
 	{
@@ -181,6 +183,8 @@ std::map< HeuristicConfig::Key, float > HeuristicConfig::makeParametersMap( floa
 																			float entropy,
 																			float packetValue )
 {
+	using namespace Parameters::Name;
+
 	return { { s_sensitivityName.data(), sensitivity },
 			 { s_entropyName.data(), entropy },
 			 { s_packetValueName.data(), packetValue } };

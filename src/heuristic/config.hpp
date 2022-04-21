@@ -1,5 +1,6 @@
 #pragma once
 #include "dangerous_ip_addr.hpp"
+#include "parameters_name.hpp"
 #include <map>
 #include <memory>
 #include <optional>
@@ -65,12 +66,9 @@ private:
 	void saveAllDangerousIps();
 	void loadDangerousIp( std::ifstream& );
 
-	float getValueFromParameters( Key key ) const;
+	float getValueFromParameters( const Key& key ) const;
 
-	static constexpr KeyView s_sensitivityName{ "sensitivity" };
-	static constexpr KeyView s_entropyName{ "entropy" };
-	static constexpr KeyView s_packetValueName{ "packet_value" };
-	static constexpr KeyView s_filenameMaliciousName{ "filename_malicious" };
+	static constexpr std::string_view s_resultFilename{ "scan_result.csv" };
 
 	static constexpr float s_defaultSensitivity{ 20.F };
 	static constexpr float s_defaultEntropy{ 6.F };

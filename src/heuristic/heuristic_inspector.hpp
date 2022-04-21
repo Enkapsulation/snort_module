@@ -41,7 +41,7 @@ private:
 
 	std::shared_ptr< HeuristicConfig > m_config;
 	HeuristicModule* m_module{ nullptr };
-	bool initStaus{ false };
+	bool m_initStaus{ false };
 
 	static constexpr double ln2value{ 0.69314718056 };
 };

@@ -50,24 +50,7 @@ stream_udp = { }
 stream_user = { }
 stream_file = { }
 
--- arp_spoof = { }
--- back_orifice = { }
--- dnp3 = { }
 dns = { }
--- http_inspect = { }
--- http2_inspect = { }
--- imap = { }
--- iec104 = { }
--- modbus = { }
--- netflow = {}
--- normalizer = { }
--- pop = { }
--- rpc_decode = { }
--- sip = { }
--- ssh = { }
--- ssl = { }
--- telnet = { }
--- dpx = { }
 heuristic = {
     dangerous = { H = 333.0, M = 333.0, L = 666.0 },
     attack = { D = 234.0 },
@@ -79,22 +62,6 @@ heuristic = {
     entropy = 222.0,
     packet_value = 112.0,
 }
-
-
--- dce_smb = { }
--- dce_tcp = { }
--- dce_udp = { }
--- dce_http_proxy = { }
--- dce_http_server = { }
--- sudo snort --warn-all -c ../snort.lua --plugin-path /usr/local/lib/x86_64-linux-gnu/snort/plugins/extra/ -i wlp7s0 -L dump -A alert_full
--- see snort_defaults.lua for default_*
--- gtp_inspect = default_gtp
--- port_scan = default_med_port_scan
--- smtp = default_smtp
-
--- ftp_server = default_ftp_server
--- ftp_client = { }
--- ftp_data = { }
 
 -- see file_magic.lua for file id rules
 file_id = { file_rules = file_magic }
