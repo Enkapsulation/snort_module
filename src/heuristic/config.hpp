@@ -79,9 +79,7 @@ private:
 
 	static FlagCSVHelper m_flagCSVHelper;
 
-	std::map< Key, float > m_parameters = { { s_sensitivityName.data(), s_defaultSensitivity },
-											{ s_entropyName.data(), s_defaultEntropy },
-											{ s_packetValueName.data(), s_defaultPacketValue } };
+	std::map< Key, float > m_parameters;
 	std::string m_filenameMalicious;
 	std::vector< DangerousIpAddr > m_dangerousIpAdresses;
 };
