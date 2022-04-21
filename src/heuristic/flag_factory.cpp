@@ -1,4 +1,4 @@
-#include "flag_config.hpp"
+#include "flag_factory.hpp"
 #include "flag_default_value.hpp"
 namespace Parameters
 {

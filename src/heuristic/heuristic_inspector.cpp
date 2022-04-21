@@ -84,13 +84,13 @@ void Heuristic::printAttackInfo( std::string clientIp,
 								 const float packetValue,
 								 const DangerousIpAddr& dangerousIpAddr ) const
 {
-	LogMessage( "[FLOW]%s->%s, [ATTACK]:%s, [DANGEROUS]%s, [VALUE]%lf, [ENTROPY]:%lf\n",
+	LogMessage( "[FLOW]%s->%s, [ATTACK]:%s, [DANGEROUS]:%s, [VALUE]:%lf, [ENTROPY]:%lf\n",
 				clientIp.c_str(),
 				serverIp.c_str(),
-				dangerousIpAddr.getAllFlags()[ 1 ].getIdentifier().c_str(),
-				dangerousIpAddr.getAllFlags()[ 0 ].getIdentifier().c_str(),
+				dangerousIpAddr.getAttackTypeId().c_str(),
+				dangerousIpAddr.getDangerousTypeId().c_str(),
 				packetValue,
-				dangerousIpAddr.m_networkEntropy );
+				dangerousIpAddr.getNetworkEntropy() );
 }
 
 void Heuristic::checkThreshold( std::string clientIp,
@@ -99,7 +99,7 @@ void Heuristic::checkThreshold( std::string clientIp,
 								const DangerousIpAddr& dangerousIpAddr ) const
 {
 	const auto isSenitivityExceeded{ packetValue < m_config->getSensitivity() };
-	const auto isEntropyExceeded{ m_config->getEntropy() < dangerousIpAddr.m_networkEntropy };
+	const auto isEntropyExceeded{ m_config->getEntropy() < dangerousIpAddr.getNetworkEntropy() };
 
 	if( isSenitivityExceeded || isEntropyExceeded )
 	{
@@ -119,12 +119,12 @@ float Heuristic::computePacketValue( DangerousIpAddr& dangerousIpAddr ) const
 	assert( packetsCount > 0 );
 
 	const auto packetValue{ computeFlags( dangerousIpAddr ) };
-	const auto packet_probability{ static_cast< double >( dangerousIpAddr.m_packetCounter )
+	const auto packet_probability{ static_cast< double >( dangerousIpAddr.getPacketCounter() )
 								   / static_cast< double >( packetsCount ) };
+	const auto networkEntropy{ computeEntropy( packet_probability ) };
 
-	dangerousIpAddr.m_networkEntropy = computeEntropy( packet_probability );
-
-	return packetValue - Parameters::Default::s_entropyFactor * dangerousIpAddr.m_networkEntropy;
+	dangerousIpAddr.setNetworkEntropy( networkEntropy );
+	return packetValue - Parameters::Default::s_entropyFactor * networkEntropy;
 }
 
 void Heuristic::eval( Packet* packet )
@@ -142,9 +142,8 @@ void Heuristic::eval( Packet* packet )
 		return;
 	}
 
-	const auto& dangerousIpAdresses{ m_config->getDangerousIpAdresses() };
 	const auto clientIp{ getClientIp( packet ) };
-	auto searchResult{ m_config->find( clientIp ) };
+	const auto searchResult{ m_config->find( clientIp ) };
 
 	if( !searchResult )
 	{

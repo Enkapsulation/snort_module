@@ -22,8 +22,8 @@ add_library (
     utils.cpp
     flag.hpp
     flag.cpp
-    flag_config.cpp
-    flag_config.hpp
+    flag_factory.cpp
+    flag_factory.hpp
     dangerous_ip_addr.cpp
     dangerous_ip_addr.hpp
 )

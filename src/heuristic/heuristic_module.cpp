@@ -42,9 +42,9 @@ static const Parameter availability_flag[] = { { "N", Parameter::PT_REAL, nullpt
 											   { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
 static const Parameter heuristic_params[]
-	= { { "sensitivity", Parameter::PT_REAL, nullptr, nullptr, "detection threshold" },
-		{ "entropy", Parameter::PT_REAL, nullptr, nullptr, "packet entropy threshold" },
-		{ "packet_value", Parameter::PT_REAL, nullptr, nullptr, "start packet value" },
+	= { { "sensitivity", Parameter::PT_REAL, nullptr, nullptr, "Detection threshold" },
+		{ "entropy", Parameter::PT_REAL, nullptr, nullptr, "Packet entropy threshold" },
+		{ "packet_value", Parameter::PT_REAL, nullptr, nullptr, "Start packet value" },
 		{ "filename_malicious", Parameter::PT_STRING, nullptr, nullptr, "Path to .CSV with malicius IP address" },
 		{ "dangerous", Parameter::PT_LIST, dangerous_flag, nullptr, "Value for dangerous flag" },
 		{ "attack", Parameter::PT_LIST, attack_flag, nullptr, "Value for attack type flag" },
@@ -55,12 +55,8 @@ static const Parameter heuristic_params[]
 
 static constexpr RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 
-//-------------------------------------------------------------------------
-// heuristic module
-//-------------------------------------------------------------------------
 HeuristicModule::HeuristicModule()
-	: Module( s_name.data(), s_help.data(), heuristic_params ),
-	  m_config( std::make_shared< HeuristicConfig >( HeuristicConfig::getDefaultConfig() ) )
+	: Module( s_name.data(), s_help.data(), heuristic_params ), m_config( std::make_shared< HeuristicConfig >() )
 {
 }
 
