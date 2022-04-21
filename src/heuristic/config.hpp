@@ -56,7 +56,7 @@ private:
 	void saveAllDangerousIps();
 	void loadDangerousIp( std::ifstream& );
 
-	float getValueFromParameters( Key key ) const;
+	float getValueFromParameters( const Key& key ) const;
 
 	static constexpr KeyView s_sensitivityName{ "sensitivity" };
 	static constexpr KeyView s_entropyName{ "entropy" };

@@ -79,7 +79,7 @@ bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 	{
 		return true;
 	}
-	if( m_parameters.find( valueName ) != m_parameters.end() )
+	else if( m_parameters.find( valueName ) != m_parameters.end() )
 	{
 		m_parameters[ valueName ] = value.get_real();
 	}
@@ -100,7 +100,7 @@ HeuristicConfig HeuristicConfig::getDefaultConfig()
 	return { s_defaultSensitivity, s_defaultEntropy, s_defaultPacketValue, s_defaultFilenameMalicious.data() };
 }
 
-float HeuristicConfig::getValueFromParameters( HeuristicConfig::Key key ) const
+float HeuristicConfig::getValueFromParameters( const HeuristicConfig::Key& key ) const
 {
 	return m_parameters.find( key )->second;
 }
