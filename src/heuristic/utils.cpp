@@ -70,12 +70,12 @@ CSVRow const* CSVIterator::operator->() const
 	return &m_row;
 }
 
-bool CSVIterator::operator==( CSVIterator const& rhs )
+bool CSVIterator::operator==( CSVIterator const& rhs ) const
 {
 	return ( ( this == &rhs ) || ( ( this->m_str == nullptr ) && ( rhs.m_str == nullptr ) ) );
 }
 
-bool CSVIterator::operator!=( CSVIterator const& rhs )
+bool CSVIterator::operator!=( CSVIterator const& rhs ) const
 {
 	return !( ( *this ) == rhs );
 }

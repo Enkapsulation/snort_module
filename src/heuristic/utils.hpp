@@ -40,8 +40,8 @@ public:
 	CSVRow const& operator*() const;
 	CSVRow const* operator->() const;
 
-	bool operator==( CSVIterator const& rhs );
-	bool operator!=( CSVIterator const& rhs );
+	bool operator==( CSVIterator const& rhs ) const;
+	bool operator!=( CSVIterator const& rhs ) const;
 
 private:
 	std::istream* m_str;
