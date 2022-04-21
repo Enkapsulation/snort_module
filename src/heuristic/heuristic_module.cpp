@@ -1,5 +1,6 @@
 #include "heuristic_module.hpp"
 #include "config.hpp"
+#include "flag_default_value.hpp"
 #include "framework/parameter.h"
 #include "heuristic.hpp"
 #include "utils.hpp"
@@ -11,6 +12,7 @@ static THREAD_LOCAL SimpleStats heuristic_stats;
 static THREAD_LOCAL snort::ProfileStats heuristicPerfStats;
 
 using namespace snort;
+using namespace Parameters::Name;
 
 //-------------------------------------------------------------------------
 // heurstic params
@@ -41,17 +43,18 @@ static const Parameter availability_flag[] = { { "N", Parameter::PT_REAL, nullpt
 											   { "C", Parameter::PT_REAL, nullptr, nullptr, "Value for flag Complete" },
 											   { nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
 
-static const Parameter heuristic_params[]
-	= { { "sensitivity", Parameter::PT_REAL, nullptr, nullptr, "detection threshold" },
-		{ "entropy", Parameter::PT_REAL, nullptr, nullptr, "packet entropy threshold" },
-		{ "packet_value", Parameter::PT_REAL, nullptr, nullptr, "start packet value" },
-		{ "filename_malicious", Parameter::PT_STRING, nullptr, nullptr, "Path to .CSV with malicius IP address" },
-		{ "dangerous", Parameter::PT_LIST, dangerous_flag, nullptr, "Value for dangerous flag" },
-		{ "attack", Parameter::PT_LIST, attack_flag, nullptr, "Value for attack type flag" },
-		{ "range", Parameter::PT_LIST, range_flag, nullptr, "Value for range flag" },
-		{ "access", Parameter::PT_LIST, access_flag, nullptr, "Value for access flag" },
-		{ "availability", Parameter::PT_LIST, availability_flag, nullptr, "Value for availability flag" },
-		{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr } };
+static const Parameter heuristic_params[] = {
+	{ s_sensitivityName.data(), Parameter::PT_REAL, nullptr, nullptr, "detection threshold" },
+	{ s_entropyName.data(), Parameter::PT_REAL, nullptr, nullptr, "packet entropy threshold" },
+	{ s_packetValueName.data(), Parameter::PT_REAL, nullptr, nullptr, "start packet value" },
+	{ s_filenameMaliciousName.data(), Parameter::PT_STRING, nullptr, nullptr, "Path to .CSV with malicius IP address" },
+	{ s_dangerousName.data(), Parameter::PT_LIST, dangerous_flag, nullptr, "Value for dangerous flag" },
+	{ s_attackName.data(), Parameter::PT_LIST, attack_flag, nullptr, "Value for attack type flag" },
+	{ s_rangeName.data(), Parameter::PT_LIST, range_flag, nullptr, "Value for range flag" },
+	{ s_accessName.data(), Parameter::PT_LIST, access_flag, nullptr, "Value for access flag" },
+	{ s_availabilityName.data(), Parameter::PT_LIST, availability_flag, nullptr, "Value for availability flag" },
+	{ nullptr, Parameter::PT_MAX, nullptr, nullptr, nullptr }
+};
 
 static constexpr RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 

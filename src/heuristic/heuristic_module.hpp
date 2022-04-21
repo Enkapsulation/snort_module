@@ -47,5 +47,6 @@ private:
 
 	static constexpr std::string_view s_name{ "heuristic" };
 	static constexpr std::string_view s_help{ "detection based on heuristic rules" };
+
 	static constexpr unsigned s_idHeuristic{ 456U };
 };

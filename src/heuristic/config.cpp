@@ -3,6 +3,7 @@
 
 #include "flag.hpp"
 #include "flag_config.hpp"
+#include "flag_default_value.hpp"
 #include "framework/value.h"
 #include <arpa/inet.h>
 #include <iterator>
@@ -83,7 +84,7 @@ bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 	{
 		m_parameters[ valueName ] = value.get_real();
 	}
-	else if( valueName == s_filenameMaliciousName )
+	else if( valueName == Parameters::Name::s_filenameMaliciousName )
 	{
 		setFilenameMalicious( value.get_as_string() );
 	}
@@ -107,17 +108,17 @@ float HeuristicConfig::getValueFromParameters( const HeuristicConfig::Key& key )
 
 float HeuristicConfig::getSensitivity() const
 {
-	return getValueFromParameters( s_sensitivityName.data() );
+	return getValueFromParameters( Parameters::Name::s_sensitivityName.data() );
 }
 
 float HeuristicConfig::getEntropy() const
 {
-	return getValueFromParameters( s_entropyName.data() );
+	return getValueFromParameters( Parameters::Name::s_entropyName.data() );
 }
 
 float HeuristicConfig::getPacketValue() const
 {
-	return getValueFromParameters( s_packetValueName.data() );
+	return getValueFromParameters( Parameters::Name::s_packetValueName.data() );
 }
 
 std::string HeuristicConfig::getFilenameMalicious() const
@@ -137,7 +138,7 @@ void HeuristicConfig::setFilenameMalicious( const std::string& filenameMalicious
 
 void HeuristicConfig::saveAllDangerousIps()
 {
-	std::ofstream outputFile( "scan_result.csv", std::ios::app );
+	std::ofstream outputFile( s_resultFilename.data(), std::ios::app );
 
 	if( !m_dangerousIpAdresses.empty() )
 	{
