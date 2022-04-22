@@ -68,11 +68,11 @@ file_id = { file_rules = file_magic }
 
 -- the following require additional configuration to be fully effective:
 
-appid =
-{
+-- appid =
+-- {
     -- appid requires this to use appids in rules
     --app_detector_dir = 'directory to load appid detectors from'
-}
+-- }
 
 --[[
 reputation =

@@ -1,25 +1,17 @@
 #pragma once
 
+#include <map>
 #include <string>
 namespace Parameters
 {
-class Flag // could be a template
+class Flag
 {
 public:
-	explicit Flag( std::string identifier, float value ) : m_value( value ), m_identifier( identifier ){};
-	virtual ~Flag() = default;
+	explicit Flag( std::string identifier, float value );
+	~Flag();
 
-	virtual float getValueFromIdentifier( std::string identifier ) const = 0;
-	virtual float getDefault() const									 = 0;
-	virtual float getValue() const
-	{
-		return m_value;
-	}
-
-	virtual std::string getIdentifier() const
-	{
-		return m_identifier;
-	}
+	float getValue() const;
+	std::string getIdentifier() const;
 
 protected:
 	float m_value;

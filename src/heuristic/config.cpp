@@ -2,22 +2,34 @@
 #include <iostream>
 
 #include "flag.hpp"
-#include "flag_config.hpp"
-#include "flag_default_value.hpp"
-#include "framework/value.h"
+#include "flag_factory.hpp"
 #include <arpa/inet.h>
+#include <framework/value.h>
 #include <iterator>
 #include <map>
 #include <netinet/in.h>
 #include <optional>
 #include <ostream>
 #include <string>
+#include <string_view>
+#include <vector>
 
 #include "config.hpp"
+#include "parameters_name.hpp"
 #include "utils.hpp"
 
+using namespace Parameters;
+
 HeuristicConfig::HeuristicConfig( float sensitivity, float entropy, float packetValue, std::string filenameMalicious )
-	: m_filenameMalicious( filenameMalicious ), m_dangerousIpAdresses()
+	: m_parameters( makeParametersMap( sensitivity, entropy, packetValue ) ),
+	  m_filenameMalicious( filenameMalicious ),
+	  m_dangerousIpAdresses()
+{
+}
+
+HeuristicConfig::HeuristicConfig()
+	: m_parameters( makeParametersMap( s_defaultSensitivity, s_defaultEntropy, s_defaultPacketValue ) ),
+	  m_filenameMalicious( s_defaultFilenameMalicious.data() )
 {
 }
 
@@ -25,6 +37,13 @@ HeuristicConfig::~HeuristicConfig()
 {
 	saveAllDangerousIps();
 }
+
+HeuristicConfig::FlagCSVHelper HeuristicConfig::m_flagCSVHelper{ { { FlagType::Dangerous, CsvEncoder::DangerousFlag },
+																   { FlagType::Range, CsvEncoder::RangeFlag },
+																   { FlagType::Attack, CsvEncoder::AttackType },
+																   { FlagType::Access, CsvEncoder::AccessFlag },
+																   { FlagType::Availability,
+																	 CsvEncoder::AvailabilityFlag } } };
 
 std::optional< DangerousIpAddr* > HeuristicConfig::find( std::string ip ) const
 {
@@ -34,7 +53,7 @@ std::optional< DangerousIpAddr* > HeuristicConfig::find( std::string ip ) const
 		= std::find_if( m_dangerousIpAdresses.begin(),
 						m_dangerousIpAdresses.end(),
 						[ & ]( const DangerousIpAddr& dangerousIpAddr )
-						{ return dangerousIpAddr.m_ipAddr.sin_addr.s_addr == ipToCompare.sin_addr.s_addr; } );
+						{ return dangerousIpAddr.getSockAddr().sin_addr.s_addr == ipToCompare.sin_addr.s_addr; } );
 
 	if( suspiciousIpAddrIterator != m_dangerousIpAdresses.cend() )
 	{
@@ -74,7 +93,7 @@ bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 		return second;
 	};
 
-	const auto isFlag{ Parameters::setFlagsMaps( flagType( fullParam ), valueName, value.get_real() ) };
+	const auto isFlag{ Parameters::FlagFactory::setFlagsData( flagType( fullParam ), valueName, value.get_real() ) };
 
 	if( isFlag )
 	{
@@ -94,11 +113,6 @@ bool HeuristicConfig::set( const char* rawString, const snort::Value& value )
 	}
 
 	return true;
-}
-
-HeuristicConfig HeuristicConfig::getDefaultConfig()
-{
-	return { s_defaultSensitivity, s_defaultEntropy, s_defaultPacketValue, s_defaultFilenameMalicious.data() };
 }
 
 float HeuristicConfig::getValueFromParameters( const HeuristicConfig::Key& key ) const
@@ -124,11 +138,6 @@ float HeuristicConfig::getPacketValue() const
 std::string HeuristicConfig::getFilenameMalicious() const
 {
 	return m_filenameMalicious;
-}
-
-const std::vector< DangerousIpAddr >& HeuristicConfig::getDangerousIpAdresses() const
-{
-	return m_dangerousIpAdresses;
 }
 
 void HeuristicConfig::setFilenameMalicious( const std::string& filenameMalicious )
@@ -158,11 +167,27 @@ void HeuristicConfig::readCSV()
 
 	if( maliciousFile.bad() )
 	{
-		std::cout << "ERROR: Where malicious file" << std::endl;
+		printNoFileError();
 		return;
 	}
 
 	loadDangerousIp( maliciousFile );
+}
+
+void HeuristicConfig::printNoFileError() const
+{
+	std::cout << "ERROR: Where malicious file" << std::endl;
+}
+
+std::map< HeuristicConfig::Key, float > HeuristicConfig::makeParametersMap( float sensitivity,
+																			float entropy,
+																			float packetValue )
+{
+	using namespace Parameters::Name;
+
+	return { { s_sensitivityName.data(), sensitivity },
+			 { s_entropyName.data(), entropy },
+			 { s_packetValueName.data(), packetValue } };
 }
 
 void HeuristicConfig::loadDangerousIp( std::ifstream& file )
@@ -170,30 +195,37 @@ void HeuristicConfig::loadDangerousIp( std::ifstream& file )
 	for( const auto& row : CSVRange( file ) )
 	{
 		sockaddr_in ip_addr{ DangerousIpAddr::makeSockaddr( row[ AdressIp ].c_str() ) };
+		std::vector< Flag > flags;
+		flags.reserve( s_flagCount );
 
-		Parameters::DangerousFlag dangerousFlag( row[ DangerousFlag ] );
-		Parameters::AttackType attackTypeFlag( row[ AttackType ] );
-		Parameters::RangeFlag rangeFlag( row[ RangeFlag ] );
-		Parameters::AccessFlag accessFlag( row[ AccessFlag ] );
-		Parameters::AvailabilityFlag avaiabilityFlag( row[ AvaiabilityFlag ] );
+		std::string attackId;
+		std::string dangerousId;
 
-		auto packet_counter	  = std::stoi( row[ Counter ] );
-		float network_entropy = std::stod( row[ PacketEntropy ] );
+		for( const auto& flagHelper : m_flagCSVHelper )
+		{
+			const std::string identifier{ row[ flagHelper.csvEncoder ] };
+			const auto flagType{ flagHelper.flagType };
 
-		DangerousIpAddr dangerousIpAddr( ip_addr,
-										 dangerousFlag,
-										 attackTypeFlag,
-										 rangeFlag,
-										 accessFlag,
-										 avaiabilityFlag,
-										 packet_counter,
-										 network_entropy );
+			flags.push_back( FlagFactory::createFlag( flagType, identifier ) );
 
-		m_dangerousIpAdresses.push_back( dangerousIpAddr );
+			if( flagType == FlagType::Attack )
+			{
+				attackId = identifier;
+			}
+			else if( flagType == FlagType::Dangerous )
+			{
+				dangerousId = identifier;
+			}
+		}
+
+		const auto packet_counter{ std::stoul( row[ Counter ] ) };
+		const float network_entropy{ std::stof( row[ PacketEntropy ] ) };
+
+		m_dangerousIpAdresses.push_back( { flags, ip_addr, attackId, dangerousId, packet_counter, network_entropy } );
 	}
 
 	if( m_dangerousIpAdresses.empty() )
 	{
-		std::cout << "ERROR: Where malicious file" << std::endl;
+		printNoFileError();
 	}
 }

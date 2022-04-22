@@ -1,7 +1,7 @@
 #include "heuristic_module.hpp"
 #include "config.hpp"
 #include "framework/parameter.h"
-#include "heuristic.hpp"
+#include "heuristic_inspector.hpp"
 #include "parameters_name.hpp"
 #include "utils.hpp"
 
@@ -58,13 +58,8 @@ static const Parameter heuristic_params[] = {
 
 static constexpr RuleMap s_rules[] = { { 1, "Jeszcze jak" }, { 0, nullptr } };
 
-//-------------------------------------------------------------------------
-// heuristic module
-//-------------------------------------------------------------------------
 HeuristicModule::HeuristicModule()
-	: Module( s_name.data(), s_help.data(), heuristic_params ),
-	  m_config( std::make_shared< HeuristicConfig >( HeuristicConfig::getDefaultConfig() ) ),
-	  m_inspector( std::make_unique< Heuristic >( m_config, this ) )
+	: Module( s_name.data(), s_help.data(), heuristic_params ), m_config( std::make_shared< HeuristicConfig >() )
 {
 }
 
@@ -125,9 +120,9 @@ HeuristicModule::Usage HeuristicModule::get_usage() const
 	return INSPECT;
 }
 
-snort::Inspector* HeuristicModule::getInspector() const
+void HeuristicModule::setInspector( Heuristic* heuristic )
 {
-	return static_cast< snort::Inspector* >( m_inspector.get() );
+	m_inspector = heuristic;
 }
 
 std::string_view HeuristicModule::getName()

@@ -25,12 +25,19 @@ class HeuristicConfig
 		AttackType,
 		RangeFlag,
 		AccessFlag,
-		AvaiabilityFlag,
+		AvailabilityFlag,
 		Counter,
 		PacketEntropy
 	};
 
+	struct FlagCSV
+	{
+		Parameters::FlagType flagType;
+		CsvEncoder csvEncoder;
+	};
+
 public:
+	HeuristicConfig();
 	HeuristicConfig( float sensitivity, float entropy, float packetValue, std::string filenameMalicious );
 	~HeuristicConfig();
 
@@ -40,18 +47,20 @@ public:
 
 	bool set( const char* rawString, const snort::Value& value );
 
-	static HeuristicConfig getDefaultConfig();
 	float getSensitivity() const;
 	float getEntropy() const;
 	float getPacketValue() const;
 	std::string getFilenameMalicious() const;
-	std::shared_ptr< DangerousIpConfig > getFilenameConfig() const;
-	const std::vector< DangerousIpAddr >& getDangerousIpAdresses() const;
 	void readCSV();
 
 private:
 	using Key	  = std::string;
 	using KeyView = std::string_view;
+	static constexpr size_t s_flagCount{ 5U };
+	using FlagCSVHelper = const std::array< FlagCSV, s_flagCount >;
+
+	void printNoFileError() const;
+	std::map< Key, float > makeParametersMap( float sensitivity, float entropy, float packetValue );
 
 	void setFilenameMalicious( const std::string& );
 	void saveAllDangerousIps();
@@ -66,9 +75,9 @@ private:
 	static constexpr float s_defaultPacketValue{ 15.F };
 	static constexpr std::string_view s_defaultFilenameMalicious{ "" };
 
-	std::map< Key, float > m_parameters = { { Parameters::Name::s_sensitivityName.data(), s_defaultSensitivity },
-											{ Parameters::Name::s_entropyName.data(), s_defaultEntropy },
-											{ Parameters::Name::s_packetValueName.data(), s_defaultPacketValue } };
+	static FlagCSVHelper m_flagCSVHelper;
+
+	std::map< Key, float > m_parameters;
 	std::string m_filenameMalicious;
 	std::vector< DangerousIpAddr > m_dangerousIpAdresses;
 };
