@@ -50,52 +50,29 @@ stream_udp = { }
 stream_user = { }
 stream_file = { }
 
--- arp_spoof = { }
--- back_orifice = { }
--- dnp3 = { }
 dns = { }
--- http_inspect = { }
--- http2_inspect = { }
--- imap = { }
--- iec104 = { }
--- modbus = { }
--- netflow = {}
--- normalizer = { }
--- pop = { }
--- rpc_decode = { }
--- sip = { }
--- ssh = { }
--- ssl = { }
--- telnet = { }
--- dpx = { }
-heuristic = { filename_malicious = "/home/swnek/snort_module/Snort2File/test.csv" }
-
-
--- dce_smb = { }
--- dce_tcp = { }
--- dce_udp = { }
--- dce_http_proxy = { }
--- dce_http_server = { }
-
--- see snort_defaults.lua for default_*
--- gtp_inspect = default_gtp
--- port_scan = default_med_port_scan
--- smtp = default_smtp
-
--- ftp_server = default_ftp_server
--- ftp_client = { }
--- ftp_data = { }
+heuristic = {
+    dangerous = { H = 333.0, M = 333.0, L = 666.0 },
+    attack = { D = 234.0 },
+    range = { S = 222.0 , P = 111.0, C = 133.0 },
+    availability = { N = 123.0, P = 234.0, C = 345.0 },
+    access = { N = 345.0, U = 567.0 },
+    sensitivity = 111.0,
+    filename_malicious = "./MaliciousIPAddr.csv",
+    entropy = 222.0,
+    packet_value = 112.0,
+}
 
 -- see file_magic.lua for file id rules
 file_id = { file_rules = file_magic }
 
 -- the following require additional configuration to be fully effective:
 
-appid =
-{
+-- appid =
+-- {
     -- appid requires this to use appids in rules
     --app_detector_dir = 'directory to load appid detectors from'
-}
+-- }
 
 --[[
 reputation =

@@ -2,7 +2,8 @@
 
 #include <memory>
 
-#include "detection/detection_engine.h"
+#include <detection/detection_engine.h>
+#include <snort/framework/counts.h>
 
 class DangerousIpAddr;
 class HeuristicConfig;
@@ -18,9 +19,7 @@ public:
 	void eval( snort::Packet* ) override;
 
 private:
-	void heuristic_show_config( const HeuristicConfig* config ) const;
-	void set_default_value( HeuristicConfig* config );
-
+	void showConfig() const;
 	float computeFlags( const DangerousIpAddr& dangerousIpAddr ) const;
 	float computeEntropy( double probability ) const;
 	float computePacketValue( DangerousIpAddr& dangerousIpAddr ) const;
@@ -42,6 +41,7 @@ private:
 
 	std::shared_ptr< HeuristicConfig > m_config;
 	HeuristicModule* m_module{ nullptr };
+	bool m_initStaus{ false };
 
 	static constexpr double ln2value{ 0.69314718056 };
 };

@@ -36,16 +36,17 @@ public:
 
 	Usage get_usage() const override;
 
-	snort::Inspector* getInspector() const;
+	void setInspector( Heuristic* );
 
 	static std::string_view getName();
 	static std::string_view getHelp();
 
 private:
 	std::shared_ptr< HeuristicConfig > m_config;
-	std::unique_ptr< Heuristic > m_inspector;
+	Heuristic* m_inspector{ nullptr };
 
 	static constexpr std::string_view s_name{ "heuristic" };
 	static constexpr std::string_view s_help{ "detection based on heuristic rules" };
+
 	static constexpr unsigned s_idHeuristic{ 456U };
 };

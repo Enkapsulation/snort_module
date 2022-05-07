@@ -1,5 +1,7 @@
 #pragma once
 #include "dangerous_ip_addr.hpp"
+#include "parameters_name.hpp"
+#include <map>
 #include <memory>
 #include <optional>
 #include <string>
@@ -19,54 +21,63 @@ class HeuristicConfig
 	enum CsvEncoder
 	{
 		AdressIp,
-		RiskFlag,
+		DangerousFlag,
 		AttackType,
 		RangeFlag,
 		AccessFlag,
-		AvaiabilityFlag,
+		AvailabilityFlag,
 		Counter,
 		PacketEntropy
 	};
 
+	struct FlagCSV
+	{
+		Parameters::FlagType flagType;
+		CsvEncoder csvEncoder;
+	};
+
 public:
-	HeuristicConfig( float sensitivity, float dangerousEntropy, float packetValue, std::string filenameMalicious );
+	HeuristicConfig();
+	HeuristicConfig( float sensitivity, float entropy, float packetValue, std::string filenameMalicious );
+	~HeuristicConfig();
 
 	std::optional< DangerousIpAddr* > find( std::string ip ) const;
 
 	operator std::string() const;
-	bool set( const snort::Value& value );
 
-	static HeuristicConfig getDefaultConfig();
+	bool set( const char* rawString, const snort::Value& value );
+
 	float getSensitivity() const;
-	float getDangerousEntropy() const;
+	float getEntropy() const;
 	float getPacketValue() const;
 	std::string getFilenameMalicious() const;
-	std::shared_ptr< DangerousIpConfig > getFilenameConfig() const;
-	const std::vector< DangerousIpAddr >& getDangerousIpAdresses() const;
+	void readCSV();
 
 private:
-	void setSensitivity( float );
-	void setDangerousEntropy( float );
-	void setPacketValue( float );
+	using Key	  = std::string;
+	using KeyView = std::string_view;
+	static constexpr size_t s_flagCount{ 5U };
+	using FlagCSVHelper = const std::array< FlagCSV, s_flagCount >;
+
+	void printNoFileError() const;
+	std::map< Key, float > makeParametersMap( float sensitivity, float entropy, float packetValue );
+
 	void setFilenameMalicious( const std::string& );
-	void setFilenameConfig( std::shared_ptr< DangerousIpConfig > );
-	void readCSV();
+	void saveAllDangerousIps();
 	void loadDangerousIp( std::ifstream& );
 
-	static constexpr std::string_view s_sensitivityName{ "sensitivity" };
-	static constexpr std::string_view s_dangerousEntropyName{ "dangerous_entropy" };
-	static constexpr std::string_view s_packetValueName{ "packet_value" };
-	static constexpr std::string_view s_filenameMaliciousName{ "filename_malicious" };
+	float getValueFromParameters( const Key& key ) const;
 
-	static constexpr float s_defaultSensitivity{ 20.0 };
-	static constexpr float s_defaultDangerousEntropy{ 6.0 };
-	static constexpr float s_defaultPacketValue{ 15.0 };
+	static constexpr std::string_view s_resultFilename{ "scan_result.csv" };
+
+	static constexpr float s_defaultSensitivity{ 20.F };
+	static constexpr float s_defaultEntropy{ 6.F };
+	static constexpr float s_defaultPacketValue{ 15.F };
 	static constexpr std::string_view s_defaultFilenameMalicious{ "" };
 
-	float m_sensitivity;
-	float m_dangerousEntropy;
-	float m_packetValue;
+	static FlagCSVHelper m_flagCSVHelper;
+
+	std::map< Key, float > m_parameters;
 	std::string m_filenameMalicious;
-	std::shared_ptr< DangerousIpConfig > m_filenameConfig;
 	std::vector< DangerousIpAddr > m_dangerousIpAdresses;
 };

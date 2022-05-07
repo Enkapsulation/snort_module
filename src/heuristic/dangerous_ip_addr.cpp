@@ -1,22 +1,36 @@
 #include "dangerous_ip_addr.hpp"
+#include <functional>
+#include <iostream>
+#include <string>
 
-DangerousIpAddr::DangerousIpAddr( sockaddr_in ipAddr,
-								  Parameters::RiskFlag riskFlag,
-								  Parameters::AttackType attackType,
-								  Parameters::RangeFlag rangeFlag,
-								  Parameters::AccessFlag accessFlag,
-								  Parameters::AvailabilityFlag availabilityFlag,
+DangerousIpAddr::DangerousIpAddr( const Flags& flags,
+								  sockaddr_in ipAddr,
+								  std::string attackTypeId,
+								  std::string dangerousTypeId,
 								  uint64_t packetCounter,
 								  float networkEntropy )
-	: m_ipAddr( ipAddr ),
-	  m_riskFlag( riskFlag ),
-	  m_attackType( attackType ),
-	  m_rangeFlag( rangeFlag ),
-	  m_accessFlag( accessFlag ),
-	  m_availabilityFlag( availabilityFlag ),
+	: m_flags( flags ),
+	  m_attackTypeId( attackTypeId ),
+	  m_dangerousTypeId( dangerousTypeId ),
+	  m_ipAddr( ipAddr ),
 	  m_packetCounter( packetCounter ),
 	  m_networkEntropy( networkEntropy )
 {
+}
+
+std::ostream& operator<<( std::ostream& output, const DangerousIpAddr& dangerousIpAddr )
+{
+	const std::string ipAddInstr{ inet_ntoa( dangerousIpAddr.m_ipAddr.sin_addr ) };
+	output << ipAddInstr << ",";
+
+	for( const auto& flag : dangerousIpAddr.getAllFlags() )
+	{
+		output << flag.getIdentifier() << ",";
+	}
+
+	output << dangerousIpAddr.m_packetCounter << ",";
+	output << dangerousIpAddr.m_networkEntropy << std::endl;
+	return output;
 }
 
 void DangerousIpAddr::incrementCounter()
@@ -24,22 +38,56 @@ void DangerousIpAddr::incrementCounter()
 	++m_packetCounter;
 }
 
-sockaddr_in DangerousIpAddr::makeSockaddr( std::string ip )
+void DangerousIpAddr::setNetworkEntropy( float networkEntropy )
 {
-	sockaddr_in ip_addr{};
-	inet_pton( AF_INET, ip.c_str(), &ip_addr.sin_addr );
-	return ip_addr;
+	m_networkEntropy = networkEntropy;
+}
+
+const DangerousIpAddr::Flags& DangerousIpAddr::getAllFlags() const
+{
+	return m_flags;
+}
+
+sockaddr_in DangerousIpAddr::getSockAddr() const
+{
+	return m_ipAddr;
+}
+
+std::string DangerousIpAddr::getAttackTypeId() const
+{
+	return m_attackTypeId.data();
+}
+
+std::string DangerousIpAddr::getDangerousTypeId() const
+{
+	return m_dangerousTypeId.data();
+}
+
+uint64_t DangerousIpAddr::getPacketCounter() const
+{
+	return m_packetCounter;
+}
+
+float DangerousIpAddr::getNetworkEntropy() const
+{
+	return m_networkEntropy;
 }
 
 float DangerousIpAddr::getValueAllFlags() const
 {
 	float value{ 0.F };
 
-	value += m_riskFlag.getValue();
-	value += m_attackType.getValue();
-	value += m_rangeFlag.getValue();
-	value += m_accessFlag.getValue();
-	value += m_availabilityFlag.getValue();
+	for( const auto& flag : m_flags )
+	{
+		value += flag.getValue();
+	}
 
 	return value;
+}
+
+sockaddr_in DangerousIpAddr::makeSockaddr( std::string ip )
+{
+	sockaddr_in ip_addr{};
+	inet_pton( AF_INET, ip.c_str(), &ip_addr.sin_addr );
+	return ip_addr;
 }
